@@ -7,3 +7,6 @@ D:\C#\ABW Project\Wizualna\obj\Debug\Wizualna.Properties.Resources.resources
 D:\C#\ABW Project\Wizualna\obj\Debug\Wizualna.csproj.GenerateResource.Cache
 D:\C#\ABW Project\Wizualna\obj\Debug\Wizualna.exe
 D:\C#\ABW Project\Wizualna\obj\Debug\Wizualna.pdb
+D:\Github\ABW Project\Wizualna\bin\Debug\Wizualna.exe.config
+D:\Github\ABW Project\Wizualna\obj\Debug\Wizualna.exe
+D:\Github\ABW Project\Wizualna\obj\Debug\Wizualna.pdb
