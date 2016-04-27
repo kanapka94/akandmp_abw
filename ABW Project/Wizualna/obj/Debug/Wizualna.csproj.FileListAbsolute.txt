@@ -1,0 +1,9 @@
+D:\C#\ABW Project\Wizualna\bin\Debug\Wizualna.exe.config
+D:\C#\ABW Project\Wizualna\bin\Debug\Wizualna.exe
+D:\C#\ABW Project\Wizualna\bin\Debug\Wizualna.pdb
+D:\C#\ABW Project\Wizualna\obj\Debug\Wizualna.csprojResolveAssemblyReference.cache
+D:\C#\ABW Project\Wizualna\obj\Debug\Wizualna.Form1.resources
+D:\C#\ABW Project\Wizualna\obj\Debug\Wizualna.Properties.Resources.resources
+D:\C#\ABW Project\Wizualna\obj\Debug\Wizualna.csproj.GenerateResource.Cache
+D:\C#\ABW Project\Wizualna\obj\Debug\Wizualna.exe
+D:\C#\ABW Project\Wizualna\obj\Debug\Wizualna.pdb

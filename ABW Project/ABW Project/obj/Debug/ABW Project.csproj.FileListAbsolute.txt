@@ -1,0 +1,6 @@
+D:\C#\ABW Project\ABW Project\bin\Debug\ABW Project.exe.config
+D:\C#\ABW Project\ABW Project\bin\Debug\ABW Project.exe
+D:\C#\ABW Project\ABW Project\bin\Debug\ABW Project.pdb
+D:\C#\ABW Project\ABW Project\obj\Debug\ABW Project.csprojResolveAssemblyReference.cache
+D:\C#\ABW Project\ABW Project\obj\Debug\ABW Project.exe
+D:\C#\ABW Project\ABW Project\obj\Debug\ABW Project.pdb
