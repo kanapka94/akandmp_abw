@@ -10,3 +10,12 @@ D:\C#\ABW Project\Wizualna\obj\Debug\Wizualna.pdb
 D:\Github\ABW Project\Wizualna\bin\Debug\Wizualna.exe.config
 D:\Github\ABW Project\Wizualna\obj\Debug\Wizualna.exe
 D:\Github\ABW Project\Wizualna\obj\Debug\Wizualna.pdb
+E:\TESTY\akandmp_abw\ABW Project\Wizualna\bin\Debug\Wizualna.exe.config
+E:\TESTY\akandmp_abw\ABW Project\Wizualna\obj\Debug\Wizualna.exe
+E:\TESTY\akandmp_abw\ABW Project\Wizualna\obj\Debug\Wizualna.pdb
+E:\TESTY\akandmp_abw\ABW Project\Wizualna\bin\Debug\Wizualna.exe
+E:\TESTY\akandmp_abw\ABW Project\Wizualna\bin\Debug\Wizualna.pdb
+E:\TESTY\akandmp_abw\ABW Project\Wizualna\obj\Debug\Wizualna.csprojResolveAssemblyReference.cache
+E:\TESTY\akandmp_abw\ABW Project\Wizualna\obj\Debug\Wizualna.Form1.resources
+E:\TESTY\akandmp_abw\ABW Project\Wizualna\obj\Debug\Wizualna.Properties.Resources.resources
+E:\TESTY\akandmp_abw\ABW Project\Wizualna\obj\Debug\Wizualna.csproj.GenerateResource.Cache
