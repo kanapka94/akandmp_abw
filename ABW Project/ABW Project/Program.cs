@@ -11,7 +11,7 @@ namespace ABW_Project
     {
         static void Main(string[] args)
         {
-            WaveFile wv = new WaveFile();
+            PlikWave wv = new PlikWave();
             wv.WczytajZPliku("plik.wav");
             Console.WriteLine("Riff id: " + wv.idRiff);
             Console.WriteLine("Rozmiar pliku (bez 8 bajtów początkowych): " + Convert.ToString(wv.rozmiarPliku) + "B");

@@ -12,11 +12,11 @@ namespace Wizualna
 {
     public partial class Form1 : Form
     {
-        ABW_Project.WaveFile wv;
+        ABW_Project.PlikWave wv;
 
         public Form1()
         {
-            wv = new ABW_Project.WaveFile();
+            wv = new ABW_Project.PlikWave();
             wv.WczytajZPliku("plik.wav");
             InitializeComponent();
 

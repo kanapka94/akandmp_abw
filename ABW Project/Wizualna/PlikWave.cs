@@ -8,7 +8,7 @@ using Microsoft.VisualBasic;
 
 namespace ABW_Project
 {
-    class WaveFile
+    class PlikWave
     {
         public string idRiff;
         public string idFormatu;
@@ -29,7 +29,7 @@ namespace ABW_Project
 
         private BinaryReader plik;
 
-        ~WaveFile()
+        ~PlikWave()
         {
            //destruktor działa poprawnie
             if (plik != null)
