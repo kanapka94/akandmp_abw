@@ -12,17 +12,41 @@ namespace Wizualna
 {
     public partial class Form1 : Form
     {
-        ABW_Project.PlikWave wv;
+        PlikWave wv;
 
         public Form1()
         {
-            wv = new ABW_Project.PlikWave();
+            wv = new PlikWave();
             wv.WczytajZPliku("plik.wav");
             InitializeComponent();
 
             chart1.Series[0].Points.Clear();
 
-            double srednia = 0;
+            Dft dft = new Dft();
+            /*
+            double index = 49.001;
+
+            foreach (double item in dft.WydzielPrzydzwiek(wv).czestotliwoscSzumow)
+            {
+                chart1.Series[0].Points.Add(item);
+            }*/
+            double[] S = new double[100];
+
+            for (int k = 0; k < 100; k++)
+            {
+                S[k] = (double) Math.Sin((double)2 * Math.PI * 3 * k / 100) + Math.Cos(2*Math.PI * 10 * k / 100);
+                //chart1.Series[0].Points.Add(S[k]);
+            }
+
+            double[] wynik = dft.ObliczWidmo(S);
+
+            for (int k = 0; k < 100; k++)
+            {
+                chart1.Series[0].Points.Add(wynik[k]);
+            }
+
+
+            /*double srednia = 0;
 
             double coIleRysowac = 2;
             int i;
@@ -34,9 +58,9 @@ namespace Wizualna
                     chart1.Series[0].Points.Add(srednia / coIleRysowac - wv.czestotliwoscProbkowania / 2);
                     srednia = 0;
                 }
-            }
+            }*/
 
-           // MessageBox.Show(Convert.ToString(wv.czestotliwoscProbkowania));
+            // MessageBox.Show(Convert.ToString(wv.czestotliwoscProbkowania));
 
             //MessageBox.Show(Convert.ToString(coIleRysowac * chart1.Series[0].Points.Count));
         }

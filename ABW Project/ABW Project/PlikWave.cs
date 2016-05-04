@@ -128,14 +128,14 @@ namespace ABW_Project
         {
             if (probkiDoOdczytania == -1) probkiDoOdczytania = czestotliwoscProbkowania;
 
-            double[] result = new double[probkiDoOdczytania];
+            double[] probki = new double[probkiDoOdczytania];
 
             for (int i = 0; i < probkiDoOdczytania; i++)
             {
-                result[i] = NastepnaProbka(kanal);
+                probki[i] = NastepnaProbka(kanal);
             }
 
-            return result;
+            return probki;
         }
 
         public int CalkowityRozmiar

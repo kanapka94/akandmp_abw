@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Microsoft.VisualBasic;
 
-namespace ABW_Project
+namespace Wizualna
 {
     class PlikWave
     {
@@ -24,6 +24,7 @@ namespace ABW_Project
         public string daneID;
         public int rozmiarDanych;
 
+        int bitowNaKanal;
         public int iloscProbek;
         public double dlugoscWSekundach;
 
@@ -74,7 +75,7 @@ namespace ABW_Project
             readedBytes = plik.ReadBytes(2);
             rozdzielczosc = readedBytes[0] + readedBytes[1] * 256;
 
-            
+            bitowNaKanal = (rozmiarProbki / iloscKanalow);
 
             //byte readedBytes1 = plik.ReadBytes(1)[0];
             //byte readedBytes2 = plik.ReadBytes(1)[0];
@@ -115,54 +116,27 @@ namespace ABW_Project
         {
             byte[] readedBytes = plik.ReadBytes(rozmiarProbki);
             double dane = 0;
+            int pozycjaKanalu = kanal * bitowNaKanal;
 
-            for (int i = kanal * (rozmiarProbki / iloscKanalow); i < (kanal+1) * (rozmiarProbki / iloscKanalow); i++)
+            for (int i = pozycjaKanalu; i < pozycjaKanalu + bitowNaKanal; i++)
                 dane += readedBytes[i] * (double)Math.Pow(256, i);
 
             return dane;
         }
 
-        public double[] PobierzProbki(byte kanal = 0)
+        public double[] PobierzProbki(byte kanal = 0, int probkiDoOdczytania = -1)
         {
-            double[] result = new double[iloscProbek];
+            if (probkiDoOdczytania == -1) probkiDoOdczytania = czestotliwoscProbkowania;
 
-            for (int i = 0; i < iloscProbek; i++)
+            double[] probki = new double[probkiDoOdczytania];
+
+            for (int i = 0; i < probkiDoOdczytania; i++)
             {
-                result[i] = NastepnaProbka(kanal);
+                probki[i] = NastepnaProbka(kanal);
             }
 
-            return result;
+            return probki;
         }
-
-        /*public double NastepnaProbka(bool czyLewy = true)
-        {
-            byte[] readedBytes = plik.ReadBytes(rozmiarProbki);
-            double dane = 0;
-          
-            if (stereo)
-            {
-                if (czyLewy)
-                {
-                    for (int i = 0; i < rozmiarProbki / 2; i++)
-                        dane += readedBytes[i] * (double)Math.Pow(256, i);
-                    plik.ReadBytes(rozmiarProbki / 2);  //gdy mono to odrzuca drugą połowę bajtów
-                }
-                else
-                {
-                    plik.ReadBytes(rozmiarProbki / 2);  //gdy mono to odrzuca drugą połowę bajtów
-                    for (int i = 0; i < rozmiarProbki / 2; i++)
-                        dane += readedBytes[i] * (double)Math.Pow(256, i);                    
-                }
-            }
-            else
-            {
-                for (int i = 0; i < rozmiarProbki; i++)
-                {
-                    dane += readedBytes[i] * (double)Math.Pow(256, i);
-                }
-            }
-            return dane;
-        }*/
 
         public int CalkowityRozmiar
         {

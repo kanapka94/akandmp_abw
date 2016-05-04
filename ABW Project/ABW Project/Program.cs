@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.IO;
 
 namespace ABW_Project
 {
@@ -11,7 +12,7 @@ namespace ABW_Project
     {
         static void Main(string[] args)
         {
-            /*PlikWave wv = new PlikWave();
+            PlikWave wv = new PlikWave();
             wv.WczytajZPliku("plik.wav");
 
             Console.WriteLine("\n ========== Nagłówki ========== \n");
@@ -32,18 +33,27 @@ namespace ABW_Project
             Console.WriteLine(" Rozmiar danych: " + Convert.ToString(wv.rozmiarDanych));
             Console.WriteLine(" Ilość próbek: " + Convert.ToString(wv.iloscProbek));
             Console.WriteLine(" Długość w sekundach: " + Convert.ToString(wv.dlugoscWSekundach));
-
+            
             Console.WriteLine("\n ========== DFT ========== \n");
 
             Dft dft = new Dft();
 
-            int index = 0;
+            double index = 49.001;
+
+            StreamWriter sw = new StreamWriter("dupa.txt");
 
             foreach (double item in dft.WydzielPrzydzwiek(wv).czestotliwoscSzumow)
             {
-                Console.WriteLine("{0} {1} ", index++,item);
-            }*/
+                sw.Write(index);
+                sw.Write(" ");
+                sw.WriteLine((double)item);
+                index += 0.001;
+            }
+            Console.WriteLine("Koniec");
+            sw.Close();
 
+            /*
+             * Testujący DFT
             double[] S = new double[100];
 
             for (int t = 0; t < 100; t++)
@@ -59,8 +69,8 @@ namespace ABW_Project
             {
                 Console.WriteLine("{0} {1} ", index++, item);
             }
-
-           Console.ReadKey();
+            */
+            Console.ReadKey();
         }
     }
 }
