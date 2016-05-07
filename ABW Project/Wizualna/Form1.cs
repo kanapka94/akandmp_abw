@@ -22,7 +22,7 @@ namespace Wizualna
 
             chart1.Series[0].Points.Clear();
 
-            Dft dft = new Dft();
+            DFT dft = new DFT();
             FFT fft = new FFT();
             
             /*

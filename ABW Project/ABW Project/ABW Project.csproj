@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dft.cs" />
+    <Compile Include="DFT.cs" />
     <Compile Include="Algorytm.cs" />
     <Compile Include="FFT.cs" />
     <Compile Include="Program.cs" />

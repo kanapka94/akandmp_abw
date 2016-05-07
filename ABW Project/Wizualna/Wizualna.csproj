@@ -48,7 +48,7 @@
   <ItemGroup>
     <Compile Include="Algorytm.cs" />
     <Compile Include="Dane.cs" />
-    <Compile Include="Dft.cs" />
+    <Compile Include="DFT.cs" />
     <Compile Include="FFT.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
