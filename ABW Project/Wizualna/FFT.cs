@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Numerics;
 
 namespace Wizualna
-{
+{   //TODO: zaimplementować algorytm FFT2 metodą 3 pętli FOR
     class FFT : Algorytm
     {
         public override double[] ObliczWidmo(double[] sygnal)
@@ -62,6 +62,11 @@ namespace Wizualna
         }
         private double[] DostosujSygnal(double[] sygnal)    //metoda uzupełnia sygnał zerami, tak aby jego długość była potęgą dwójki
         {
+            int n = sygnal.Length;
+
+            if ((n & (n - 1)) == 0)  //jeżeli długość sygnału jest potęgą dwójki
+                return sygnal;
+
             int potega = 0;
             for (int i = 1; i <= 16; i++)   //sprawdza do jakiej potęgi dwójki ma rozszerzyć tablicę z próbkami
             {                
