@@ -11,9 +11,9 @@ namespace ABW_Project
     {
         public override double[] ObliczWidmo(double[] sygnal)
         {
-            return PodzialFFT(sygnal);
+            return PodzialFFT(DostosujSygnal(sygnal));
         }
-        public double[] PodzialFFT(double[] sygnal)
+        private double[] PodzialFFT(double[] sygnal)
         {
             int N = sygnal.Length;  //długość sygnału
             double[] S = new double[N]; //tworzę nową tablicę na sygnał
@@ -52,13 +52,41 @@ namespace ABW_Project
                 S[k] = (double)2 / N * Complex.Abs(suma);
             }
 
-            for (int k = 0; k < N; k++)
+            for (int k = 0; k < N/2; k++)
             {
-                S[k] = probkiParzysteCalosc[k] + probkiParzysteCalosc[k];
+                S[k] = probkiParzysteCalosc[k] + probkiNieparzysteCalosc[k];
                 S[k + N / 2] = probkiParzysteCalosc[k] - probkiNieparzysteCalosc[k];
             }
 
             return S;   //zwracam powstały sygnał
         }
+        private double[] DostosujSygnal(double[] sygnal)    //metoda uzupełnia sygnał zerami, tak aby jego długość była potęgą dwójki
+        {
+            int potega = 0;
+            for (int i = 1; i <= 16; i++)   //sprawdza do jakiej potęgi dwójki ma rozszerzyć tablicę z próbkami
+            {                
+                if (sygnal.Length <= Math.Pow(2, i))
+                {
+                    potega = i;
+                    break;
+                }
+            }
+
+            int ileCykliPotrzeba = (int)Math.Pow(2, potega);
+
+            double[] sygnalRozszerzony = new double[ileCykliPotrzeba];
+
+            for (int i = 0; i < sygnal.Length; i++)  //kopiuję wartości sygnału starego
+            {
+                sygnalRozszerzony[i] = sygnal[i];
+            }
+
+            for (int i = sygnal.Length-1; i < ileCykliPotrzeba; i++)
+            {
+                sygnalRozszerzony[i] = 0;
+            }
+
+            return sygnalRozszerzony;       
+        } 
     }
 }
