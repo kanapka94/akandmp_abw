@@ -10,15 +10,12 @@ namespace ABW_Project
 {
     class Log
     {
-        static StreamWriter sw;
-
-        public static void Init()
-        {
-            sw = new StreamWriter("log.txt");
-        }
+        static StreamWriter sw = null;
 
         public static void Add(string txt, bool date = true)
         {
+            if(sw == null) sw = new StreamWriter("log.txt");
+
             if (date)
             {
                 DateTime date1 = DateTime.Now;
