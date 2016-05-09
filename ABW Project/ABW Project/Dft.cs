@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace ABW_Project
 {
-    class Dft : Algorytm
+    class DFT : Algorytm
     {
         public override double[] ObliczWidmo(double[] sygnal)
         {
@@ -33,5 +33,6 @@ namespace ABW_Project
 
             return wynik;
         }
+
     }
 }

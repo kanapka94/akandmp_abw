@@ -22,7 +22,9 @@ namespace Wizualna
 
             chart1.Series[0].Points.Clear();
 
-            Dft dft = new Dft();
+            DFT dft = new DFT();
+            FFT fft = new FFT();
+            
             /*
             double index = 49.001;
 
@@ -39,10 +41,11 @@ namespace Wizualna
             }
 
             double[] wynik = dft.ObliczWidmo(S);
+            double[] wynik2 = fft.ObliczWidmo(S);
 
             for (int k = 0; k < 100; k++)
             {
-                chart1.Series[0].Points.Add(wynik[k]);
+                chart1.Series[0].Points.Add(wynik2[k]);
             }
 
 

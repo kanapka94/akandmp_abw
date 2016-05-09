@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace Wizualna
 {
-    class Dft : Algorytm
+    class DFT : Algorytm
     {
         public override double[] ObliczWidmo(double[] sygnal)
         {

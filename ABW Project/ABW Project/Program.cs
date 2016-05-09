@@ -36,7 +36,7 @@ namespace ABW_Project
             
             Console.WriteLine("\n ========== DFT ========== \n");
 
-            Dft dft = new Dft();
+            DFT dft = new DFT();
 
             double index = 49.001;
 
