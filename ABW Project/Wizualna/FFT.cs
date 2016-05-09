@@ -9,14 +9,14 @@ namespace Wizualna
 {   //TODO: zaimplementować algorytm FFT2 metodą 3 pętli FOR
     class FFT : Algorytm
     {
-        public override double[] ObliczWidmo(double[] sygnal)
+        public override decimal[] ObliczWidmo(decimal[] sygnal)
         {
             return PodzialFFT(DostosujSygnal(sygnal));
         }
-        private double[] PodzialFFT(double[] sygnal)
+        private decimal[] PodzialFFT(decimal[] sygnal)
         {
             int N = sygnal.Length;  //długość sygnału
-            double[] S = new double[N]; //tworzę nową tablicę na sygnał
+            decimal[] S = new decimal[N]; //tworzę nową tablicę na sygnał
 
             if (N == 1)     //jeżeli została mi tylko jedna próbka w sygnale to zwracam jej wartość
             {
@@ -24,10 +24,10 @@ namespace Wizualna
                 return S;
             }
 
-            double[] probkiParzyste, probkiNieparzyste, probkiParzysteCalosc, probkiNieparzysteCalosc;
+            decimal[] probkiParzyste, probkiNieparzyste, probkiParzysteCalosc, probkiNieparzysteCalosc;
 
-            probkiParzyste = new double[N / 2];     //
-            probkiNieparzyste = new double[N / 2];  //dzielę sygnał na pół (część parzystą i nieparzystą)
+            probkiParzyste = new decimal[N / 2];     //
+            probkiNieparzyste = new decimal[N / 2];  //dzielę sygnał na pół (część parzystą i nieparzystą)
 
             for (int n = 0; n < N/2; n++)   //uzupełniam puste szuflady (2 skrzynki z próbkami parzystymi i nieparzystymi) próbkami
             {
@@ -46,10 +46,10 @@ namespace Wizualna
                 suma = 0;
                 for (int n = 0; n < N; n++)
                 {
-                    suma += sygnal[n] * Complex.Exp((double)-2 * Complex.ImaginaryOne * Math.PI * (double)n * (double)k / (double)N);
+                    suma += sygnal[n] * Complex.Exp((decimal)-2 * Complex.ImaginaryOne * Math.PI * (decimal)n * (decimal)k / (decimal)N);
                 }
                 // wynik[k] =10 * Math.Log10(Math.Pow(Complex.Abs(suma),2));
-                S[k] = (double)2 / N * Complex.Abs(suma);
+                S[k] = (decimal)2 / N * Complex.Abs(suma);
             }
 
             for (int k = 0; k < N/2; k++)
@@ -60,7 +60,7 @@ namespace Wizualna
 
             return S;   //zwracam powstały sygnał
         }
-        private double[] DostosujSygnal(double[] sygnal)    //metoda uzupełnia sygnał zerami, tak aby jego długość była potęgą dwójki
+        private decimal[] DostosujSygnal(decimal[] sygnal)    //metoda uzupełnia sygnał zerami, tak aby jego długość była potęgą dwójki
         {
             int n = sygnal.Length;
 
@@ -79,7 +79,7 @@ namespace Wizualna
 
             int ileCykliPotrzeba = (int)Math.Pow(2, potega);
 
-            double[] sygnalRozszerzony = new double[ileCykliPotrzeba];
+            decimal[] sygnalRozszerzony = new decimal[ileCykliPotrzeba];
 
             for (int i = 0; i < sygnal.Length; i++)  //kopiuję wartości sygnału starego
             {

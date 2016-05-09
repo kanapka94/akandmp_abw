@@ -24,34 +24,38 @@ namespace Wizualna
 
             DFT dft = new DFT();
             FFT fft = new FFT();
-            
-            /*
-            double index = 49.001;
 
-            foreach (double item in dft.WydzielPrzydzwiek(wv).czestotliwoscSzumow)
+            /*
+            decimal index = 49.001;
+
+            foreach (decimal item in dft.WydzielPrzydzwiek(wv).czestotliwoscSzumow)
             {
                 chart1.Series[0].Points.Add(item);
             }*/
-            double[] S = new double[100];
+            /*decimal[] S = new decimal[100];
 
             for (int k = 0; k < 100; k++)
             {
-                S[k] = (double) Math.Sin((double)2 * Math.PI * 3 * k / 100) + Math.Cos(2*Math.PI * 10 * k / 100);
+                S[k] = (decimal) Math.Sin((decimal)2 * Math.PI * 3 * k / 100) + Math.Cos(2*Math.PI * 10 * k / 100);
                 //chart1.Series[0].Points.Add(S[k]);
-            }
+            }*/
 
-            double[] wynik = dft.ObliczWidmo(S);
-            double[] wynik2 = fft.ObliczWidmo(S);
+            decimal[] S;
 
-            for (int k = 0; k < 100; k++)
+            S = wv.PobierzProbki(0, 200);
+
+            //decimal[] wynik = dft.ObliczWidmo(S);
+            decimal[] wynik2 = fft.ObliczWidmo(S);
+
+            for (int k = 0; k < 200; k++)
             {
                 chart1.Series[0].Points.Add(wynik2[k]);
             }
 
 
-            /*double srednia = 0;
+            /*decimal srednia = 0;
 
-            double coIleRysowac = 2;
+            decimal coIleRysowac = 2;
             int i;
             for (i = 0; i < wv.iloscProbek/100; i++)
             {

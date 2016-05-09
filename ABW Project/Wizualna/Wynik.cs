@@ -8,6 +8,6 @@ namespace Wizualna
 {
     class Wynik
     {
-        public double[] czestotliwoscSzumow;
+        public decimal[] czestotliwoscSzumow;
     }
 }

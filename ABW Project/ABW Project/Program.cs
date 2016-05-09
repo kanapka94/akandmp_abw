@@ -5,9 +5,122 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.IO;
+using System.Diagnostics;
 
 namespace ABW_Project
 {
+    public class Stan
+    {
+        int cX; // Pozycja kursora w consoli
+        int cY;
+        public int stan; // Stan wykonanej roboty
+
+        int kX; // Pozycja animowanego znaku pasek
+        int kY;
+
+        int animacja; // Poziom Animacji
+        Thread animWatek;
+
+        Stopwatch sw = new Stopwatch();
+
+        public void Init(int x, int y)
+        {
+            cX = x;
+            cY = y;
+            kX = 10;
+            kY = cY + 1;
+            stan = 0;
+            animacja = 0;
+        }
+
+        public void AnimacjaKursora()
+        {
+            while (true)
+            {
+                kX = 10 + stan / 20;
+                rysujStan();
+                if (stan >= 100)
+                {
+                    animWatek.Abort();
+                }
+                
+                if (stan < 100)
+                {
+                    Console.SetCursorPosition(kX, kY);
+                    switch (animacja)
+                    {
+                        case 0:
+                            Console.Write("|");
+                            break;
+                        case 1:
+                            Console.Write("/");
+                            break;
+                        case 2:
+                            Console.Write("-");
+                            break;
+                        case 3:
+                            Console.Write("\\");
+                            break;
+                    }
+                    animacja++;
+                    if (animacja == 4) animacja = 0;
+                }
+                Thread.Sleep(200);
+            }
+        }
+        public void rysujStan()
+        {
+            Console.SetCursorPosition(cX, cY);
+            Console.WriteLine(" Czas: {0} s        ", (int)(sw.ElapsedMilliseconds/1000));
+            Console.Write(" Postęp: [");
+            for (int i = 0; i < stan / 20; i++)
+            {
+                Console.Write("+");
+            }
+            if(stan < 100)
+            Console.Write(" ");
+            for (int i = stan / 20 + 1; i < 5; i++)
+            {
+                Console.Write("-");
+            }
+            Console.WriteLine("] {0}%           ", stan);
+        }
+
+        public void Rozpocznij()
+        {
+            animWatek = new Thread(new ThreadStart(AnimacjaKursora));
+            animWatek.Start();
+            while (!animWatek.IsAlive) ;
+
+            Console.CursorVisible = false;
+            sw.Reset();
+            sw.Start();
+
+        }
+
+        public void Zakoncz()
+        {
+            animWatek.Abort();
+            Console.SetCursorPosition(1, kY);
+            Console.WriteLine(" Postęp: [+++++] 100%       ");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.SetCursorPosition(cX, cY + 3);
+            Console.CursorVisible = true;
+
+            sw.Stop();
+            
+        }
+
+        public double Sekundy
+        {
+            get
+            {
+                return (double)sw.ElapsedMilliseconds / 1000;
+            }
+        }
+    };
+
     class Program
     {
         static void Main(string[] args)
@@ -37,21 +150,33 @@ namespace ABW_Project
             Console.WriteLine("\n ========== DFT ========== \n");
 
             DFT dft = new DFT();
+            Console.WriteLine(" Analiza...\n");
+            Stan stan = new Stan();
 
-            double index = 49.001;
+            stan.Init(Console.CursorLeft, Console.CursorTop);
+            
+            stan.Rozpocznij();
+            int index = 0;
+            
+            double[] wynik = dft.WydzielPrzydzwiek(wv, ref stan.stan).czestotliwoscSzumow;
+ 
+            stan.Zakoncz();
 
-            StreamWriter sw = new StreamWriter("dupa.txt");
-
-            foreach (double item in dft.WydzielPrzydzwiek(wv).czestotliwoscSzumow)
+            Console.WriteLine("> Wynik DFT");
+            Console.WriteLine();
+            foreach (double item in wynik)
             {
-                sw.Write(index);
-                sw.Write(" ");
-                sw.WriteLine((double)item);
-                index += 0.001;
+                Console.WriteLine(" W {0} sekundzie {1} hz", ++index, item);
             }
-            Console.WriteLine("Koniec");
-            sw.Close();
 
+            Console.WriteLine();
+            Console.WriteLine(" Czas: {0} s", stan.Sekundy);
+
+
+            Console.CursorVisible = true;
+
+            Console.WriteLine();
+            Console.WriteLine(" === Koniec ===");
             /*
              * Testujący DFT
             double[] S = new double[100];
