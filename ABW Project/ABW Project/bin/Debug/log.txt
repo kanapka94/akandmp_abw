@@ -1,0 +1,3 @@
+2016-05-09 22:24:44 To jest przykładowy wpis
+2016-05-09 22:24:44 A to następny
+A ten bez daty

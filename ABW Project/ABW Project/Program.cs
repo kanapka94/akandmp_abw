@@ -128,6 +128,12 @@ namespace ABW_Project
             PlikWave wv = new PlikWave();
             wv.WczytajZPliku("plik.wav");
 
+            Log.Init();
+            Log.Add("To jest przykładowy wpis");
+            Log.Add("A to następny");
+            Log.Add("A ten bez daty",false);
+            Log.Close();
+
             Console.WriteLine("\n ========== Nagłówki ========== \n");
 
             Console.WriteLine(" Riff id: " + wv.idRiff);
