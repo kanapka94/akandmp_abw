@@ -10,3 +10,9 @@ D:\Github\ABW Project\ABW Project\obj\Debug\ABW Project.pdb
 D:\Github\ABW Project\ABW Project\bin\Debug\ABW Project.exe
 D:\Github\ABW Project\ABW Project\bin\Debug\ABW Project.pdb
 D:\Github\ABW Project\ABW Project\obj\Debug\ABW Project.csprojResolveAssemblyReference.cache
+D:\Github\ABW Project\ABW Project\ABW Project\bin\Debug\ABW Project.exe.config
+D:\Github\ABW Project\ABW Project\ABW Project\obj\Debug\ABW Project.exe
+D:\Github\ABW Project\ABW Project\ABW Project\obj\Debug\ABW Project.pdb
+D:\Github\ABW Project\ABW Project\ABW Project\bin\Debug\ABW Project.exe
+D:\Github\ABW Project\ABW Project\ABW Project\bin\Debug\ABW Project.pdb
+D:\Github\ABW Project\ABW Project\ABW Project\obj\Debug\ABW Project.csprojResolveAssemblyReference.cache
