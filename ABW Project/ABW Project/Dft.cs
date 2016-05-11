@@ -21,11 +21,11 @@ namespace ABW_Project
 
             //for (int k = -999; k < 1000; k++)
 
-            decimal k = 49.001M;
+            decimal k = 49.8M;
 
             int index = 0;
 
-            while (k < 51.0M)
+            while (k <= 50.2M)
             {
                 suma = 0;
                 

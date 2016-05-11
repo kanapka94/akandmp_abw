@@ -19,7 +19,7 @@ namespace ABW_Project
 
                 double max = 0;
                 decimal maxi = 0;
-                decimal index = 49.001M;
+                decimal index = 49.8M;
 
                 foreach (double item in widmo)
                 {
