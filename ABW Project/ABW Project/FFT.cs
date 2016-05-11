@@ -48,8 +48,8 @@ namespace ABW_Project
                 {
                     suma += sygnal[n] * Complex.Exp((double)-2 * Complex.ImaginaryOne * Math.PI * (double)n * (double)k / (double)N);
                 }
-                // wynik[k] =10 * Math.Log10(Math.Pow(Complex.Abs(suma),2));
-                S[k] = (double)2 / N * Complex.Abs(suma);
+                                
+                S[k] = (double)1 / N * Math.Pow(Complex.Abs(suma),2);
             }
 
             for (int k = 0; k < N/2; k++)

@@ -40,12 +40,12 @@ namespace Wizualna
                 //chart1.Series[0].Points.Add(S[k]);
             }*/
 
-            decimal[] S;
+            double[] S;
 
             S = wv.PobierzProbki(0, 200);
 
-            //decimal[] wynik = dft.ObliczWidmo(S);
-            decimal[] wynik2 = fft.ObliczWidmo(S);
+            double[] wynik = dft.ObliczWidmo(S);
+            double[] wynik2 = fft.ObliczWidmo(S);
 
             for (int k = 0; k < 200; k++)
             {
@@ -74,8 +74,8 @@ namespace Wizualna
 
         private void chart1_Click(object sender, EventArgs e)
         {
-           
-            
+
+            MessageBox.Show("To jest świetny wykres");
         }
 
         private void button1_Click(object sender, EventArgs e)

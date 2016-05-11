@@ -26,7 +26,7 @@ namespace Wizualna
 
         int bitowNaKanal;
         public int iloscProbek;
-        public decimal dlugoscWSekundach;
+        public double dlugoscWSekundach;
 
         private BinaryReader plik;
 
@@ -105,30 +105,30 @@ namespace Wizualna
             rozmiarDanych = readedBytes[0] + readedBytes[1] * (int)Math.Pow(256, 1) + readedBytes[2] * (int)Math.Pow(256, 2) + readedBytes[3] * (int)Math.Pow(256, 3);
 
             iloscProbek = (rozmiarDanych) / rozmiarProbki;
-            dlugoscWSekundach = (decimal)iloscProbek / czestotliwoscProbkowania;
+            dlugoscWSekundach = (double)iloscProbek / czestotliwoscProbkowania;
             // riffId = ((string)readedBytes[0]) + ((char)readedBytes[1]) + ((char)readedBytes[2]) + ((char)readedBytes[3]);
 
             //riffId = 1000 * readedBytes[3] + 100 * readedBytes[2] + 10 * readedBytes[1] + readedBytes[0];
             
         }
 
-        public decimal NastepnaProbka(byte kanal = 0)
+        public double NastepnaProbka(byte kanal = 0)
         {
             byte[] readedBytes = plik.ReadBytes(rozmiarProbki);
-            decimal dane = 0;
+            double dane = 0;
             int pozycjaKanalu = kanal * bitowNaKanal;
 
             for (int i = pozycjaKanalu; i < pozycjaKanalu + bitowNaKanal; i++)
-                dane += readedBytes[i] * (decimal)Math.Pow(256, i);
+                dane += readedBytes[i] * (double)Math.Pow(256, i);
 
             return dane;
         }
 
-        public decimal[] PobierzProbki(byte kanal = 0, int probkiDoOdczytania = -1)
+        public double[] PobierzProbki(byte kanal = 0, int probkiDoOdczytania = -1)
         {
             if (probkiDoOdczytania == -1) probkiDoOdczytania = czestotliwoscProbkowania;
 
-            decimal[] probki = new decimal[probkiDoOdczytania];
+            double[] probki = new double[probkiDoOdczytania];
 
             for (int i = 0; i < probkiDoOdczytania; i++)
             {

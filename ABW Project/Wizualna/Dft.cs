@@ -9,10 +9,10 @@ namespace Wizualna
 {
     class DFT : Algorytm
     {
-        public override decimal[] ObliczWidmo(decimal[] sygnal)
+        public override double[] ObliczWidmo(double[] sygnal)
         {
             int N = sygnal.Length;
-            decimal[] wynik = new decimal[N];
+            double[] wynik = new double[N];
 
             // Wzór na DFT //
 
@@ -24,10 +24,10 @@ namespace Wizualna
 
                 for (int j = 0; j < N; j++)
                 {
-                    suma += sygnal[j] * Complex.Exp((decimal)-2 * Complex.ImaginaryOne * Math.PI * (decimal)j * (decimal)k / (decimal)N);
+                    suma += sygnal[j] * Complex.Exp((double)-2 * Complex.ImaginaryOne * Math.PI * (double)j * (double)k / (double)N);
                 }
                 // wynik[k] =10 * Math.Log10(Math.Pow(Complex.Abs(suma),2));
-                wynik[k] = (decimal)2 / N * Complex.Abs(suma);
+                wynik[k] = Math.Pow(Complex.Abs(suma),2)/N;
             }
             return wynik;
         }

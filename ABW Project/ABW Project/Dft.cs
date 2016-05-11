@@ -34,7 +34,7 @@ namespace ABW_Project
                     suma += sygnal[j] * Complex.Exp(Complex.ImaginaryOne * (double)(- 2 * (decimal)Math.PI * (decimal)j * (decimal)(k) / (decimal)N));
                 }
                 // wynik[k] =10 * Math.Log10(Math.Pow(Complex.Abs(suma),2));
-                wynik[index++] = (double)2 / (double)N * Complex.Abs(suma);
+                wynik[index++] = (double)1 / (double)N * Complex.Abs(suma);
                 k += 0.001M;
             }
 
