@@ -26,7 +26,10 @@ namespace ABW_Project
 
         public static void Close()
         {
-            sw.Close();
+            if(sw != null)
+            { 
+                sw.Close();
+            }
         }
     }
 }
