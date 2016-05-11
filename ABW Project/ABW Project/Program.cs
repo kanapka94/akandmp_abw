@@ -128,10 +128,7 @@ namespace ABW_Project
             PlikWave wv = new PlikWave();
             wv.WczytajZPliku("plik.wav");
 
-            Log.Add("To jest przykładowy wpis");
-            Log.Add("A to następny");
-            Log.Add("A ten bez daty",false);
-            Log.Close();
+            Log.Add("-------------------- Nowa analiza -----------------------");                        
 
             Console.WriteLine("\n ========== Nagłówki ========== \n");
 
@@ -154,6 +151,7 @@ namespace ABW_Project
             
             Console.WriteLine("\n ========== DFT ========== \n");
 
+            
             DFT dft = new DFT();
             Console.WriteLine(" Analiza...\n");
             Stan stan = new Stan();
@@ -162,17 +160,22 @@ namespace ABW_Project
             
             stan.Rozpocznij();
             int index = 0;
-            
+
+            Log.Add("Rozpoczęcie analizy");
             double[] wynik = dft.WydzielPrzydzwiek(wv, ref stan.stan).czestotliwoscSzumow;
- 
+            Log.Add("Zakończenie analizy");
             stan.Zakoncz();
 
             Console.WriteLine("> Wynik DFT");
             Console.WriteLine();
+            Log.Add("Wyniki:", false);
             foreach (double item in wynik)
             {
                 Console.WriteLine(" W {0} sekundzie {1} hz", ++index, item);
+                Log.Add(" w "+index+" sekundzie "+item+" hz");
             }
+
+            Log.Close();
 
             Console.WriteLine();
             Console.WriteLine(" Czas: {0} s", stan.Sekundy);
