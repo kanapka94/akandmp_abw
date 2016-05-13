@@ -12,7 +12,7 @@ namespace ABW_Project
     {
         static StreamWriter sw = null;
 
-        public static void Add(string txt, bool date = true)
+        public static void Dodaj(string txt, bool date = true)
         {
             if(sw == null) sw = new StreamWriter("log.txt");
 
@@ -24,7 +24,7 @@ namespace ABW_Project
             sw.WriteLine(txt);
         }
 
-        public static void Close()
+        public static void Zamknij()
         {
             if(sw != null)
             { 
