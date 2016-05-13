@@ -162,7 +162,7 @@ namespace ABW_Project
             int index = 0;
 
             Log.Dodaj("Rozpoczęcie analizy");
-            double[] wynik = dft.WydzielPrzydzwiek(wv, ref stan.stan).czestotliwoscSzumow;
+            double[] wynik = dft.WydzielPrzydzwiek(wv, ref stan.stan).czestotliwoscSygnalu;
             Log.Dodaj("Zakończenie analizy");
             stan.Zakoncz();
 

@@ -11,14 +11,14 @@ namespace ABW_Project
         public Wynik WydzielPrzydzwiek(PlikWave plik,ref int stan)
         {
             Wynik wynik = new Wynik();
-            wynik.czestotliwoscSzumow = new double[(int)plik.dlugoscWSekundach];
+            wynik.czestotliwoscSygnalu = new double[(int)plik.dlugoscWSekundach];
 
             for (int sekundy = 0; sekundy < (int)plik.dlugoscWSekundach; sekundy++)
             {
                 double[] widmo = ObliczWidmo(plik.PobierzProbki());
 
                 double max = 0;
-                decimal maxi = 0;
+                decimal maxIndex = 0;
                 decimal index = 49.8M;
 
                 foreach (double item in widmo)
@@ -26,7 +26,7 @@ namespace ABW_Project
                     if (item > max)
                     {
                         max = item;
-                        maxi = index;
+                        maxIndex = index;
                     }
 
                     index += 0.001M;
@@ -34,7 +34,7 @@ namespace ABW_Project
 
                 stan = (int)((double)(sekundy+1) / plik.dlugoscWSekundach * 100);
 
-                wynik.czestotliwoscSzumow[sekundy] = (double)maxi;
+                wynik.czestotliwoscSygnalu[sekundy] = (double)maxIndex;
             }
             stan = 100;
 

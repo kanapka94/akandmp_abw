@@ -62,6 +62,11 @@ namespace ABW_Project
         }
         private double[] DostosujSygnal(double[] sygnal)    //metoda uzupełnia sygnał zerami, tak aby jego długość była potęgą dwójki
         {
+            int n = sygnal.Length;
+
+            if ((n & (n - 1)) == 0)     //sprawdza czy długość sygnału jest potęgą dwójki
+                return sygnal;
+
             int potega = 0;
             for (int i = 1; i <= 16; i++)   //sprawdza do jakiej potęgi dwójki ma rozszerzyć tablicę z próbkami
             {                
