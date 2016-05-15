@@ -16,3 +16,9 @@ D:\Github\ABW Project\ABW Project\ABW Project\obj\Debug\ABW Project.pdb
 D:\Github\ABW Project\ABW Project\ABW Project\bin\Debug\ABW Project.exe
 D:\Github\ABW Project\ABW Project\ABW Project\bin\Debug\ABW Project.pdb
 D:\Github\ABW Project\ABW Project\ABW Project\obj\Debug\ABW Project.csprojResolveAssemblyReference.cache
+E:\TESTY\akandmp_abw\ABW Project\ABW Project\bin\Debug\ABW Project.exe.config
+E:\TESTY\akandmp_abw\ABW Project\ABW Project\obj\Debug\ABW Project.exe
+E:\TESTY\akandmp_abw\ABW Project\ABW Project\obj\Debug\ABW Project.pdb
+E:\TESTY\akandmp_abw\ABW Project\ABW Project\bin\Debug\ABW Project.exe
+E:\TESTY\akandmp_abw\ABW Project\ABW Project\bin\Debug\ABW Project.pdb
+E:\TESTY\akandmp_abw\ABW Project\ABW Project\obj\Debug\ABW Project.csprojResolveAssemblyReference.cache

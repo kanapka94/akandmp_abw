@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorytm.cs" />
+    <Compile Include="CZT.cs" />
     <Compile Include="Dane.cs" />
     <Compile Include="DFT.cs" />
     <Compile Include="FFT.cs" />

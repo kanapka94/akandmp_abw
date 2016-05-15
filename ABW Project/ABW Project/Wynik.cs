@@ -8,6 +8,6 @@ namespace ABW_Project
 {
     class Wynik
     {
-        public double[] czestotliwoscSzumow;
+        public double[] czestotliwoscSygnalu;
     }
 }

@@ -23,39 +23,39 @@ namespace Wizualna
             chart1.Series[0].Points.Clear();
 
             DFT dft = new DFT();
-           // FFT fft = new FFT();
+            FFT fft = new FFT();
 
             /*
-            double index = 49.001;
+            decimal index = 49.001;
 
-            foreach (double item in dft.WydzielPrzydzwiek(wv).czestotliwoscSzumow)
+            foreach (decimal item in dft.WydzielPrzydzwiek(wv).czestotliwoscSzumow)
             {
                 chart1.Series[0].Points.Add(item);
             }*/
-            /*double[] S = new double[100];
+            /*decimal[] S = new decimal[100];
 
             for (int k = 0; k < 100; k++)
             {
-                S[k] = (double) Math.Sin((double)2 * Math.PI * 3 * k / 100) + Math.Cos(2*Math.PI * 10 * k / 100);
+                S[k] = (decimal) Math.Sin((decimal)2 * Math.PI * 3 * k / 100) + Math.Cos(2*Math.PI * 10 * k / 100);
                 //chart1.Series[0].Points.Add(S[k]);
             }*/
 
             double[] S;
 
-            S = wv.PobierzProbki(0, 44100);
+            S = wv.PobierzProbki(0, 200);
 
-            //double[] wynik = dft.ObliczWidmo(S);
-            double[] wynik2 = dft.ObliczWidmo(S);
+            double[] wynik = dft.ObliczWidmo(S);
+            double[] wynik2 = fft.ObliczWidmo(S);
 
             for (int k = 0; k < 200; k++)
             {
-                chart1.Series[0].Points.Add((int)wynik2[k]);
+                chart1.Series[0].Points.Add(wynik2[k]);
             }
 
 
-            /*double srednia = 0;
+            /*decimal srednia = 0;
 
-            double coIleRysowac = 2;
+            decimal coIleRysowac = 2;
             int i;
             for (i = 0; i < wv.iloscProbek/100; i++)
             {
@@ -74,8 +74,8 @@ namespace Wizualna
 
         private void chart1_Click(object sender, EventArgs e)
         {
-           
-            
+
+            MessageBox.Show("To jest świetny wykres");
         }
 
         private void button1_Click(object sender, EventArgs e)

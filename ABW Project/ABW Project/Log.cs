@@ -12,21 +12,24 @@ namespace ABW_Project
     {
         static StreamWriter sw = null;
 
-        public static void Add(string txt, bool date = true)
+        public static void Dodaj(string tekst, bool czyWypisywacDate = true)
         {
             if(sw == null) sw = new StreamWriter("log.txt");
 
-            if (date)
+            if (czyWypisywacDate)
             {
-                DateTime date1 = DateTime.Now;
-                sw.Write("{0} ",date1);
+                DateTime data1 = DateTime.Now;
+                sw.Write("{0} ",data1);
             }
-            sw.WriteLine(txt);
+            sw.WriteLine(tekst);
         }
 
-        public static void Close()
+        public static void Zamknij()
         {
-            sw.Close();
+            if(sw != null)
+            { 
+                sw.Close();
+            }
         }
     }
 }

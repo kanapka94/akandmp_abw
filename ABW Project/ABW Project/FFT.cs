@@ -48,8 +48,8 @@ namespace ABW_Project
                 {
                     suma += sygnal[n] * Complex.Exp((double)-2 * Complex.ImaginaryOne * Math.PI * (double)n * (double)k / (double)N);
                 }
-                // wynik[k] =10 * Math.Log10(Math.Pow(Complex.Abs(suma),2));
-                S[k] = (double)2 / N * Complex.Abs(suma);
+                                
+                S[k] = (double)1 / N * Math.Pow(Complex.Abs(suma),2);
             }
 
             for (int k = 0; k < N/2; k++)
@@ -62,6 +62,11 @@ namespace ABW_Project
         }
         private double[] DostosujSygnal(double[] sygnal)    //metoda uzupełnia sygnał zerami, tak aby jego długość była potęgą dwójki
         {
+            int n = sygnal.Length;
+
+            if ((n & (n - 1)) == 0)     //sprawdza czy długość sygnału jest potęgą dwójki
+                return sygnal;
+
             int potega = 0;
             for (int i = 1; i <= 16; i++)   //sprawdza do jakiej potęgi dwójki ma rozszerzyć tablicę z próbkami
             {                
