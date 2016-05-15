@@ -15,7 +15,7 @@ namespace Wizualna
             return wynik;
         }
 
-        public virtual decimal[] ObliczWidmo(decimal[] sygnal)
+        public virtual double[] ObliczWidmo(double[] sygnal)
         {
             return null;
         }

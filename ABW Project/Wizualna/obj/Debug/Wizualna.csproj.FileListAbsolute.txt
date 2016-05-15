@@ -25,3 +25,12 @@ E:\TESTY\akandmp_abw\ABW Project\Wizualna\obj\Debug\Wizualna.csprojResolveAssemb
 E:\TESTY\akandmp_abw\ABW Project\Wizualna\obj\Debug\Wizualna.Form1.resources
 E:\TESTY\akandmp_abw\ABW Project\Wizualna\obj\Debug\Wizualna.Properties.Resources.resources
 E:\TESTY\akandmp_abw\ABW Project\Wizualna\obj\Debug\Wizualna.csproj.GenerateResource.Cache
+D:\Github\ABW Project\ABW Project\Wizualna\bin\Debug\Wizualna.exe.config
+D:\Github\ABW Project\ABW Project\Wizualna\obj\Debug\Wizualna.exe
+D:\Github\ABW Project\ABW Project\Wizualna\obj\Debug\Wizualna.pdb
+D:\Github\ABW Project\ABW Project\Wizualna\obj\Debug\Wizualna.csprojResolveAssemblyReference.cache
+D:\Github\ABW Project\ABW Project\Wizualna\obj\Debug\Wizualna.Form1.resources
+D:\Github\ABW Project\ABW Project\Wizualna\obj\Debug\Wizualna.Properties.Resources.resources
+D:\Github\ABW Project\ABW Project\Wizualna\obj\Debug\Wizualna.csproj.GenerateResource.Cache
+D:\Github\ABW Project\ABW Project\Wizualna\bin\Debug\Wizualna.exe
+D:\Github\ABW Project\ABW Project\Wizualna\bin\Debug\Wizualna.pdb
