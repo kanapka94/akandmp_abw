@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace ABW_Project
 {
@@ -11,38 +12,29 @@ namespace ABW_Project
         public Wynik WydzielPrzydzwiek(PlikWave plik,ref int stan)
         {
             Wynik wynik = new Wynik();
-            wynik.czestotliwoscSygnalu = new double[(int)plik.dlugoscWSekundach];
 
-            for (int sekundy = 0; sekundy < (int)plik.dlugoscWSekundach; sekundy++)
+            double[] wynik2 = plik.PobierzProbki();
+            wynik.czestotliwoscSygnalu = new double[800000];
+
+            for (int i = 0; i < wynik.czestotliwoscSygnalu.Length; i++)
             {
-                double[] widmo = ObliczWidmo(plik.PobierzProbki());
-
-                double max = 0;
-                decimal maxIndex = 0;
-                decimal index = 49.8M;
-
-                foreach (double item in widmo)
-                {
-                    if (item > max)
-                    {
-                        max = item;
-                        maxIndex = index;
-                    }
-
-                    index += 0.001M;
-                }
-
-                stan = (int)((double)(sekundy+1) / plik.dlugoscWSekundach * 100);
-
-                wynik.czestotliwoscSygnalu[sekundy] = (double)maxIndex;
+                wynik.czestotliwoscSygnalu[i] = 0;
             }
-            stan = 100;
+
+            for (int i = 0; i < wynik2.Length; i++)
+            {
+                wynik.czestotliwoscSygnalu[i] = wynik2[i];
+            }
+
+            wynik.czestotliwoscSygnalu = ObliczWidmo(wynik.czestotliwoscSygnalu);
 
             return wynik;
         }
 
         public virtual double[] ObliczWidmo(double[] sygnal)
         {
+            // Algorytm powinien być nadpisany
+
             return null;
         }
     }

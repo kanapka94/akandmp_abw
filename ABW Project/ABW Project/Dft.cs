@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,17 +9,17 @@ namespace ABW_Project
 {
     class DFT : Algorytm
     {
-        public override double[] ObliczWidmo(double[] sygnal)
+        public override double[] ObliczWidmo(double[] sygnal,int iloscProbek = -1)
         {
             double[] wynik = new double[2000];
 
             int N = sygnal.Length;
+            if (iloscProbek == -1) iloscProbek = N;
+            double wartoscProbki = 0;
 
             // Wzór na DFT //
-            
-            Complex suma = new Complex(0, 0);
 
-            //for (int k = -999; k < 1000; k++)
+            Complex suma = new Complex(0, 0);
 
             decimal k = 49.8M;
 
@@ -28,10 +28,15 @@ namespace ABW_Project
             while (k <= 50.2M)
             {
                 suma = 0;
-                
-                for (int j = 0; j < N; j++)
+
+                for (int j = 0; j < iloscProbek; j++)
                 {
-                    suma += sygnal[j] * Complex.Exp(Complex.ImaginaryOne * (double)(- 2 * (decimal)Math.PI * (decimal)j * (decimal)(k) / (decimal)N));
+                    if (j >= N)
+                        wartoscProbki = 0;
+                    else
+                        wartoscProbki = sygnal[j];
+
+                    suma += wartoscProbki * Complex.Exp(Complex.ImaginaryOne * (double)(- 2 * (decimal)Math.PI * (decimal)j * (decimal)(k) / (decimal)N));
                 }
                 // wynik[k] =10 * Math.Log10(Math.Pow(Complex.Abs(suma),2));
                 wynik[index++] = (double)1 / (double)N * Complex.Abs(suma);
@@ -42,4 +47,4 @@ namespace ABW_Project
         }
 
     }
-}
+}*/

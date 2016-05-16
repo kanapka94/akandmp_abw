@@ -1,7 +1,4 @@
-2016-05-11 09:27:04 ------------------- Analiza z dnia:
-2016-05-11 09:27:04 Rozpoczęcie analizy:
-2016-05-11 09:27:25 Zakończenie analizy:
+2016-05-16 20:54:48 -------------------- Nowa analiza -----------------------
+2016-05-16 20:54:48 Rozpoczęcie analizy
+2016-05-16 20:54:50 Zakończenie analizy
 Wyniki:
-2016-05-11 09:27:25  W 1 sekundzie 49,8 hz
-2016-05-11 09:27:25  W 2 sekundzie 49,984 hz
-2016-05-11 09:27:25  W 3 sekundzie 50,2 hz

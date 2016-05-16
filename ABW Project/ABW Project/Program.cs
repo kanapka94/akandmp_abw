@@ -152,34 +152,67 @@ namespace ABW_Project
             Console.WriteLine("\n ========== DFT ========== \n");
 
             
-            DFT dft = new DFT();
+            
             Console.WriteLine(" Analiza...\n");
             Stan stan = new Stan();
+            //DFT dft = new DFT();
+            FFT fft = new FFT();
 
             stan.Init(Console.CursorLeft, Console.CursorTop);
-            
             stan.Rozpocznij();
             int index = 0;
 
             Log.Dodaj("Rozpoczęcie analizy");
-            double[] wynik = dft.WydzielPrzydzwiek(wv, ref stan.stan).czestotliwoscSygnalu;
+            //double[] wynik = dft.WydzielPrzydzwiek(wv, ref stan.stan,wv.czestotliwoscProbkowania*16).czestotliwoscSygnalu;
+            double[] wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan).czestotliwoscSygnalu;
+
             Log.Dodaj("Zakończenie analizy");
             stan.Zakoncz();
 
-            Console.WriteLine("> Wynik DFT");
+            /*Console.WriteLine("> Wynik DFT");
             Console.WriteLine();
             Log.Dodaj("Wyniki:", false);
             foreach (double item in wynik)
             {
                 Console.WriteLine(" W {0} sekundzie {1} hz", ++index, item);
                 Log.Dodaj(" w "+index+" sekundzie "+item+" hz");
+            }*/
+
+            Console.WriteLine("> Wynik FFT");
+            Console.WriteLine();
+            Log.Dodaj("Wyniki:", false);
+            /*foreach (double item in wynik)
+            {
+                Console.WriteLine(" W {0} sekundzie {1} hz", ++index, item);
+                Log.Dodaj(" w " + index + " sekundzie " + item + " hz");
+            }*/
+            int potegaDwojki = (int)Math.Log(800000, 2) + 1;
+
+            Console.WriteLine(wv.czestotliwoscProbkowania / (Math.Pow(2, potegaDwojki)));
+
+            StreamWriter sw = new StreamWriter("plik.txt");
+
+            for (int i = 0; i < wynik.Length; i++)
+            {
+                sw.WriteLine(Convert.ToString((decimal)(i * wv.czestotliwoscProbkowania / (decimal)(Math.Pow(2, potegaDwojki)))));
             }
+            sw.Close();
+            /*int indexP = (int)(40 * (double)(Math.Pow(2,potegaDwojki) / wv.czestotliwoscProbkowania));
+            int indexK = (int)(60 * (double)(Math.Pow(2,potegaDwojki) / wv.czestotliwoscProbkowania));
+            Console.WriteLine(wynik.Length);
+            index = 40;
+
+            for (int i = indexP; i < indexK; i++)
+            {
+                Console.WriteLine(" W {0} sekundzie {1} hz", index, wynik[i]/100);
+                Log.Dodaj(" w " + index + " sekundzie " + wynik[i] + " hz");
+                index++;
+            }*/
 
             Log.Zamknij();
 
             Console.WriteLine();
             Console.WriteLine(" Czas: {0} s", stan.Sekundy);
-
 
             Console.CursorVisible = true;
 

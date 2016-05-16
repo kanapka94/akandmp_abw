@@ -45,10 +45,13 @@
     <Compile Include="DFT.cs" />
     <Compile Include="Algorytm.cs" />
     <Compile Include="FFT.cs" />
+    <Compile Include="FFT Adama.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="Okno.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PlikWave.cs" />
+    <Compile Include="Sygnal.cs" />
     <Compile Include="Wynik.cs" />
   </ItemGroup>
   <ItemGroup>

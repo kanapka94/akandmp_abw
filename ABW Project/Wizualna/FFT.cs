@@ -11,8 +11,8 @@ namespace Wizualna
     {
         public override double[] ObliczWidmo(double[] sygnal)
         {
-            //return PodzialFFT(DostosujSygnal(sygnal));
-            return PodzialRadix2(DostosujSygnal(sygnal));
+            return PodzialFFT(DostosujSygnal(sygnal));
+            //return PodzialRadix2(DostosujSygnal(sygnal));
         }
         private double[] PodzialFFT(double[] sygnal)
         {
