@@ -14,7 +14,7 @@ namespace ABW_Project
             Wynik wynik = new Wynik();
 
             double[] wynik2 = plik.PobierzProbki();
-            wynik.czestotliwoscSygnalu = new double[800000];
+            wynik.czestotliwoscSygnalu = new double[2000000];
 
             for (int i = 0; i < wynik.czestotliwoscSygnalu.Length; i++)
             {

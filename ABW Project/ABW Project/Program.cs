@@ -186,7 +186,7 @@ namespace ABW_Project
                 Console.WriteLine(" W {0} sekundzie {1} hz", ++index, item);
                 Log.Dodaj(" w " + index + " sekundzie " + item + " hz");
             }*/
-            int potegaDwojki = (int)Math.Log(800000, 2) + 1;
+            int potegaDwojki = (int)Math.Log(20000000, 2) + 1;
 
             Console.WriteLine(wv.czestotliwoscProbkowania / (Math.Pow(2, potegaDwojki)));
 
@@ -194,7 +194,7 @@ namespace ABW_Project
 
             for (int i = 0; i < wynik.Length; i++)
             {
-                sw.WriteLine(Convert.ToString((decimal)(i * wv.czestotliwoscProbkowania / (decimal)(Math.Pow(2, potegaDwojki)))));
+                sw.WriteLine(Convert.ToString((decimal)(i * wv.czestotliwoscProbkowania / (decimal)(Math.Pow(2, potegaDwojki)))) + " " + Convert.ToString(wynik[i]));
             }
             sw.Close();
             /*int indexP = (int)(40 * (double)(Math.Pow(2,potegaDwojki) / wv.czestotliwoscProbkowania));
