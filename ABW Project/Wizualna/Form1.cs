@@ -17,12 +17,12 @@ namespace Wizualna
         public Form1()
         {
             wv = new PlikWave();
-            wv.WczytajZPliku("plik.wav");
+            wv.WczytajZPliku("BRK.wav");
             InitializeComponent();
 
             chart1.Series[0].Points.Clear();
 
-            DFT dft = new DFT();
+            //DFT dft = new DFT();
             FFT fft = new FFT();
 
             /*
@@ -42,12 +42,12 @@ namespace Wizualna
 
             double[] S;
 
-            S = wv.PobierzProbki(0, 200);
+            S = wv.PobierzProbki();
 
-            double[] wynik = dft.ObliczWidmo(S);
+            //double[] wynik = dft.ObliczWidmo(S);
             double[] wynik2 = fft.ObliczWidmo(S);
 
-            for (int k = 0; k < 200; k++)
+            for (int k = 0; k < wynik2.Length; k++)
             {
                 chart1.Series[0].Points.Add(wynik2[k]);
             }

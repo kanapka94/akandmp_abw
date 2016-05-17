@@ -126,7 +126,7 @@ namespace ABW_Project
         static void Main(string[] args)
         {
             PlikWave wv = new PlikWave();
-            wv.WczytajZPliku("plik.wav");
+            wv.WczytajZPliku("BRK.wav");
 
             Log.Dodaj("-------------------- Nowa analiza -----------------------");                        
 
@@ -194,7 +194,7 @@ namespace ABW_Project
 
             for (int i = 0; i < wynik.Length; i++)
             {
-                sw.WriteLine(Convert.ToString((decimal)(i * wv.czestotliwoscProbkowania / (decimal)(Math.Pow(2, potegaDwojki)))) + " " + Convert.ToString(wynik[i]));
+                sw.WriteLine(Convert.ToString((decimal)(i * wv.czestotliwoscProbkowania / (decimal)(Math.Pow(2, potegaDwojki)))) + "\t" + Convert.ToString(wynik[i]));
             }
             sw.Close();
             /*int indexP = (int)(40 * (double)(Math.Pow(2,potegaDwojki) / wv.czestotliwoscProbkowania));

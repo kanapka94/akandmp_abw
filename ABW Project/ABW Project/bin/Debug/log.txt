@@ -1,0 +1,4 @@
+2016-05-17 11:25:26 -------------------- Nowa analiza -----------------------
+2016-05-17 11:25:27 Rozpoczęcie analizy
+2016-05-17 11:25:30 Zakończenie analizy
+Wyniki:

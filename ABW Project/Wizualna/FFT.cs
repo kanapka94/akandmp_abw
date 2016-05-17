@@ -9,60 +9,153 @@ namespace Wizualna
 {
     class FFT : Algorytm
     {
+        public Complex[] PrzygotujDaneDoFFT(double[] x, int OknoT)
+        {
+
+            Complex[] wynik;
+
+            double[] daneDoObliczenia;
+            double[] tablicaPotegiDwa;
+            int i;
+
+            daneDoObliczenia = x;
+            Okno.Funkcja(x, OknoT);
+
+            tablicaPotegiDwa = WypelnijZerami(daneDoObliczenia);
+            wynik = new Complex[tablicaPotegiDwa.Length];
+
+            for (i = 0; i < tablicaPotegiDwa.Length; i++)
+            {
+                wynik[i] = new Complex(tablicaPotegiDwa[i] / (double)tablicaPotegiDwa.Length, 0.0);
+            }//next i
+
+            return wynik;
+        }
+
+        public static double[] WypelnijZerami(double[] x)
+        {
+
+            if ((x.Length & (x.Length - 1)) == 0) return x;
+
+            double log2;
+            int log2_int;
+            int i;
+            double[] wynik;
+            int k;
+
+            log2 = Math.Log((double)x.Length) / Math.Log(2);
+            log2_int = (int)Math.Round(log2);
+
+            wynik = null;
+
+            k = (int)Math.Pow(2.0, (double)log2_int);
+
+            if (k < x.Length) log2_int++; //in case when the k is too small
+
+            k = (int)Math.Pow(2.0, (double)log2_int);
+
+            wynik = new double[k];
+
+            for (i = 0; i < k; i++)
+            {
+                if (i < x.Length)
+                {
+                    wynik[i] = x[i];
+                }
+                else
+                {
+                    wynik[i] = 0;
+                }//end if
+            }//next i
+
+            return wynik;
+
+        }//end of WypelnijZerami
+
         public override double[] ObliczWidmo(double[] sygnal)
         {
-            return PodzialFFT(DostosujSygnal(sygnal));
-            //return PodzialRadix2(DostosujSygnal(sygnal));
+            //sygnal = DostosujSygnal(sygnal);
+
+            Complex[] y = PrzygotujDaneDoFFT(sygnal, Okno.Blackmana);
+
+            /*Complex[] y = new Complex[sygnal.Length];
+            for (int i = 0; i < y.Length; i++)
+            {
+                y[i] = new Complex(sygnal[i], 0);
+            }*/
+
+            double[] wynik = new double[y.Length];
+
+
+            y = fft(y);
+
+            for (int i = 0; i < y.Length; i++)
+            {
+                wynik[i] = Complex.Abs(y[i]);
+                //Math.Pow(Complex.Abs(y[i]),2)
+            }
+
+            return wynik;
         }
-        private double[] PodzialFFT(double[] sygnal)
+
+
+        private static Complex[] fft(Complex[] x)
         {
-            int N = sygnal.Length;  //długość sygnału
-            double[] S = new double[N]; //tworzę nową tablicę na sygnał
+            int N = x.Length;
 
-            if (N == 1)     //jeżeli została mi tylko jedna próbka w sygnale to zwracam jej wartość
+            if (N == 1) return new Complex[] { x[0] };
+
+            // fft of even terms
+            Complex[] even = new Complex[N / 2];
+            for (int k = 0; k < N / 2; k++)
             {
-                S[0] = sygnal[0];
-                return S;
+                even[k] = x[2 * k];
+            }
+            Complex[] q = fft(even);
+
+            // fft of odd terms
+            Complex[] odd = even;  // reuse the array
+            for (int k = 0; k < N / 2; k++)
+            {
+                odd[k] = x[2 * k + 1];
+            }
+            Complex[] r = fft(odd);
+
+            // combine
+            Complex[] y = new Complex[N];
+            for (int k = 0; k < N / 2; k++)
+            {
+                double kth = -2 * k * Math.PI / N;
+                Complex wk = new Complex(Math.Cos(kth), Math.Sin(kth));
+                y[k] = q[k] + wk * r[k];
+                y[k + N / 2] = q[k] - wk * r[k];
             }
 
-            double[] probkiParzyste, probkiNieparzyste, probkiParzysteCalosc, probkiNieparzysteCalosc;
-
-            probkiParzyste = new double[N / 2];     //
-            probkiNieparzyste = new double[N / 2];  //dzielę sygnał na pół (część parzystą i nieparzystą)
-
-            for (int n = 0; n < N/2; n++)   //uzupełniam puste szuflady (2 skrzynki z próbkami parzystymi i nieparzystymi) próbkami
-            {
-                probkiParzyste[n] = sygnal[2 * n];
-                probkiNieparzyste[n] = sygnal[2 * n + 1];
-            }
-
-            //stosuję rekurencję
-            probkiParzysteCalosc = PodzialFFT(probkiParzyste);
-            probkiNieparzysteCalosc = PodzialFFT(probkiNieparzyste);
-
-            Complex suma = new Complex(0, 0);
-
-            for (int k = 0; k < N; k++)   //DFT
-            {
-                suma = 0;
-                for (int n = 0; n < N; n++)
-                {
-                    suma += sygnal[n] * Complex.Exp((double)-2 * Complex.ImaginaryOne * Math.PI * (double)n * (double)k / (double)N);                    
-                }
-
-                //S[k] = Math.Pow(Complex.Abs(suma),2)/N;   //moc sygnału
-                S[k] = Math.Pow(Complex.Abs(suma),2)/N;
-            }
-
-            for (int k = 0; k < N/2; k++)
-            {
-                S[k] = probkiParzysteCalosc[k] + probkiNieparzysteCalosc[k];
-                S[k + N / 2] = probkiParzysteCalosc[k] - probkiNieparzysteCalosc[k];
-            }
-
-            return S;   //zwracam powstały sygnał
+            return y;
         }
-        private double[] DostosujSygnal(double[] sygnal)    //metoda uzupełnia sygnał zerami, tak aby jego długość była potęgą dwójki
+
+        public static Complex[] ifft(Complex[] x)
+        {
+            int N = x.Length;
+            Complex[] y = new Complex[N];
+
+            //nie stosuję koniungacji, gdyż nasz sygnał ma tylko wartości rzeczywiste (zespolone = 0)
+
+            y = fft(y);
+
+            // podziel przez N
+            for (int i = 0; i < N; i++)
+            {
+                y[i] = y[i] * (1.0 / N);
+            }
+
+            return y;
+
+        }
+
+
+        //metoda uzupełnia sygnał zerami, tak aby jego długość była potęgą dwójki
+        private double[] DostosujSygnal(double[] sygnal)    
         {
             int n = sygnal.Length;
 
@@ -70,8 +163,8 @@ namespace Wizualna
                 return sygnal;
 
             int potega = 0;
-            for (int i = 1; i <= 16; i++)   //sprawdza do jakiej potęgi dwójki ma rozszerzyć tablicę z próbkami
-            {                
+            for (int i = 1; i <= 24; i++)   //sprawdza do jakiej potęgi dwójki ma rozszerzyć tablicę z próbkami
+            {
                 if (sygnal.Length <= Math.Pow(2, i))
                 {
                     potega = i;
@@ -88,102 +181,13 @@ namespace Wizualna
                 sygnalRozszerzony[i] = sygnal[i];
             }
 
-            for (int i = sygnal.Length-1; i < ileCykliPotrzeba; i++)
+            for (int i = sygnal.Length - 1; i < ileCykliPotrzeba; i++)
             {
                 sygnalRozszerzony[i] = 0;
             }
 
-            return sygnalRozszerzony;       
+            return sygnalRozszerzony;
         }
-
-
-        //-----------------------------------------------------------------------------------------------------
-        // ---------------------------------------- algorytm Nayuki -------------------------------------------
-        //-----------------------------------------------------------------------------------------------------
-        public static double[] PodzialRadix2(double[] sygnal)
-        {
-
-            int n = sygnal.Length;
-            int poziomy = 31 - LiczbaZerWiodacych(n);  // podłoga(log2(n))
-            double[] cosTable = new double[n / 2];
-            double[] sinTable = new double[n / 2];
-            for (int i = 0; i < n / 2; i++)
-            {
-                cosTable[i] = Math.Cos(2 * Math.PI * i / n);
-                sinTable[i] = Math.Sin(2 * Math.PI * i / n);
-            }
-
-            // Zamiana bitów
-            for (int i = 0; i < n; i++)
-            {
-                int j = (int)((uint)OdwrocBity(i) >> (32 - poziomy));
-                if (j > i)
-                {
-                    double temp = sygnal[i];
-                    sygnal[i] = sygnal[j];
-                    sygnal[j] = temp;
-                }
-            }
-
-            // Cooley-Tukey podział w czasie radix-2 FFT
-            for (int rozmiar = 2; rozmiar <= n; rozmiar *= 2)
-            {
-                int polowaRozmiaru = rozmiar / 2;
-                int tablestep = n / rozmiar;
-                for (int i = 0; i < n; i += rozmiar)
-                {
-                    for (int j = i, k = 0; j < i + polowaRozmiaru; j++, k += tablestep)
-                    {
-                        double tpre = sygnal[j + polowaRozmiaru] * cosTable[k];
-                        double tpim = -sygnal[j + polowaRozmiaru] * sinTable[k];
-                        sygnal[j + polowaRozmiaru] = sygnal[j] - tpre;
-                        sygnal[j] += tpre;
-                    }
-                }
-                if (rozmiar == n)  // Prevent overflow in 'size *= 2'
-                    break;
-            }
-
-            double pom = 0.0;
-            for (int i = 0; i < sygnal.Length; i++)
-            {
-                pom = Math.Pow(sygnal[i], 2);
-                sygnal[i] = pom;
-            }
-
-            return sygnal;
-        }
-
-
-        private static int LiczbaZerWiodacych(int wartosc)
-        {
-            if (wartosc == 0)
-                return 32;
-            int wynik = 0;
-            for (; wartosc >= 0; wartosc <<= 1)
-                wynik++;
-            return wynik;
-        }
-
-
-        private static int NajwiekszyBit(int wartosc)
-        {
-            for (int i = 1 << 31; i != 0; i = (int)((uint)i >> 1))
-            {
-                if ((wartosc & i) != 0)
-                    return i;
-            }
-            return 0;
-        }
-
-
-        private static int OdwrocBity(int wartosc)
-        {
-            int wynik = 0;
-            for (int i = 0; i < 32; i++, wartosc >>= 1)
-                wynik = (wynik << 1) | (wartosc & 1);
-            return wynik;
-        }
-
     }
 }
+
