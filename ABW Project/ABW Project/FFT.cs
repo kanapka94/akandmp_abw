@@ -4,27 +4,50 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
+using System.IO;
 
 namespace ABW_Project
 {
     class FFT : Algorytm
     {
-        public Complex[] PrzygotujDaneDoFFT(double[] x, int OknoT)
+        public Complex[] PrzygotujDaneDoFFT(int[] x2, int dokladnosc,int OknoT)
         {
-
             Complex[] wynik;
 
-            double[] daneDoObliczenia;
-            double[] tablicaPotegiDwa;
-            int i;
+            int[] w1 = (int[])x2.Clone();
+            double[] x = Okno.Funkcja(x2, OknoT);
 
-            daneDoObliczenia = x;
-            Okno.Funkcja(x, OknoT);
+            int licznik = 0;
+
+            for (int i = 0; i < w1.Length; i++)
+            {
+                if (w1[i] == x[i])
+                    licznik++;
+            }
+            StreamWriter sww = new StreamWriter("wyniksaasd.txt");
+
+            sww.WriteLine(Convert.ToString(licznik) + " " +Convert.ToString(w1.Length));
+            sww.Close();
+            double[] daneDoObliczenia = new double[dokladnosc];
+
+            for (int i = 0; i < x2.Length; i++)
+            {
+                daneDoObliczenia[i] = x2[i];
+            }
+            for (int i = x2.Length; i < daneDoObliczenia.Length; i++)
+            {
+                daneDoObliczenia[i] = 0;
+            }
+
+            double[] tablicaPotegiDwa;
+            
+            
 
             tablicaPotegiDwa = WypelnijZerami(daneDoObliczenia);
+
             wynik = new Complex[tablicaPotegiDwa.Length];
 
-            for (i = 0; i < tablicaPotegiDwa.Length; i++)
+            for (int i = 0; i < tablicaPotegiDwa.Length; i++)
             {
                 wynik[i] = new Complex(tablicaPotegiDwa[i] / (double)tablicaPotegiDwa.Length, 0.0);
             }//next i
@@ -72,32 +95,25 @@ namespace ABW_Project
 
         }//end of WypelnijZerami
 
-        public override double[] ObliczWidmo(double[] sygnal)
+        public override double[] ObliczWidmo(int[] sygnal, int dokladnosc = 1)
         {
-            //sygnal = DostosujSygnal(sygnal);
+            Complex[] y = PrzygotujDaneDoFFT(sygnal,dokladnosc, Okno.Blackmana);
 
-            Complex[] y = PrzygotujDaneDoFFT(sygnal, Okno.Blackmana);
 
-            /*Complex[] y = new Complex[sygnal.Length];
-            for (int i = 0; i < y.Length; i++)
-            {
-                y[i] = new Complex(sygnal[i], 0);
-            }*/
 
             double[] wynik = new double[y.Length];
-
-
             y = fft(y);
-
-            for (int i = 0; i < y.Length; i++)
+            for (int i = 0; i < y.Length ; i++)
             {
                 wynik[i] = Complex.Abs(y[i]);
-                //Math.Pow(Complex.Abs(y[i]),2)
             }
-
             return wynik;
         }
 
+        public int IndeksCzestosciWWidmie(double czestosc, double czestotliwoscProbkowania, double rozmiarWidma)
+        {
+            return (int)((double)czestosc * (double)rozmiarWidma / (double)czestotliwoscProbkowania);
+        }
 
         private static Complex[] fft(Complex[] x)
         {

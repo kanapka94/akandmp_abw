@@ -102,7 +102,7 @@ namespace ABW_Project
         {
             animWatek.Abort();
             Console.SetCursorPosition(1, kY);
-            Console.WriteLine(" Postęp: [+++++] 100%       ");
+            Console.WriteLine("Postęp: [+++++] 100%       ");
             Console.WriteLine();
             Console.WriteLine();
             Console.SetCursorPosition(cX, cY + 3);
@@ -126,7 +126,8 @@ namespace ABW_Project
         static void Main(string[] args)
         {
             PlikWave wv = new PlikWave();
-            wv.WczytajZPliku("BRK.wav");
+            //wv.WczytajZPliku("BRK.wav");
+            wv.WczytajZPliku("plik.wav");
 
             Log.Dodaj("-------------------- Nowa analiza -----------------------");                        
 
@@ -149,25 +150,72 @@ namespace ABW_Project
             Console.WriteLine(" Ilość próbek: " + Convert.ToString(wv.iloscProbek));
             Console.WriteLine(" Długość w sekundach: " + Convert.ToString(wv.dlugoscWSekundach));
             
-            Console.WriteLine("\n ========== DFT ========== \n");
+            Stan stan;
+            DFT dft;
+            FFT fft;
+            int index = 0;
+            double[] wynik;
 
-            
-            
+            /* DFT działa choć ze względu na dokładność na razie jest wyłączone z używania
+             * 
+            Console.WriteLine("\n ========== DFT ========== \n");
             Console.WriteLine(" Analiza...\n");
-            Stan stan = new Stan();
-            //DFT dft = new DFT();
-            FFT fft = new FFT();
+            stan = new Stan();
+            dft = new DFT();
 
             stan.Init(Console.CursorLeft, Console.CursorTop);
             stan.Rozpocznij();
-            int index = 0;
+            index = 0;
 
-            Log.Dodaj("Rozpoczęcie analizy");
-            //double[] wynik = dft.WydzielPrzydzwiek(wv, ref stan.stan,wv.czestotliwoscProbkowania*16).czestotliwoscSygnalu;
-            double[] wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan).czestotliwoscSygnalu;
+            Log.Dodaj("Rozpoczęcie analizy DFT");
+            wynik = dft.WydzielPrzydzwiek(wv, ref stan.stan).czestotliwoscSygnalu;
 
             Log.Dodaj("Zakończenie analizy");
             stan.Zakoncz();
+
+            Console.WriteLine("> Wynik FFT");
+            Console.WriteLine();
+            Log.Dodaj("Wyniki:", false);
+            foreach (double item in wynik)
+            {
+                Console.WriteLine(" W {0} sekundzie {1} hz", ++index, item);
+                Log.Dodaj(" w " + index + " sekundzie " + item + " hz");
+            }
+            */
+            Console.WriteLine("\n ========== FFT ========== \n");
+
+            wv.ZamknijPlik();
+            wv = new PlikWave();
+            wv.WczytajZPliku("plik.wav");
+
+            Console.WriteLine(" Analiza...\n");
+            stan = new Stan();
+            fft = new FFT();
+
+            stan.Init(Console.CursorLeft, Console.CursorTop);
+            stan.Rozpocznij();
+            index = 0;
+
+            Log.Dodaj("Rozpoczęcie analizy FFT");
+            wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52, 4410000).czestotliwoscSygnalu;
+
+            int potegaDwojki = (int)Math.Log(4410000, 2) + 1;
+            Log.Dodaj("Zakończenie analizy");
+            stan.Zakoncz();
+            Console.WriteLine("> Wynik FFT");
+            Console.WriteLine();
+
+            Console.WriteLine(" Dokładność: {0}", wv.czestotliwoscProbkowania / (Math.Pow(2, potegaDwojki)));
+            Console.WriteLine(" Potęga dwójki: {0}", potegaDwojki);
+            Console.WriteLine(" Rozmiar widma: {0}", Math.Pow(2, potegaDwojki));
+
+            Console.WriteLine();
+            Log.Dodaj("Wyniki:", false);
+            foreach (double item in wynik)
+            {
+                Console.WriteLine(" W {0} sekundzie {1} hz", ++index, item);
+                Log.Dodaj(" w " + index + " sekundzie " + item + " hz");
+            }
 
             /*Console.WriteLine("> Wynik DFT");
             Console.WriteLine();
@@ -178,25 +226,12 @@ namespace ABW_Project
                 Log.Dodaj(" w "+index+" sekundzie "+item+" hz");
             }*/
 
-            Console.WriteLine("> Wynik FFT");
-            Console.WriteLine();
-            Log.Dodaj("Wyniki:", false);
-            /*foreach (double item in wynik)
-            {
-                Console.WriteLine(" W {0} sekundzie {1} hz", ++index, item);
-                Log.Dodaj(" w " + index + " sekundzie " + item + " hz");
-            }*/
-            int potegaDwojki = (int)Math.Log(20000000, 2) + 1;
+           
 
-            Console.WriteLine(wv.czestotliwoscProbkowania / (Math.Pow(2, potegaDwojki)));
+            /*int potegaDwojki = (int)Math.Log(20000000, 2) + 1;
+            Console.WriteLine(wv.czestotliwoscProbkowania / (Math.Pow(2, potegaDwojki)));*/
 
-            StreamWriter sw = new StreamWriter("plik.txt");
-
-            for (int i = 0; i < wynik.Length; i++)
-            {
-                sw.WriteLine(Convert.ToString((decimal)(i * wv.czestotliwoscProbkowania / (decimal)(Math.Pow(2, potegaDwojki)))) + "\t" + Convert.ToString(wynik[i]));
-            }
-            sw.Close();
+            
             /*int indexP = (int)(40 * (double)(Math.Pow(2,potegaDwojki) / wv.czestotliwoscProbkowania));
             int indexK = (int)(60 * (double)(Math.Pow(2,potegaDwojki) / wv.czestotliwoscProbkowania));
             Console.WriteLine(wynik.Length);
@@ -218,6 +253,7 @@ namespace ABW_Project
 
             Console.WriteLine();
             Console.WriteLine(" === Koniec ===");
+
             /*
              * Testujący DFT
             double[] S = new double[100];
@@ -236,6 +272,7 @@ namespace ABW_Project
                 Console.WriteLine("{0} {1} ", index++, item);
             }
             */
+
             Console.ReadKey();
         }
     }
