@@ -1,4 +1,7 @@
-﻿using System;
+﻿// @autor Robert Sedgewick
+// @autor Kevin Wayne
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,26 +13,26 @@ namespace ABW_Project
     {
         public static double Energia(double[] sygnal)
         {
-            double result;
+            double wynik;
             int i;
 
-            result = 0;
+            wynik = 0;
 
             for (i = 0; i < sygnal.Length; i++)
             {
-                result += (sygnal[i] * sygnal[i]);
+                wynik += (sygnal[i] * sygnal[i]);
             }
 
-            return result;
+            return wynik;
         }
 
         public static double Moc(double[] sygnal)
         {
-            double result;
+            double wynik;
 
-            result = Energia(sygnal) / ((double)sygnal.Length);
+            wynik = Energia(sygnal) / ((double)sygnal.Length);
 
-            return result;
+            return wynik;
         }
     }
 }

@@ -197,9 +197,9 @@ namespace ABW_Project
             index = 0;
 
             Log.Dodaj("Rozpoczęcie analizy FFT");
-            wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, 40, 60, 9000000).czestotliwoscSygnalu;
+            wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, 40, 60, 900000).czestotliwoscSygnalu;
 
-            int potegaDwojki = (int)Math.Log(9000000, 2) + 1;
+            int potegaDwojki = (int)Math.Log(900000, 2) + 1;
             Console.WriteLine("Dokładność: {0}",wv.czestotliwoscProbkowania / (Math.Pow(2, potegaDwojki)));
 
             Log.Dodaj("Zakończenie analizy");
