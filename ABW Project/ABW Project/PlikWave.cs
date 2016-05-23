@@ -33,6 +33,11 @@ namespace ABW_Project
         ~PlikWave()
         {
            //destruktor działa poprawnie
+            ZamknijPlik();
+        }
+
+        public void ZamknijPlik()
+        {
             if (plik != null)
             {
                 plik.Close();
@@ -112,23 +117,23 @@ namespace ABW_Project
             
         }
 
-        public double NastepnaProbka(byte kanal = 0)
+        public int NastepnaProbka(byte kanal = 0)
         {
             byte[] readedBytes = plik.ReadBytes(rozmiarProbki);
-            double dane = 0;
+            int dane = 0;
             int pozycjaKanalu = kanal * bitowNaKanal;
 
             for (int i = pozycjaKanalu; i < pozycjaKanalu + bitowNaKanal; i++)
-                dane += readedBytes[i] * (double)Math.Pow(256, i);
+                dane += readedBytes[i] << i; //(int)Math.Pow(256, i);
 
             return dane;
         }
 
-        public double[] PobierzProbki(byte kanal = 0, int probkiDoOdczytania = -1)
+        public int[] PobierzProbki(byte kanal = 0, int probkiDoOdczytania = -1)
         {
             if (probkiDoOdczytania == -1) probkiDoOdczytania = czestotliwoscProbkowania;
 
-            double[] probki = new double[probkiDoOdczytania];
+            int[] probki = new int[probkiDoOdczytania];
 
             for (int i = 0; i < probkiDoOdczytania; i++)
             {
