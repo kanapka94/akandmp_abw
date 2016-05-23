@@ -42,10 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DFT.cs" />
+    <Compile Include="stare klasy\DFT.cs" />
     <Compile Include="Algorytm.cs" />
     <Compile Include="FFT.cs" />
-    <Compile Include="FFT Adama.cs" />
+    <Compile Include="stare klasy\FFT Adama.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Okno.cs" />
     <Compile Include="Program.cs" />
