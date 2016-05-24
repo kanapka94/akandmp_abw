@@ -12,27 +12,7 @@ namespace ABW_Project
     {
         public Wynik WydzielPrzydzwiek(PlikWave plik,ref int stan,double dolnaCzestosc = 40, double gornaCzestosc = 60, int dokladnosc = -1)
         {
-            /*Wynik wynik = new Wynik();
 
-              === FFT
-             * 
-             * double[] wynik2 = plik.PobierzProbki();
-            wynik.czestotliwoscSygnalu = new double[2000000];
-
-            for (int i = 0; i < wynik.czestotliwoscSygnalu.Length; i++)
-            {
-                wynik.czestotliwoscSygnalu[i] = 0;
-            }
-
-            for (int i = 0; i < wynik2.Length; i++)
-            {
-                wynik.czestotliwoscSygnalu[i] = wynik2[i];
-            }
-
-            wynik.czestotliwoscSygnalu = ObliczWidmo(wynik.czestotliwoscSygnalu);
-
-            return wynik;
-            */
             
             // Kod testujący do DFT =========================================================
             // ******************************************************************************
