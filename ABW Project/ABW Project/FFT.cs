@@ -1,8 +1,4 @@
-﻿// @autor Robert Sedgewick
-// @autor Kevin Wayne
- 
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,24 +10,38 @@ namespace ABW_Project
 {
     class FFT : Algorytm
     {
-        public Complex[] PrzygotujDaneDoFFT(int[] x, int dokladnosc,int OknoT)
+        public Complex[] PrzygotujDaneDoFFT(int[] x2, int dokladnosc,int OknoT)
         {
             Complex[] wynik;
 
+            int[] w1 = (int[])x2.Clone();
+            double[] x = Okno.Funkcja(x2, OknoT);
+
+            int licznik = 0;
+
+            for (int i = 0; i < w1.Length; i++)
+            {
+                if (w1[i] == x[i])
+                    licznik++;
+            }
+            StreamWriter sww = new StreamWriter("wyniksaasd.txt");
+
+            sww.WriteLine(Convert.ToString(licznik) + " " +Convert.ToString(w1.Length));
+            sww.Close();
             double[] daneDoObliczenia = new double[dokladnosc];
 
-            for (int i = 0; i < x.Length; i++)
+            for (int i = 0; i < x2.Length; i++)
             {
-                daneDoObliczenia[i] = x[i];
+                daneDoObliczenia[i] = x2[i];
             }
-            for (int i = x.Length; i < daneDoObliczenia.Length; i++)
+            for (int i = x2.Length; i < daneDoObliczenia.Length; i++)
             {
                 daneDoObliczenia[i] = 0;
             }
 
             double[] tablicaPotegiDwa;
             
-            //Okno.Funkcja(x, OknoT);
+            
 
             tablicaPotegiDwa = WypelnijZerami(daneDoObliczenia);
 
@@ -88,6 +98,9 @@ namespace ABW_Project
         public override double[] ObliczWidmo(int[] sygnal, int dokladnosc = 1)
         {
             Complex[] y = PrzygotujDaneDoFFT(sygnal,dokladnosc, Okno.Blackmana);
+
+
+
             double[] wynik = new double[y.Length];
             y = fft(y);
             for (int i = 0; i < y.Length ; i++)

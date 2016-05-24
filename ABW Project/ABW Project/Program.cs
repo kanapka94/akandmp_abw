@@ -197,15 +197,18 @@ namespace ABW_Project
             index = 0;
 
             Log.Dodaj("Rozpoczęcie analizy FFT");
-            wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, 40, 60, 900000).czestotliwoscSygnalu;
+            wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52, 4410000).czestotliwoscSygnalu;
 
-            int potegaDwojki = (int)Math.Log(900000, 2) + 1;
-            Console.WriteLine("Dokładność: {0}",wv.czestotliwoscProbkowania / (Math.Pow(2, potegaDwojki)));
-
+            int potegaDwojki = (int)Math.Log(4410000, 2) + 1;
             Log.Dodaj("Zakończenie analizy");
             stan.Zakoncz();
-
             Console.WriteLine("> Wynik FFT");
+            Console.WriteLine();
+
+            Console.WriteLine(" Dokładność: {0}", wv.czestotliwoscProbkowania / (Math.Pow(2, potegaDwojki)));
+            Console.WriteLine(" Potęga dwójki: {0}", potegaDwojki);
+            Console.WriteLine(" Rozmiar widma: {0}", Math.Pow(2, potegaDwojki));
+
             Console.WriteLine();
             Log.Dodaj("Wyniki:", false);
             foreach (double item in wynik)

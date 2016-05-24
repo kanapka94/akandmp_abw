@@ -1,6 +1,4 @@
-﻿//Autorzy: Michał Paduch i Adam Konopka
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,27 +12,7 @@ namespace ABW_Project
     {
         public Wynik WydzielPrzydzwiek(PlikWave plik,ref int stan,double dolnaCzestosc = 40, double gornaCzestosc = 60, int dokladnosc = -1)
         {
-            /*Wynik wynik = new Wynik();
 
-              === FFT
-             * 
-             * double[] wynik2 = plik.PobierzProbki();
-            wynik.czestotliwoscSygnalu = new double[2000000];
-
-            for (int i = 0; i < wynik.czestotliwoscSygnalu.Length; i++)
-            {
-                wynik.czestotliwoscSygnalu[i] = 0;
-            }
-
-            for (int i = 0; i < wynik2.Length; i++)
-            {
-                wynik.czestotliwoscSygnalu[i] = wynik2[i];
-            }
-
-            wynik.czestotliwoscSygnalu = ObliczWidmo(wynik.czestotliwoscSygnalu);
-
-            return wynik;
-            */
             
             // Kod testujący do DFT =========================================================
             // ******************************************************************************
@@ -59,7 +37,6 @@ namespace ABW_Project
             *
             ********************************************************************************/
 
-
             if (dokladnosc == -1) dokladnosc = plik.czestotliwoscProbkowania;       // Jeżeli dokladnosc == -1 to wynosi inaczej ilosci probek w pliku
 
             Wynik wynik = new Wynik();
@@ -77,16 +54,23 @@ namespace ABW_Project
                 double przydzwiek = ZnajdzPrzydzwiekWWidmie(widmo,plik.czestotliwoscProbkowania,rozmiarWidma,dolnaCzestosc,gornaCzestosc);
 
                 //  =========================================================================================================
+                sw.WriteLine();
+                sw.WriteLine("================================================================================");
                 sw.WriteLine("=> Widmo dla "+Convert.ToString(i+1)+" sekundy");          // Tymczasowe tylko do zapisu widma|
                 sw.WriteLine("> Dokładność = " + Convert.ToString((decimal)plik.czestotliwoscProbkowania / (decimal)rozmiarWidma));
+                sw.WriteLine("50 Hz na pozycji: " + indeksHzWTablicy(50, plik.czestotliwoscProbkowania, rozmiarWidma));
+                sw.WriteLine("================================================================================");
+                sw.WriteLine();
                 for (int j = 0; j < widmo.Length; j++)                                   //                                 |
-                {                                                                        //                                 |
-                    sw.WriteLine(Convert.ToString((double)j * (double)plik.czestotliwoscProbkowania / (double)rozmiarWidma + "Hz -> " + widmo[j] + dolnaCzestosc));                                   //                                 | 
+                {   
+                    if(indeksHzWTablicy(dolnaCzestosc,plik.czestotliwoscProbkowania,rozmiarWidma) < j)//
+                        if (indeksHzWTablicy(gornaCzestosc, plik.czestotliwoscProbkowania, rozmiarWidma) > j)
+                            sw.WriteLine(Convert.ToString(j + " " + Math.Round((decimal)j * (decimal)plik.czestotliwoscProbkowania / (decimal)rozmiarWidma,3) + "Hz -> " + widmo[j] + dolnaCzestosc));                                   //                                 | 
                 }                                                                        //                                 |       
                 sw.WriteLine("Znaleziony Przydźwięk: " + Convert.ToString(przydzwiek));  //                                 |          
                 //  ========================================================================================================= 
                 wynik.czestotliwoscSygnalu[i] = przydzwiek;
-                stan = i / wynik.czestotliwoscSygnalu.Length * 100;
+                stan = (int)((double)(i+1) / (double)wynik.czestotliwoscSygnalu.Length * 100.0);
             }
             sw.Close();  // Tymczasowe tylko do zapisu wyników widma
 
@@ -126,8 +110,8 @@ namespace ABW_Project
         public virtual double ZnajdzPrzydzwiekWWidmie(double[] widmo, int czestotliwoscProbkowania, int rozmiarWidma, double hzZakresDolny, double hzZakresGorny)
         {
 
-            int indeksZakresDolny = hzNaIndeksWTablicy(hzZakresDolny,czestotliwoscProbkowania,rozmiarWidma)+1;
-            int indeksZakresGorny = hzNaIndeksWTablicy(hzZakresGorny, czestotliwoscProbkowania, rozmiarWidma) + 1;
+            int indeksZakresDolny = indeksHzWTablicy(hzZakresDolny,czestotliwoscProbkowania,rozmiarWidma);
+            int indeksZakresGorny = indeksHzWTablicy(hzZakresGorny, czestotliwoscProbkowania, rozmiarWidma);
 
             double max = widmo[(int)indeksZakresDolny];
             int indeksMax = (int)indeksZakresDolny;
@@ -142,14 +126,14 @@ namespace ABW_Project
             return indeksTablicyNaHz(indeksMax, czestotliwoscProbkowania, rozmiarWidma);
         }
 
-        public int hzNaIndeksWTablicy(double hz,double czestotliwoscProbkowania, double rozmiarWidma)
+        public int indeksHzWTablicy(double hz,double czestotliwoscProbkowania, double rozmiarWidma)
         {
-            return (int)Math.Round((hz * (double)rozmiarWidma / (double)czestotliwoscProbkowania));
+            return (int)Math.Round(((decimal)hz * (decimal)rozmiarWidma / (decimal)czestotliwoscProbkowania));
         }
 
-        public double indeksTablicyNaHz(int indeks, double czestotliwoscProbkowania, double rozmiarWidma)
+        public double indeksTablicyNaHz(int indeks, double czestotliwoscProbkowania, decimal rozmiarWidma)
         {
-            return (double)(indeks * (double)czestotliwoscProbkowania) / (double)rozmiarWidma;
+            return (double)((decimal)indeks * (decimal)czestotliwoscProbkowania / (decimal)rozmiarWidma);
         }
     }
 }

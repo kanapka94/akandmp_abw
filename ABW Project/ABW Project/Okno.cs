@@ -121,34 +121,40 @@ namespace ABW_Project
 
         }
 
-        public static double[] Funkcja(double[] sygnal, int okno)
+        public static double[] Funkcja(int[] sygnal, int okno)
         {
+            double[] result = new double[sygnal.Length];
+            for (int i = 0; i < sygnal.Length; i++)
+            {
+                result[i] = (double)sygnal[i];
+            }
+
             if (okno == Prostokatne)
             {
                 
             }
             else if (okno == Barletta)
             {
-                sygnal = OknoBartletta(sygnal);
+                result = OknoBartletta(result);
             }
             else if (okno == Hanninga)
             {
-                sygnal = OknoHamminga(sygnal);
+                result = OknoHanninga(result);
             }
             else if (okno == Hamminga)
             {
-                sygnal = OknoHamminga(sygnal);
+                result = OknoHamminga(result);
             }
             else if (okno == Blackmana)
             {
-                sygnal = OknoBlackmana(sygnal);
+                result = OknoBlackmana(result);
             }
             else
             {
                 // Błąd, złe okno
             }
 
-            return sygnal;
+            return result;
         }
     }
 }
