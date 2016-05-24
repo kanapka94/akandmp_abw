@@ -10,12 +10,12 @@ namespace ABW_Project
 {
     class FFT : Algorytm
     {
-        public Complex[] PrzygotujDaneDoFFT(int[] x2, int dokladnosc,int OknoT)
+        public Complex[] PrzygotujDaneDoFFT(int[] probki, int dokladnosc,int OknoT)
         {
             Complex[] wynik;
 
-            int[] w1 = (int[])x2.Clone();
-            double[] x = Okno.Funkcja(x2, OknoT);
+            int[] w1 = (int[])probki.Clone();
+            double[] x = Okno.Funkcja(probki, OknoT);
 
             int licznik = 0;
 
@@ -30,11 +30,11 @@ namespace ABW_Project
             sww.Close();
             double[] daneDoObliczenia = new double[dokladnosc];
 
-            for (int i = 0; i < x2.Length; i++)
+            for (int i = 0; i < probki.Length; i++)
             {
-                daneDoObliczenia[i] = x2[i];
+                daneDoObliczenia[i] = probki[i];
             }
-            for (int i = x2.Length; i < daneDoObliczenia.Length; i++)
+            for (int i = probki.Length; i < daneDoObliczenia.Length; i++)
             {
                 daneDoObliczenia[i] = 0;
             }
@@ -55,10 +55,10 @@ namespace ABW_Project
             return wynik;
         }
 
-        public static double[] WypelnijZerami(double[] x)
+        public static double[] WypelnijZerami(double[] dane)
         {
 
-            if ((x.Length & (x.Length - 1)) == 0) return x;
+            if ((dane.Length & (dane.Length - 1)) == 0) return dane;
 
             double log2;
             int log2_int;
@@ -66,14 +66,14 @@ namespace ABW_Project
             double[] wynik;
             int k;
 
-            log2 = Math.Log((double)x.Length) / Math.Log(2);
+            log2 = Math.Log((double)dane.Length) / Math.Log(2);
             log2_int = (int)Math.Round(log2);
 
             wynik = null;
 
             k = (int)Math.Pow(2.0, (double)log2_int);
 
-            if (k < x.Length) log2_int++; //in case when the k is too small
+            if (k < dane.Length) log2_int++; //in case when the k is too small
 
             k = (int)Math.Pow(2.0, (double)log2_int);
 
@@ -81,9 +81,9 @@ namespace ABW_Project
 
             for (i = 0; i < k; i++)
             {
-                if (i < x.Length)
+                if (i < dane.Length)
                 {
-                    wynik[i] = x[i];
+                    wynik[i] = dane[i];
                 }
                 else
                 {
@@ -110,7 +110,7 @@ namespace ABW_Project
             return wynik;
         }
 
-        public int IndeksCzestosciWWidmie(double czestosc, double czestotliwoscProbkowania, double rozmiarWidma)
+        public int IndeksCzestosciWWidmie(double czestosc, int czestotliwoscProbkowania, int rozmiarWidma)
         {
             return (int)((double)czestosc * (double)rozmiarWidma / (double)czestotliwoscProbkowania);
         }
@@ -155,9 +155,17 @@ namespace ABW_Project
             int N = x.Length;
             Complex[] y = new Complex[N];
 
-            //nie stosuję koniungacji, gdyż nasz sygnał ma tylko wartości rzeczywiste (zespolone = 0)
+            for (int i = 0; i < N; i++)
+            {
+                y[i] = new Complex(x[i].Real, -x[i].Imaginary);
+            }
 
             y = fft(y);
+
+            for (int i = 0; i < N; i++)
+            {
+                y[i] = y[i] = new Complex(y[i].Real, -y[i].Imaginary); ;
+            }
 
             // podziel przez N
             for (int i = 0; i < N; i++)
