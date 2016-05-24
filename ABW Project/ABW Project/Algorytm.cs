@@ -126,8 +126,8 @@ namespace ABW_Project
         public virtual double ZnajdzPrzydzwiekWWidmie(double[] widmo, int czestotliwoscProbkowania, int rozmiarWidma, double hzZakresDolny, double hzZakresGorny)
         {
 
-            int indeksZakresDolny = indeksHzWTablicy(hzZakresDolny,czestotliwoscProbkowania,rozmiarWidma)+1;
-            int indeksZakresGorny = indeksHzWTablicy(hzZakresGorny, czestotliwoscProbkowania, rozmiarWidma) + 1;
+            int indeksZakresDolny = hzNaIndeksWTablicy(hzZakresDolny,czestotliwoscProbkowania,rozmiarWidma)+1;
+            int indeksZakresGorny = hzNaIndeksWTablicy(hzZakresGorny, czestotliwoscProbkowania, rozmiarWidma) + 1;
 
             double max = widmo[(int)indeksZakresDolny];
             int indeksMax = (int)indeksZakresDolny;
@@ -142,7 +142,7 @@ namespace ABW_Project
             return indeksTablicyNaHz(indeksMax, czestotliwoscProbkowania, rozmiarWidma);
         }
 
-        public int indeksHzWTablicy(double hz,double czestotliwoscProbkowania, double rozmiarWidma)
+        public int hzNaIndeksWTablicy(double hz,double czestotliwoscProbkowania, double rozmiarWidma)
         {
             return (int)Math.Round((hz * (double)rozmiarWidma / (double)czestotliwoscProbkowania));
         }
