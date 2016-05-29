@@ -151,7 +151,7 @@ namespace ABW_Project
             Console.WriteLine(" Długość w sekundach: " + Convert.ToString(wv.dlugoscWSekundach));
             
             Stan stan;
-            DFT dft;
+            //DFT dft;
             FFT fft;
             int index = 0;
             double[] wynik;
@@ -186,7 +186,7 @@ namespace ABW_Project
 
             wv.ZamknijPlik();
             wv = new PlikWave();
-            wv.WczytajZPliku("plik.wav");
+            wv.WczytajZPliku("BRK.wav");
 
             Console.WriteLine(" Analiza...\n");
             stan = new Stan();
@@ -197,9 +197,9 @@ namespace ABW_Project
             index = 0;
 
             Log.Dodaj("Rozpoczęcie analizy FFT");
-            wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52, 4410000).czestotliwoscSygnalu;
+            wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan,1,1,70100).czestotliwoscSygnalu;
 
-            int potegaDwojki = (int)Math.Log(4410000, 2) + 1;
+            int potegaDwojki = (int)Math.Log(70100, 2) + 1;
             Log.Dodaj("Zakończenie analizy");
             stan.Zakoncz();
             Console.WriteLine("> Wynik FFT");

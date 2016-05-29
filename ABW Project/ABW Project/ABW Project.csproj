@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CZT.cs" />
     <Compile Include="stare klasy\DFT.cs" />
     <Compile Include="Algorytm.cs" />
     <Compile Include="FFT.cs" />

@@ -1,4 +1,6 @@
 ﻿//autorzy: Michał Paduch i Adam Konopka
+// @autor Robert Sedgewick
+// @autor Kevin Wayne
 //licencja: GPLv2
 
 using System;
@@ -102,10 +104,10 @@ namespace ABW_Project
         {
             Complex[] y = PrzygotujDaneDoFFT(sygnal,dokladnosc, Okno.Blackmana);
 
-
-
             double[] wynik = new double[y.Length];
+
             y = fft(y);
+
             for (int i = 0; i < y.Length ; i++)
             {
                 wynik[i] = Complex.Abs(y[i]);
