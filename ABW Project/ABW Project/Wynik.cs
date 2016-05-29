@@ -1,4 +1,5 @@
 ﻿//Autorzy: Michał Paduch i Adam Konopka
+//licencja: GPLv2
 
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,6 @@
 ﻿// @autor Robert Sedgewick
 // @autor Kevin Wayne
+//licencja: GPLv2
 
 using System;
 using System.Collections.Generic;
