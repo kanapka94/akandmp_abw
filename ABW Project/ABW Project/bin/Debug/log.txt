@@ -1,5 +1,0 @@
-2016-05-23 18:48:08 -------------------- Nowa analiza -----------------------
-2016-05-23 18:48:08 Rozpoczęcie analizy FFT
-2016-05-23 18:48:37 Zakończenie analizy
-Wyniki:
-2016-05-23 18:48:37  w 1 sekundzie 50,6577014923096 hz
