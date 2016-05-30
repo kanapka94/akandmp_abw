@@ -1,5 +1,5 @@
 ﻿//Autorzy: Michał Paduch i Adam Konopka
-//licencja: GPLv2
+//licencja: GNU GPLv.2
 
 using System;
 using System.Collections.Generic;
@@ -11,10 +11,18 @@ using System.IO;
 
 namespace ABW_Project
 {
+    /// <summary>
+    /// Klasa zapisująca logi w pliku tekstowym
+    /// </summary>
     class Log
     {
         static StreamWriter sw = null;
 
+        /// <summary>
+        /// Metoda dodająca wpis do pliku
+        /// </summary>
+        /// <param name="tekst">Tekst, który ma zostać wpisany</param>
+        /// <param name="czyWypisywacDate">Jeśli 'true' zapisuje też datę obok wpisu</param>
         public static void Dodaj(string tekst, bool czyWypisywacDate = true)
         {
             if(sw == null) sw = new StreamWriter("log.txt");
@@ -27,6 +35,9 @@ namespace ABW_Project
             sw.WriteLine(tekst);
         }
 
+        /// <summary>
+        /// Metoda zamykająca plik
+        /// </summary>
         public static void Zamknij()
         {
             if(sw != null)

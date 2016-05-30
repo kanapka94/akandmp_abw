@@ -1,5 +1,5 @@
 ﻿//Autorzy: Michał Paduch i Adam Konopka
-//licencja: GPLv2
+//licencja: GNU GPLv.2
 
 using System;
 using System.Collections.Generic;
@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace ABW_Project
 {
+    /// <summary>
+    /// Klasa dotycząca wyniku naszych obliczeń
+    /// </summary>
     class Wynik
     {
         public double[] czestotliwoscSygnalu;

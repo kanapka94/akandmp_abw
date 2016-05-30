@@ -1,4 +1,9 @@
-﻿using System;
+﻿//autor: Tomasz P.Zieliński
+//oraz zamiana kodu na C#: Michał Paduch i Adam Konopka
+//źródło: T.Zieliński - Cyfrowe Przetwarzanie Sygnałów
+//licencja GNU GPLv.2
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +12,20 @@ using System.Numerics;
 
 namespace ABW_Project
 {
+    /// <summary>
+    /// Klasa CZT - zawarte są w niej algorytmy metody CZT na spróbkowanym sygnale
+    /// </summary>
     class CZT : Algorytm
     {
+        /// <summary>
+        /// CZT
+        /// </summary>
+        /// <param name="probki">Sygnał spróbkowany</param>
+        /// <param name="czestoscProbkowania">Częstotliwość próbkowania</param>
+        /// <param name="iloscPrazkow">Ilość prążków</param>
+        /// <param name="czestoscDolna">Częstotliwość dolna</param>
+        /// <param name="czestoscGorna">Częstotliwość górna</param>
+        /// <returns>Zwraca wartości danej częstotliwości</returns>
         public Complex[] czt(int[] probki, int czestoscProbkowania, int iloscPrazkow, double czestoscDolna, double czestoscGorna)
         {
 
@@ -74,11 +91,22 @@ namespace ABW_Project
             return XcztN;
         }
 
+        /// <summary>
+        /// Metoda "okienkuje" sygnał
+        /// </summary>
+        /// <param name="probki">Sygnał spróbkowany</param>
+        /// <param name="OknoT">Numer okna przez które przemnożymy sygnał</param>
         public void PrzygotujDaneDoCZT(int[] probki, int OknoT)
         {
             Okno.Funkcja(probki, OknoT); 
         }
 
+        /// <summary>
+        /// Metoda licząca widmo
+        /// </summary>
+        /// <param name="probki">Sygnał spróbkowany</param>
+        /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
+        /// <returns>Zwraca widmo sygnału</returns>
         public override double[] ObliczWidmo(int[] probki, int dokladnosc = 1)
         {
             PrzygotujDaneDoCZT(probki, Okno.Blackmana);
