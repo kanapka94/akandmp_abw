@@ -120,7 +120,7 @@ namespace ABW_Project
             return (int)((double)czestosc * (double)rozmiarWidma / (double)czestotliwoscProbkowania);
         }
 
-        private static Complex[] fft(Complex[] x)
+        public static Complex[] fft(Complex[] x)
         {
             int N = x.Length;
 
@@ -162,14 +162,14 @@ namespace ABW_Project
 
             for (int i = 0; i < N; i++)
             {
-                y[i] = new Complex(x[i].Real, -x[i].Imaginary);
+                y[i] = Complex.Conjugate(x[i]);
             }
 
             y = fft(y);
 
             for (int i = 0; i < N; i++)
             {
-                y[i] = y[i] = new Complex(y[i].Real, -y[i].Imaginary); ;
+                y[i] = Complex.Conjugate(y[i]);
             }
 
             // podziel przez N

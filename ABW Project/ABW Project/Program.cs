@@ -186,11 +186,13 @@ namespace ABW_Project
 
             wv.ZamknijPlik();
             wv = new PlikWave();
-            wv.WczytajZPliku("BRK.wav");
+            wv.WczytajZPliku("plik.wav");
 
             Console.WriteLine(" Analiza...\n");
             stan = new Stan();
             fft = new FFT();
+
+            //CZT czt = new CZT();
 
             stan.Init(Console.CursorLeft, Console.CursorTop);
             stan.Rozpocznij();
@@ -198,6 +200,7 @@ namespace ABW_Project
 
             Log.Dodaj("Rozpoczęcie analizy FFT");
             wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan,1,1,70100).czestotliwoscSygnalu;
+            //wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52).czestotliwoscSygnalu;
 
             int potegaDwojki = (int)Math.Log(70100, 2) + 1;
             Log.Dodaj("Zakończenie analizy");
