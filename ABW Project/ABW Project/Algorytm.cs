@@ -17,7 +17,7 @@ namespace ABW_Project
     class Algorytm
     {
         /// <summary>
-        /// 
+        /// Metoda wydzielająca wartość przydźwięku sieciowego co sekundę
         /// </summary>
         /// <param name="plik">Obiekt klasy PlikWave</param>
         //todo: Padi uzupełnij tutaj:

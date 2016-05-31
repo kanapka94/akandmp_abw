@@ -26,7 +26,7 @@ namespace ABW_Project
         /// <param name="czestoscDolna">Częstotliwość dolna</param>
         /// <param name="czestoscGorna">Częstotliwość górna</param>
         /// <returns>Zwraca wartości danej częstotliwości</returns>
-        public Complex[] czt(int[] probki, int czestoscProbkowania, int iloscPrazkow, double czestoscDolna, double czestoscGorna)
+        public static Complex[] czt(int[] probki, int czestoscProbkowania, int iloscPrazkow, double czestoscDolna, double czestoscGorna)
         {
 
             int N = probki.Length;
