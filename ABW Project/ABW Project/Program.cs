@@ -192,17 +192,17 @@ namespace ABW_Project
             stan = new Stan();
             fft = new FFT();
 
-            //CZT czt = new CZT();
+            CZT czt = new CZT();
 
             stan.Init(Console.CursorLeft, Console.CursorTop);
             stan.Rozpocznij();
             index = 0;
 
             Log.Dodaj("Rozpoczęcie analizy FFT");
-            wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan,1,1,70100).czestotliwoscSygnalu;
-            //wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52).czestotliwoscSygnalu;
+            //wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan,48,52,1000000).czestotliwoscSygnalu;
+            wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52).czestotliwoscSygnalu;
 
-            int potegaDwojki = (int)Math.Log(70100, 2) + 1;
+            int potegaDwojki = (int)Math.Log(1000000, 2) + 1;
             Log.Dodaj("Zakończenie analizy");
             stan.Zakoncz();
             Console.WriteLine("> Wynik FFT");

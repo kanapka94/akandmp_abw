@@ -17,7 +17,7 @@ namespace ABW_Project
         {
 
             
-            // Kod testujący do DFT =========================================================
+            // Kod testujący do FFT =========================================================
             // ******************************************************************************
 
             /********************************************************************************
@@ -66,8 +66,8 @@ namespace ABW_Project
                 sw.WriteLine();
                 for (int j = 0; j < widmo.Length; j++)                                   //                                 |
                 {   
-                    if(hzNaIndeksWTablicy(dolnaCzestosc,plik.czestotliwoscProbkowania,rozmiarWidma) < j)//
-                        if (hzNaIndeksWTablicy(gornaCzestosc, plik.czestotliwoscProbkowania, rozmiarWidma) > j)
+                    if(hzNaIndeksWTablicy(dolnaCzestosc,plik.czestotliwoscProbkowania,rozmiarWidma) <= j)//
+                        if (hzNaIndeksWTablicy(gornaCzestosc, plik.czestotliwoscProbkowania, rozmiarWidma) >= j)
                             sw.WriteLine(Convert.ToString(j + " " + Math.Round((decimal)j * (decimal)plik.czestotliwoscProbkowania / (decimal)rozmiarWidma,3) + "Hz -> " + widmo[j] + dolnaCzestosc));                                   //                                 | 
                 }                                                                        //                                 |       
                 sw.WriteLine("Znaleziony Przydźwięk: " + Convert.ToString(przydzwiek));  //                                 |          

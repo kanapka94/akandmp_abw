@@ -87,7 +87,7 @@ namespace ABW_Project
 
             Complex[] sygnal = new Complex[probki.Length];
 
-            sygnal = czt(probki, 44100, 256, 48, 52);   //uruchamianie CZT ze stało określonymia parametrami
+            sygnal = czt(probki, 44100, 1000, 48, 52);   //uruchamianie CZT ze stało określonymia parametrami
 
             for (int i = 0; i < sygnal.Length; i++)
             {
