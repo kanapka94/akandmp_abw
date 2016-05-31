@@ -137,7 +137,7 @@ namespace ABW_Project
         }
 
         /// <summary>
-        /// 
+        /// Metoda zwracająca indeks danej częstotliwości w tablicy widma.
         /// </summary>
         /// <param name="czestosc">Częstotliwość, której chcemy znaleźć indeks</param>
         /// <param name="czestotliwoscProbkowania">Częstotliwość próbkowania</param>
