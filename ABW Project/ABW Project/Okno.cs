@@ -151,7 +151,7 @@ namespace ABW_Project
         /// </summary>
         /// <param name="sygnal">Sygnał spróbkowany</param>
         /// <param name="okno">Numer okna </param>
-        /// <returns></returns>
+        /// <returns>Zwraca zokienkowany sygnał</returns>
         public static double[] Funkcja(int[] sygnal, int okno)
         {
             double[] result = new double[sygnal.Length];
