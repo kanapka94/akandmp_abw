@@ -1,0 +1,5 @@
+2016-05-30 14:57:37 -------------------- Nowa analiza -----------------------
+2016-05-30 14:57:37 Rozpoczęcie analizy FFT
+2016-05-30 14:57:38 Zakończenie analizy
+Wyniki:
+2016-05-30 14:57:38  w 1 sekundzie 48 hz
