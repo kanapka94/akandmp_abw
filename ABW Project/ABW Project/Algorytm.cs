@@ -169,7 +169,7 @@ namespace ABW_Project
         }
 
         /// <summary>
-        /// Metoda zwracająca wartość częstotliwości
+        /// Metoda zwracająca wartość częstotliwości pod podanym indeksem
         /// </summary>
         /// <param name="indeks">Indeks elementu tablicy</param>
         /// <param name="czestotliwoscProbkowania">Częstotliwość próbkowania</param>
