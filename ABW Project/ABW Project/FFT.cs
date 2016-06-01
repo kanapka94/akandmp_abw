@@ -1,7 +1,7 @@
-﻿//autorzy: Michał Paduch i Adam Konopka
+﻿//@autorzy: Michał Paduch i Adam Konopka
 // @autor Robert Sedgewick
 // @autor Kevin Wayne
-//licencja: GPLv2
+//licencja: GNU GPLv.2
 
 using System;
 using System.Collections.Generic;
@@ -13,8 +13,18 @@ using System.IO;
 
 namespace ABW_Project
 {
+    /// <summary>
+    /// Klasa FFT - zawarte są w niej algorytmy metody FFT na spróbkowanym sygnale
+    /// </summary>
     class FFT : Algorytm
     {
+        /// <summary>
+        /// Metoda przygotowująca sygnał spróbkowany do FFT
+        /// </summary>
+        /// <param name="probki">sygnał spróbkowany</param>
+        /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
+        /// <param name="OknoT">numer okna przez które przemnożymy sygnał</param>
+        /// <returns>Zwraca zmieniony sygnał</returns>
         public Complex[] PrzygotujDaneDoFFT(int[] probki, int dokladnosc,int OknoT)
         {
             Complex[] wynik;
@@ -60,6 +70,11 @@ namespace ABW_Project
             return wynik;
         }
 
+        /// <summary>
+        /// Metoda uzupełnia sygnał zerami, tak aby jego długość była potęgą dwójki
+        /// </summary>
+        /// <param name="dane">spróbkowany sygnał</param>
+        /// <returns>Zwraca rozszerzony sygnał</returns>
         public static double[] WypelnijZerami(double[] dane)
         {
 
@@ -100,6 +115,12 @@ namespace ABW_Project
 
         }//end of WypelnijZerami
 
+        /// <summary>
+        /// Metoda licząca widmo
+        /// </summary>
+        /// <param name="sygnal">sygnał spróbkowany</param>
+        /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
+        /// <returns>Zwraca widmo sygnału</returns>
         public override double[] ObliczWidmo(int[] sygnal, int dokladnosc = 1)
         {
             Complex[] y = PrzygotujDaneDoFFT(sygnal,dokladnosc, Okno.Blackmana);
@@ -115,11 +136,23 @@ namespace ABW_Project
             return wynik;
         }
 
+        /// <summary>
+        /// Metoda zwracająca indeks danej częstotliwości w tablicy widma.
+        /// </summary>
+        /// <param name="czestosc">Częstotliwość, której chcemy znaleźć indeks</param>
+        /// <param name="czestotliwoscProbkowania">Częstotliwość próbkowania</param>
+        /// <param name="rozmiarWidma">Rozmiar widma</param>
+        /// <returns>Zwraca indeks częstotliwości w tablicy widma</returns>
         public int IndeksCzestosciWWidmie(double czestosc, int czestotliwoscProbkowania, int rozmiarWidma)
         {
             return (int)((double)czestosc * (double)rozmiarWidma / (double)czestotliwoscProbkowania);
         }
 
+        /// <summary>
+        /// FFT
+        /// </summary>
+        /// <param name="x">Sygnał spróbkowany</param>
+        /// <returns>Zwraca wartości danej częstotliwości</returns>
         public static Complex[] fft(Complex[] x)
         {
             int N = x.Length;
@@ -127,20 +160,20 @@ namespace ABW_Project
             if (N == 1) return new Complex[] { x[0] };
 
             // fft of even terms
-            Complex[] even = new Complex[N / 2];
+            Complex[] parzyste = new Complex[N / 2];
             for (int k = 0; k < N / 2; k++)
             {
-                even[k] = x[2 * k];
+                parzyste[k] = x[2 * k];
             }
-            Complex[] q = fft(even);
+            Complex[] q = fft(parzyste);
 
             // fft of odd terms
-            Complex[] odd = even;  // reuse the array
+            Complex[] nieparzyste = parzyste;
             for (int k = 0; k < N / 2; k++)
             {
-                odd[k] = x[2 * k + 1];
+                nieparzyste[k] = x[2 * k + 1];
             }
-            Complex[] r = fft(odd);
+            Complex[] r = fft(nieparzyste);
 
             // combine
             Complex[] y = new Complex[N];
@@ -155,6 +188,11 @@ namespace ABW_Project
             return y;
         }
 
+        /// <summary>
+        /// Odwrotne FFT
+        /// </summary>
+        /// <param name="x">Sygnał spróbkowany</param>
+        /// <returns>Zwraca wartości amplitudy w czasie</returns>
         public static Complex[] ifft(Complex[] x)
         {
             int N = x.Length;
@@ -182,41 +220,6 @@ namespace ABW_Project
 
         }
 
-
-        //metoda uzupełnia sygnał zerami, tak aby jego długość była potęgą dwójki
-        private double[] DostosujSygnal(double[] sygnal)    
-        {
-            int n = sygnal.Length;
-
-            if ((n & (n - 1)) == 0)     //sprawdza czy długość sygnału jest potęgą dwójki
-                return sygnal;
-
-            int potega = 0;
-            for (int i = 1; i <= 24; i++)   //sprawdza do jakiej potęgi dwójki ma rozszerzyć tablicę z próbkami
-            {
-                if (sygnal.Length <= Math.Pow(2, i))
-                {
-                    potega = i;
-                    break;
-                }
-            }
-
-            int ileCykliPotrzeba = (int)Math.Pow(2, potega);
-
-            double[] sygnalRozszerzony = new double[ileCykliPotrzeba];
-
-            for (int i = 0; i < sygnal.Length; i++)  //kopiuję wartości sygnału starego
-            {
-                sygnalRozszerzony[i] = sygnal[i];
-            }
-
-            for (int i = sygnal.Length - 1; i < ileCykliPotrzeba; i++)
-            {
-                sygnalRozszerzony[i] = 0;
-            }
-
-            return sygnalRozszerzony;
-        }
     }
 }
 

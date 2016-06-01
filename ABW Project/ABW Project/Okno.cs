@@ -1,6 +1,7 @@
 ﻿// @autor Robert Sedgewick
 // @autor Kevin Wayne
-//licencja: GPLv2
+//oraz zamiana kodu na C#: Michał Paduch i Adam Konopka
+//licencja: GNU GPLv.2
 
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace ABW_Project
 {
+    /// <summary>
+    /// Klasa zawierająca metody okienkujące spróbkowany sygnał
+    /// </summary>
     class Okno
     {
         public readonly static int Prostokatne = 1;
@@ -18,6 +22,11 @@ namespace ABW_Project
         public readonly static int Hamminga = 4;
         public readonly static int Blackmana = 5;
 
+        /// <summary>
+        /// Metoda modyfikująca sygnał
+        /// </summary>
+        /// <param name="x">Sygnał spróbkowany</param>
+        /// <returns>Zwraca zokienkowany sygnał</returns>
         private static double[] OknoBartletta(double[] x)
         {
             double[] result;
@@ -41,6 +50,11 @@ namespace ABW_Project
             return result;
         }
 
+        /// <summary>
+        /// Metoda modyfikująca sygnał
+        /// </summary>
+        /// <param name="x">Sygnał spróbkowany</param>
+        /// <returns>Zwraca zokienkowany sygnał</returns>
         private static double[] OknoHanninga(double[] x)
         {
 
@@ -66,6 +80,11 @@ namespace ABW_Project
 
         }
 
+        /// <summary>
+        /// Metoda modyfikująca sygnał
+        /// </summary>
+        /// <param name="x">Sygnał spróbkowany</param>
+        /// <returns>Zwraca zokienkowany sygnał</returns>
         private static double[] OknoHamminga(double[] x)
         {
 
@@ -91,6 +110,11 @@ namespace ABW_Project
 
         }
 
+        /// <summary>
+        /// Metoda modyfikująca sygnał
+        /// </summary>
+        /// <param name="x">Sygnał spróbkowany</param>
+        /// <returns>Zwraca zokienkowany sygnał</returns>
         private static double[] OknoBlackmana(double[] x)
         {
 
@@ -122,6 +146,12 @@ namespace ABW_Project
 
         }
 
+        /// <summary>
+        /// Metoda obsługująca wybór okna
+        /// </summary>
+        /// <param name="sygnal">Sygnał spróbkowany</param>
+        /// <param name="okno">Numer okna </param>
+        /// <returns>Zwraca zokienkowany sygnał</returns>
         public static double[] Funkcja(int[] sygnal, int okno)
         {
             double[] result = new double[sygnal.Length];
