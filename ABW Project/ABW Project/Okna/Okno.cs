@@ -16,6 +16,6 @@ namespace ABW_Project
         /// </summary>
         /// <param name="x">Sygnał spróbkowany</param>
         /// <returns>Zwraca zokienkowany sygnał</returns>
-        public abstract double[] Funkcja(int[] x);
+        public abstract double[] Funkcja(double[] x);
     }
 }

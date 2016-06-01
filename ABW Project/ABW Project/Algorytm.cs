@@ -103,7 +103,7 @@ namespace ABW_Project
         /// <param name="sygnal">Sygnał spróbkowany</param>
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca tablicę wartości widma</returns>
-        public abstract double[] ObliczWidmo(int[] sygnal, Okno okno, int dokladnosc);
+        public abstract double[] ObliczWidmo(double[] sygnal, Okno okno, int dokladnosc);
 
         // Metoda odnajdująca przydźwięk w widmie wybierając element maksymalny. 
         /*public virtual int ZnajdzPrzydzwiekWWidmie(double[] widmo, int indeksZakresDolny, int indeksZakresGorny, int czestotliwoscProbkowania, int rozmiarWidma)

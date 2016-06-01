@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.IO;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace ABW_Project
 {
@@ -203,11 +204,11 @@ namespace ABW_Project
             stan.Rozpocznij();
             index = 0;
 
-           // Log.Dodaj("Rozpoczęcie analizy FFT");
-            wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan,48,52,1000000).czestotliwoscSygnalu;
+            // Log.Dodaj("Rozpoczęcie analizy FFT");
+             wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan,new OknoBlackmana(),49.8,51.2, 44100000).czestotliwoscSygnalu;
             //wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52).czestotliwoscSygnalu;
 
-            int potegaDwojki = (int)Math.Log(1000000, 2) + 1;
+            int potegaDwojki = (int)Math.Log(44100000, 2) + 1;
            // Log.Dodaj("Zakończenie analizy");
             stan.Zakoncz();
             Console.WriteLine("> Wynik FFT");

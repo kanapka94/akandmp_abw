@@ -7,11 +7,11 @@ using System.Numerics;
 
 namespace ABW_Project
 {
-    class DFT : Algorytm
+    /*class DFT : Algorytm
     {
 
         /* Aby algorytm działał poprawnie należy podać jako dokładność liczbę całkowitą */
-        public override double[] ObliczWidmo(int[] sygnal, int dokladnosc)
+        /*(public override double[] ObliczWidmo(int[] sygnal, int dokladnosc)
         {
             /*double[] wynik = new double[(int)((gornaCzestosc - dolnaCzestosc)/dokladnosc + 1)];
             int N = sygnal.Length;
@@ -38,8 +38,8 @@ namespace ABW_Project
             }
 
             return wynik;*/
-            return null;
+          /*  return null;
         }
 
-    }
+    }*/
 }

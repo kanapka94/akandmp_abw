@@ -16,28 +16,26 @@ namespace ABW_Project
         /// </summary>
         /// <param name="x">Sygnał spróbkowany</param>
         /// <returns>Zwraca zokienkowany sygnał za pomocą okna Hamminga</returns>
-        public override double[] Funkcja(int[] x)
+        public override double[] Funkcja(double[] x)
         {
 
-            double[] result;
             int i;
             double N;
             double value;
             double n;
 
-            result = new double[x.Length];
             N = (double)x.Length;
 
             for (i = 0; i < x.Length; i++)
             {
 
-                value = (double)x[i];
+                value = x[i];
                 n = (double)i;
 
-                result[i] = (0.54 - (0.46 * Math.Cos(2.0 * Math.PI * n / (N - 1.0)))) * value;
+                x[i] = (0.54 - (0.46 * Math.Cos(2.0 * Math.PI * n / (N - 1.0)))) * value;
             }
 
-            return result;
+            return x;
 
         }
     }

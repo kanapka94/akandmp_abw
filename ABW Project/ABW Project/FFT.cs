@@ -26,47 +26,19 @@ namespace ABW_Project
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <param name="OknoT">numer okna przez które przemnożymy sygnał</param>
         /// <returns>Zwraca zmieniony sygnał</returns>
-        public Complex[] PrzygotujDaneDoFFT(int[] probki, int dokladnosc,int OknoT)
+        public Complex[] PrzygotujDaneDoFFT(double[] probki, int dokladnosc,Okno okno)
         {
             Complex[] wynik;
 
-            int[] w1 = (int[])probki.Clone();
-            double[] x = Okno.Funkcja(probki, OknoT);
-
-            int licznik = 0;
-
-            for (int i = 0; i < w1.Length; i++)
-            {
-                if (w1[i] == x[i])
-                    licznik++;
-            }
-            StreamWriter sww = new StreamWriter("wyniksaasd.txt");
-
-            sww.WriteLine(Convert.ToString(licznik) + " " +Convert.ToString(w1.Length));
-            sww.Close();
-            double[] daneDoObliczenia = new double[dokladnosc];
+            okno.Funkcja(probki);
+            probki = WypelnijZerami(probki,dokladnosc);
+            PrzestawienieProbek(probki);
+            wynik = new Complex[probki.Length];
 
             for (int i = 0; i < probki.Length; i++)
             {
-                daneDoObliczenia[i] = probki[i];
+                wynik[i] = new Complex(probki[i] / (double)probki.Length, 0.0);
             }
-            for (int i = probki.Length; i < daneDoObliczenia.Length; i++)
-            {
-                daneDoObliczenia[i] = 0;
-            }
-
-            double[] tablicaPotegiDwa;
-            
-            
-
-            tablicaPotegiDwa = WypelnijZerami(daneDoObliczenia);
-
-            wynik = new Complex[tablicaPotegiDwa.Length];
-
-            for (int i = 0; i < tablicaPotegiDwa.Length; i++)
-            {
-                wynik[i] = new Complex(tablicaPotegiDwa[i] / (double)tablicaPotegiDwa.Length, 0.0);
-            }//next i
 
             return wynik;
         }
@@ -76,7 +48,7 @@ namespace ABW_Project
         /// </summary>
         /// <param name="dane">spróbkowany sygnał</param>
         /// <returns>Zwraca rozszerzony sygnał</returns>
-        public static double[] WypelnijZerami(double[] dane)
+        public static double[] WypelnijZerami(double[] dane,int iloscProbek)
         {
 
             if ((dane.Length & (dane.Length - 1)) == 0) return dane;
@@ -87,14 +59,15 @@ namespace ABW_Project
             double[] wynik;
             int k;
 
-            log2 = Math.Log((double)dane.Length) / Math.Log(2);
+            //log2 = Math.Log((double)dane.Length) / Math.Log(2);
+            log2 = Math.Log((double)iloscProbek) / Math.Log(2);
             log2_int = (int)Math.Round(log2);
 
             wynik = null;
 
             k = (int)Math.Pow(2.0, (double)log2_int);
 
-            if (k < dane.Length) log2_int++; //in case when the k is too small
+            if (k < iloscProbek) log2_int++; //in case when the k is too small
 
             k = (int)Math.Pow(2.0, (double)log2_int);
 
@@ -109,8 +82,8 @@ namespace ABW_Project
                 else
                 {
                     wynik[i] = 0;
-                }//end if
-            }//next i
+                }
+            }
 
             return wynik;
 
@@ -122,14 +95,11 @@ namespace ABW_Project
         /// <param name="sygnal">sygnał spróbkowany</param>
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca widmo sygnału</returns>
-        public override double[] ObliczWidmo(int[] sygnal, int dokladnosc = -1)
+        public override double[] ObliczWidmo(double[] sygnal, Okno okno, int dokladnosc = -1)
         {
-            Complex[] y = PrzygotujDaneDoFFT(sygnal,dokladnosc, Okno.Blackmana);
-
+            Complex[] y = PrzygotujDaneDoFFT(sygnal,dokladnosc, okno);
             double[] wynik = new double[y.Length];
-
-            y = fft(y);
-
+            y = fftFor(y);
             for (int i = 0; i < y.Length ; i++)
             {
                 wynik[i] = Complex.Abs(y[i]);
@@ -228,24 +198,24 @@ namespace ABW_Project
         /// </summary>
         /// <param name="probki">Spróbkowany sygnał</param>
         /// <returns></returns>
-        public int[] PrzestawienieProbek(int[] probki)
+        public double[] PrzestawienieProbek(double[] probki)
         {
-            int a = 0;
+            int a = 1;
             int N = probki.Length; //ilość próbek w sygnale
             int c;
 
-            int T;  //zmienna pomocnicza przechowująca wartość próbki
+            double T;  //zmienna pomocnicza przechowująca wartość próbki
 
-            for (int b = 0; b < N; b++)
+            for (int b = 1; b < N; b++)
             {
-                if (b<a)
+                if (b < a)
                 {
-                    T = probki[a];
-                    probki[a] = probki[b];
-                    probki[b] = T;
+                    T = probki[a-1];
+                    probki[a-1] = probki[b-1];
+                    probki[b-1] = T;
                 }
                 c = N / 2;
-                while (c<a)
+                while (c < a)
                 {
                     a = a - c;
                     c = c / 2;
@@ -271,7 +241,7 @@ namespace ABW_Project
 
             Complex W, Wi = 1;
 
-            for (int e = 0; e < Math.Log(N,2); e++)
+            for (int e = 1; e <= Math.Log(N,2); e++)
             {
                 L = (int)Math.Pow(2, e); //długość bloków DFT
                 M = (int)Math.Pow(2, (e - 1));   //liczba motylków w bloku, szerokość każdego motylka
@@ -279,16 +249,16 @@ namespace ABW_Project
 
                 W = Complex.Cos(2 * Math.PI / L) - Complex.ImaginaryOne * Complex.Sin(2 * Math.PI / L);  //mnożnik bazy Fouriera
 
-                for (int m = 0; m < M; m++) //Kolejne motylki
+                for (int m = 1; m <= M; m++) //Kolejne motylki
                 {
-                    for (int g = m; g < N; g += L) //w kolejnych blokach
+                    for (int g = m; g <= N; g += L) //w kolejnych blokach
                     {
-                        d = g + (int)M;    //d - dolny indeks próbki motylka, g - górny indeks próbki motylka 
-                        T = probki[d] * Wi; //"serce" FFT
-                        probki[d] = probki[g] - T;
-                        probki[g] = probki[g] + T;
+                        d = g + M;          //d - dolny indeks próbki motylka, g - górny indeks próbki motylka 
+                        T = probki[d-1] * Wi; //"serce" FFT
+                        probki[d-1] = probki[g-1] - T;
+                        probki[g-1] = probki[g-1] + T;
                     }
-                    Wi = Wi + W;
+                    Wi = Wi * W;
                 }
             }
 

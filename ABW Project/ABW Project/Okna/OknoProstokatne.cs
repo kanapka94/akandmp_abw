@@ -14,16 +14,9 @@ namespace ABW_Project
         /// <param name="x">Sygnał spróbkowany</param>
         /// <returns>Zwraca zokienkowany sygnał oknem prostokątnym</returns>
 
-        public override double[] Funkcja(int[] x)
+        public override double[] Funkcja(double[] x)
         {
-            double[] result = new double[x.Length];
-
-            for (int i = 0; i < x.Length; i++)
-            {
-                result[i] = (double)x[i];
-            }
-
-            return result;
+            return x;
         }
     }
 }

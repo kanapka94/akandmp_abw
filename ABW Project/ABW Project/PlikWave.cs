@@ -135,7 +135,7 @@ namespace ABW_Project
         /// </summary>
         /// <param name="kanal">Kanał dźwiękowy wyrażany w wartości liczbowej (0 to lewy, 1 prawy, ...)</param>
         /// <returns>Zwraca wartość próbki</returns>
-        public int NastepnaProbka(byte kanal = 0)
+        public double NastepnaProbka(byte kanal = 0)
         {
             byte[] readedBytes = plik.ReadBytes(rozmiarProbki);
             int dane = 0;
@@ -153,11 +153,11 @@ namespace ABW_Project
         /// <param name="kanal">Kanał dźwiękowy wyrażany w wartości liczbowej (0 to lewy, 1 prawy, ...)</param>
         /// <param name="probkiDoOdczytania">Ilość próbek</param>
         /// <returns>Zwraca tablicę próbek (sygnał spróbkowany)</returns>
-        public int[] PobierzProbki(byte kanal = 0, int probkiDoOdczytania = -1)
+        public double[] PobierzProbki(byte kanal = 0, int probkiDoOdczytania = -1)
         {
             if (probkiDoOdczytania == -1) probkiDoOdczytania = czestotliwoscProbkowania;
 
-            int[] probki = new int[probkiDoOdczytania];
+            double[] probki = new double[probkiDoOdczytania];
 
             for (int i = 0; i < probkiDoOdczytania; i++)
             {

@@ -16,10 +16,9 @@ namespace ABW_Project
         /// </summary>
         /// <param name="x">Sygnał spróbkowany</param>
         /// <returns>Zwraca zokienkowany sygnał za pomocą Okna Blackmana</returns>
-        public override double[] Funkcja(int[] x)
+        public override double[] Funkcja(double[] x)
         {
 
-            double[] result;
             int i;
             double N;
             double value;
@@ -28,22 +27,21 @@ namespace ABW_Project
             double[] parts;
 
             parts = new double[2];
-            result = new double[x.Length];
             N = (double)x.Length;
 
             for (i = 0; i < x.Length; i++)
             {
 
-                value = (double)x[i];
+                value = x[i];
                 n = (double)i;
 
                 parts[0] = 0.42 - (0.50 * Math.Cos(2.0 * Math.PI * n / (N - 1.0)));
                 parts[1] = 0.08 * Math.Cos(4 * Math.PI * n / (N - 1.0));
 
-                result[i] = (parts[0] + parts[1]) * value;
+                x[i] = (parts[0] + parts[1]) * value;
             }
 
-            return result;
+            return x;
 
         }
     }

@@ -27,7 +27,7 @@ namespace ABW_Project
         /// <param name="czestoscDolna">Częstotliwość dolna</param>
         /// <param name="czestoscGorna">Częstotliwość górna</param>
         /// <returns>Zwraca wartości danej częstotliwości</returns>
-        public static Complex[] czt(int[] probki, int czestoscProbkowania, int iloscPrazkow, double czestoscDolna, double czestoscGorna)
+        public static Complex[] czt(double[] probki, int czestoscProbkowania, int iloscPrazkow, double czestoscDolna, double czestoscGorna)
         {
 
             int N = probki.Length;
@@ -97,7 +97,7 @@ namespace ABW_Project
         /// </summary>
         /// <param name="probki">Sygnał spróbkowany</param>
         /// <param name="OknoT">Numer okna przez które przemnożymy sygnał</param>
-        public void PrzygotujDaneDoCZT(int[] probki, Okno okno)
+        public void PrzygotujDaneDoCZT(double[] probki, Okno okno)
         {
             okno.Funkcja(probki);
         }
@@ -108,7 +108,7 @@ namespace ABW_Project
         /// <param name="probki">Sygnał spróbkowany</param>
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca widmo sygnału</returns>
-        public override double[] ObliczWidmo(int[] probki, Okno okno,int dokladnosc = 1)
+        public override double[] ObliczWidmo(double[] probki, Okno okno,int dokladnosc = 1)
         {
             PrzygotujDaneDoCZT(probki, okno);
 
