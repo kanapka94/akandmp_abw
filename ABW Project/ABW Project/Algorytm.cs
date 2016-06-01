@@ -1,5 +1,6 @@
 ﻿//autorzy: Michał Paduch i Adam Konopka
-//licencja: GPLv2
+//Wyżej wymienieni autorzy udostępniają cały powyższy/poniższy kod zawarty w niniejszym pliku 
+//na zasadach licencji GNU GPLv2.http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,26 @@ using System.IO;
 
 namespace ABW_Project
 {
+    /// <summary>
+    /// Klasa, którą dziedziczą klasy FFT, CZT oraz ESPRIT
+    /// </summary>
     class Algorytm
     {
+        /// <summary>
+        /// Metoda wydzielająca wartość przydźwięku sieciowego co sekundę
+        /// </summary>
+        /// <param name="plik">Obiekt klasy PlikWave</param>
+        //todo: Padi uzupełnij tutaj:
+        /// <param name="stan">...</param>
+        /// <param name="dolnaCzestosc">Dolna częstotliwość (graniczna, badana)</param>
+        /// <param name="gornaCzestosc">Górna częstotliwość (graniczna, badana)</param>
+        /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
+        /// <returns>Zwraca obiekt klasy Wynik</returns>
         public Wynik WydzielPrzydzwiek(PlikWave plik,ref int stan,double dolnaCzestosc = 40, double gornaCzestosc = 60, int dokladnosc = -1)
         {
 
             
-            // Kod testujący do FFT =========================================================
+            // Kod testujący do DFT =========================================================
             // ******************************************************************************
 
             /********************************************************************************
@@ -66,8 +80,8 @@ namespace ABW_Project
                 sw.WriteLine();
                 for (int j = 0; j < widmo.Length; j++)                                   //                                 |
                 {   
-                    if(hzNaIndeksWTablicy(dolnaCzestosc,plik.czestotliwoscProbkowania,rozmiarWidma) <= j)//
-                        if (hzNaIndeksWTablicy(gornaCzestosc, plik.czestotliwoscProbkowania, rozmiarWidma) >= j)
+                    if(hzNaIndeksWTablicy(dolnaCzestosc,plik.czestotliwoscProbkowania,rozmiarWidma) < j)//
+                        if (hzNaIndeksWTablicy(gornaCzestosc, plik.czestotliwoscProbkowania, rozmiarWidma) > j)
                             sw.WriteLine(Convert.ToString(j + " " + Math.Round((decimal)j * (decimal)plik.czestotliwoscProbkowania / (decimal)rozmiarWidma,3) + "Hz -> " + widmo[j] + dolnaCzestosc));                                   //                                 | 
                 }                                                                        //                                 |       
                 sw.WriteLine("Znaleziony Przydźwięk: " + Convert.ToString(przydzwiek));  //                                 |          
@@ -83,6 +97,12 @@ namespace ABW_Project
             // Kod testujący do DFT =========================================================a
         }
 
+        /// <summary>
+        /// Metoda wirtualna. Jej zadaniem jest obliczanie widma sygnału dźwiękowego
+        /// </summary>
+        /// <param name="sygnal">Sygnał spróbkowany</param>
+        /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
+        /// <returns>Zwraca tablicę wartości widma</returns>
         public virtual double[] ObliczWidmo(int[] sygnal, int dokladnosc)
         {
             // Algorytm powinien być nadpisany
@@ -109,7 +129,15 @@ namespace ABW_Project
             return 
         }*/
 
-        // Metoda odnajdująca przydźwięk w widmie wybierając element maksymalny. 
+        /// <summary>
+        /// Metoda odnajdująca przydźwięk w widmie wybierając element maksymalny.
+        /// </summary>
+        /// <param name="widmo">Widmo dźwięku</param>
+        /// <param name="czestotliwoscProbkowania">Częstotliwość próbkowania</param>
+        /// <param name="rozmiarWidma">Rozmiar widma</param>
+        /// <param name="hzZakresDolny">Dolna granica badanych częstotliwości</param>
+        /// <param name="hzZakresGorny">Górna granica badanych częstotliwości</param>
+        /// <returns>Zwraca wartość przydźwięku sieciowego znalezionego w widmie</returns>
         public virtual double ZnajdzPrzydzwiekWWidmie(double[] widmo, int czestotliwoscProbkowania, int rozmiarWidma, double hzZakresDolny, double hzZakresGorny)
         {
 
@@ -129,11 +157,25 @@ namespace ABW_Project
             return indeksTablicyNaHz(indeksMax, czestotliwoscProbkowania, rozmiarWidma);
         }
 
+        /// <summary>
+        /// Metoda zwracająca indeks częstotliwości
+        /// </summary>
+        /// <param name="hz">Częstotliwość, której chcemy znaleźć indeks</param>
+        /// <param name="czestotliwoscProbkowania">Częstotliwość próbkowania</param>
+        /// <param name="rozmiarWidma">Rozmiar widma</param>
+        /// <returns>Zwraca indeks danej częstotliwości w tablicy</returns>
         public int hzNaIndeksWTablicy(double hz,double czestotliwoscProbkowania, double rozmiarWidma)
         {
             return (int)Math.Round(((decimal)hz * (decimal)rozmiarWidma / (decimal)czestotliwoscProbkowania));
         }
 
+        /// <summary>
+        /// Metoda zwracająca wartość częstotliwości pod podanym indeksem
+        /// </summary>
+        /// <param name="indeks">Indeks elementu tablicy</param>
+        /// <param name="czestotliwoscProbkowania">Częstotliwość próbkowania</param>
+        /// <param name="rozmiarWidma">Rozmiar widma</param>
+        /// <returns>Zwraca wartość częstotliwości ukrytej pod danym indeksem w tablicy</returns>
         public double indeksTablicyNaHz(int indeks, double czestotliwoscProbkowania, decimal rozmiarWidma)
         {
             return (double)((decimal)indeks * (decimal)czestotliwoscProbkowania / (decimal)rozmiarWidma);

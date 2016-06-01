@@ -1,6 +1,6 @@
 ﻿//Autorzy: Michał Paduch i Adam Konopka
-//licencja: GPLv2
-
+//Wyżej wymienieni autorzy udostępniają cały powyższy/poniższy kod zawarty w niniejszym pliku 
+//na zasadach licencji GNU GPLv2.http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +11,9 @@ using Microsoft.VisualBasic;
 
 namespace ABW_Project
 {
+    /// <summary>
+    /// Klasa przechowująca dane o pliku .wav
+    /// </summary>
     class PlikWave
     {
         public string idRiff;
@@ -33,12 +36,18 @@ namespace ABW_Project
 
         private BinaryReader plik;
 
+        /// <summary>
+        /// Destruktor
+        /// </summary>
         ~PlikWave()
         {
            //destruktor działa poprawnie
             ZamknijPlik();
         }
 
+        /// <summary>
+        /// Metoda zamykająca plik
+        /// </summary>
         public void ZamknijPlik()
         {
             if (plik != null)
@@ -47,6 +56,10 @@ namespace ABW_Project
             }
         }
         
+        /// <summary>
+        /// Metoda wczytująca dane nagłówkowe pliku .wav
+        /// </summary>
+        /// <param name="adresPliku">Ścieżka dostępu do pliku .wav</param>
         public void WczytajZPliku(string adresPliku)
         {
             plik = new BinaryReader(new FileStream(adresPliku,FileMode.Open));
@@ -114,12 +127,14 @@ namespace ABW_Project
 
             iloscProbek = (rozmiarDanych) / rozmiarProbki;
             dlugoscWSekundach = (double)iloscProbek / czestotliwoscProbkowania;
-            // riffId = ((string)readedBytes[0]) + ((char)readedBytes[1]) + ((char)readedBytes[2]) + ((char)readedBytes[3]);
-
-            //riffId = 1000 * readedBytes[3] + 100 * readedBytes[2] + 10 * readedBytes[1] + readedBytes[0];
             
         }
 
+        /// <summary>
+        /// Metoda wczytująca następną próbkę
+        /// </summary>
+        /// <param name="kanal">Kanał dźwiękowy wyrażany w wartości liczbowej (0 to lewy, 1 prawy, ...)</param>
+        /// <returns>Zwraca wartość próbki</returns>
         public int NastepnaProbka(byte kanal = 0)
         {
             byte[] readedBytes = plik.ReadBytes(rozmiarProbki);
@@ -132,6 +147,12 @@ namespace ABW_Project
             return dane;
         }
 
+        /// <summary>
+        /// Metoda pobierająca wyznaczoną ilość próbek
+        /// </summary>
+        /// <param name="kanal">Kanał dźwiękowy wyrażany w wartości liczbowej (0 to lewy, 1 prawy, ...)</param>
+        /// <param name="probkiDoOdczytania">Ilość próbek</param>
+        /// <returns>Zwraca tablicę próbek (sygnał spróbkowany)</returns>
         public int[] PobierzProbki(byte kanal = 0, int probkiDoOdczytania = -1)
         {
             if (probkiDoOdczytania == -1) probkiDoOdczytania = czestotliwoscProbkowania;
@@ -146,6 +167,9 @@ namespace ABW_Project
             return probki;
         }
 
+        /// <summary>
+        /// Atrybut zwracający całkowity rozmiar pliku
+        /// </summary>
         public int CalkowityRozmiar
         {
             get
@@ -154,6 +178,9 @@ namespace ABW_Project
             }
         }
 
+        /// <summary>
+        /// Atrybut zwracający rodzaj kompresji pliku
+        /// </summary>
         public string RodzajKompresjiOpis
         {
             get

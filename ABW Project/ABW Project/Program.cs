@@ -1,4 +1,8 @@
-﻿using System;
+﻿//autorzy: Michał Paduch i Adam Konopka
+//Wyżej wymienieni autorzy udostępniają cały powyższy/poniższy kod zawarty w niniejszym pliku 
+//na zasadach licencji GNU GPLv2.http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -192,15 +196,15 @@ namespace ABW_Project
             stan = new Stan();
             fft = new FFT();
 
-            CZT czt = new CZT();
+            //CZT czt = new CZT();
 
             stan.Init(Console.CursorLeft, Console.CursorTop);
             stan.Rozpocznij();
             index = 0;
 
             Log.Dodaj("Rozpoczęcie analizy FFT");
-            //wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan,48,52,1000000).czestotliwoscSygnalu;
-            wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52).czestotliwoscSygnalu;
+            wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan,48,52,1000000).czestotliwoscSygnalu;
+            //wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52).czestotliwoscSygnalu;
 
             int potegaDwojki = (int)Math.Log(1000000, 2) + 1;
             Log.Dodaj("Zakończenie analizy");

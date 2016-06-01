@@ -1,4 +1,10 @@
-﻿using System;
+﻿//autor: Tomasz P.Zieliński
+//oraz zamiana kodu na C#: Michał Paduch i Adam Konopka
+//źródło: T.Zieliński - Cyfrowe Przetwarzanie Sygnałów
+//Wyżej wymienieni autorzy udostępniają cały powyższy/poniższy kod zawarty w niniejszym pliku 
+//na zasadach licencji GNU GPLv2.http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,9 +13,21 @@ using System.Numerics;
 
 namespace ABW_Project
 {
+    /// <summary>
+    /// Klasa CZT - zawarte są w niej algorytmy metody CZT na spróbkowanym sygnale
+    /// </summary>
     class CZT : Algorytm
     {
-        public Complex[] czt(int[] probki, int czestoscProbkowania, int iloscPrazkow, double czestoscDolna, double czestoscGorna)
+        /// <summary>
+        /// CZT
+        /// </summary>
+        /// <param name="probki">Sygnał spróbkowany</param>
+        /// <param name="czestoscProbkowania">Częstotliwość próbkowania</param>
+        /// <param name="iloscPrazkow">Ilość prążków</param>
+        /// <param name="czestoscDolna">Częstotliwość dolna</param>
+        /// <param name="czestoscGorna">Częstotliwość górna</param>
+        /// <returns>Zwraca wartości danej częstotliwości</returns>
+        public static Complex[] czt(int[] probki, int czestoscProbkowania, int iloscPrazkow, double czestoscDolna, double czestoscGorna)
         {
 
             int N = probki.Length;
@@ -74,11 +92,22 @@ namespace ABW_Project
             return XcztN;
         }
 
+        /// <summary>
+        /// Metoda "okienkuje" sygnał
+        /// </summary>
+        /// <param name="probki">Sygnał spróbkowany</param>
+        /// <param name="OknoT">Numer okna przez które przemnożymy sygnał</param>
         public void PrzygotujDaneDoCZT(int[] probki, int OknoT)
         {
             Okno.Funkcja(probki, OknoT); 
         }
 
+        /// <summary>
+        /// Metoda licząca widmo
+        /// </summary>
+        /// <param name="probki">Sygnał spróbkowany</param>
+        /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
+        /// <returns>Zwraca widmo sygnału</returns>
         public override double[] ObliczWidmo(int[] probki, int dokladnosc = 1)
         {
             PrzygotujDaneDoCZT(probki, Okno.Blackmana);
@@ -87,7 +116,7 @@ namespace ABW_Project
 
             Complex[] sygnal = new Complex[probki.Length];
 
-            sygnal = czt(probki, 44100, 1000, 48, 52);   //uruchamianie CZT ze stało określonymia parametrami
+            sygnal = czt(probki, 44100, 256, 48, 52);   //uruchamianie CZT ze stało określonymia parametrami
 
             for (int i = 0; i < sygnal.Length; i++)
             {
