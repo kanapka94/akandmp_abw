@@ -221,6 +221,79 @@ namespace ABW_Project
 
         }
 
+        // ================== FFT nierekurencyjne ======================
+
+        /// <summary>
+        /// Metoda przestawiająca próbki w sygnal spróbkowanym (przygotowuje dane do FFT)
+        /// </summary>
+        /// <param name="probki">Spróbkowany sygnał</param>
+        /// <returns></returns>
+        public int[] PrzestawienieProbek(int[] probki)
+        {
+            int a = 0;
+            int N = probki.Length; //ilość próbek w sygnale
+            int c;
+
+            int T;  //zmienna pomocnicza przechowująca wartość próbki
+
+            for (int b = 0; b < N; b++)
+            {
+                if (b<a)
+                {
+                    T = probki[a];
+                    probki[a] = probki[b];
+                    probki[b] = T;
+                }
+                c = N / 2;
+                while (c<a)
+                {
+                    a = a - c;
+                    c = c / 2;
+                }
+                a = a + c;          
+            }
+
+            return probki;
+        }
+
+        /// <summary>
+        ///    FFT tylko, że obliczanie bez rekurencji
+        /// </summary>
+        /// <param name="probki">Sygnał spróbkowany</param>
+        /// <returns></returns>
+        public static Complex[] fftFor(Complex[] probki)
+        {
+            int N = probki.Length;  //ilość próbek w sygnale
+            int L,M;
+            Complex T;        
+
+            int d;
+
+            Complex W, Wi = 1;
+
+            for (int e = 0; e < Math.Log(N,2); e++)
+            {
+                L = (int)Math.Pow(2, e); //długość bloków DFT
+                M = (int)Math.Pow(2, (e - 1));   //liczba motylków w bloku, szerokość każdego motylka
+                Wi = 1;
+
+                W = Complex.Cos(2 * Math.PI / L) - Complex.ImaginaryOne * Complex.Sin(2 * Math.PI / L);  //mnożnik bazy Fouriera
+
+                for (int m = 0; m < M; m++) //Kolejne motylki
+                {
+                    for (int g = m; g < N; g += L) //w kolejnych blokach
+                    {
+                        d = g + (int)M;    //d - dolny indeks próbki motylka, g - górny indeks próbki motylka 
+                        T = probki[d] * Wi; //"serce" FFT
+                        probki[d] = probki[g] - T;
+                        probki[g] = probki[g] + T;
+                    }
+                    Wi = Wi + W;
+                }
+            }
+
+            return probki;  // probki to inaczej wynik FFT
+        }
     }
 }
 
