@@ -15,6 +15,7 @@ namespace ABW_Project
 {
     public class Stan
     {
+
         int cX; // Pozycja kursora w consoli
         int cY;
         public int stan; // Stan wykonanej roboty
@@ -133,7 +134,7 @@ namespace ABW_Project
             //wv.WczytajZPliku("BRK.wav");
             wv.WczytajZPliku("plik.wav");
 
-            Log.Dodaj("-------------------- Nowa analiza -----------------------");                        
+            //Log.Dodaj("-------------------- Nowa analiza -----------------------");                        
 
             Console.WriteLine("\n ========== Nagłówki ========== \n");
 
@@ -202,12 +203,12 @@ namespace ABW_Project
             stan.Rozpocznij();
             index = 0;
 
-            Log.Dodaj("Rozpoczęcie analizy FFT");
+           // Log.Dodaj("Rozpoczęcie analizy FFT");
             wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan,48,52,1000000).czestotliwoscSygnalu;
             //wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52).czestotliwoscSygnalu;
 
             int potegaDwojki = (int)Math.Log(1000000, 2) + 1;
-            Log.Dodaj("Zakończenie analizy");
+           // Log.Dodaj("Zakończenie analizy");
             stan.Zakoncz();
             Console.WriteLine("> Wynik FFT");
             Console.WriteLine();
@@ -217,11 +218,11 @@ namespace ABW_Project
             Console.WriteLine(" Rozmiar widma: {0}", Math.Pow(2, potegaDwojki));
 
             Console.WriteLine();
-            Log.Dodaj("Wyniki:", false);
+          //  Log.Dodaj("Wyniki:", false);
             foreach (double item in wynik)
             {
                 Console.WriteLine(" W {0} sekundzie {1} hz", ++index, item);
-                Log.Dodaj(" w " + index + " sekundzie " + item + " hz");
+               // Log.Dodaj(" w " + index + " sekundzie " + item + " hz");
             }
 
             /*Console.WriteLine("> Wynik DFT");
@@ -251,7 +252,7 @@ namespace ABW_Project
                 index++;
             }*/
 
-            Log.Zamknij();
+            GuiLog.Zamknij();
 
             Console.WriteLine();
             Console.WriteLine(" Czas: {0} s", stan.Sekundy);

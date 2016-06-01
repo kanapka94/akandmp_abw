@@ -43,11 +43,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CZT.cs" />
+    <Compile Include="Klasy log\AnalizaLog.cs" />
+    <Compile Include="Klasy log\BazaDanychLog.cs" />
+    <Compile Include="Klasy log\GuiLog.cs" />
+    <Compile Include="Klasy log\PorownanieLog.cs" />
     <Compile Include="stare klasy\DFT.cs" />
     <Compile Include="Algorytm.cs" />
     <Compile Include="FFT.cs" />
     <Compile Include="stare klasy\FFT Adama.cs" />
-    <Compile Include="Log.cs" />
     <Compile Include="Okno.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
