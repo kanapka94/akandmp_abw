@@ -122,7 +122,7 @@ namespace ABW_Project
         /// <param name="sygnal">sygnał spróbkowany</param>
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca widmo sygnału</returns>
-        public override double[] ObliczWidmo(int[] sygnal, int dokladnosc = 1)
+        public override double[] ObliczWidmo(int[] sygnal, int dokladnosc = -1)
         {
             Complex[] y = PrzygotujDaneDoFFT(sygnal,dokladnosc, Okno.Blackmana);
 
