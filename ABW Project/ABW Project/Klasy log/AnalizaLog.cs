@@ -62,12 +62,19 @@ namespace ABW_Project
             if (logSW == null)
                 UtworzPlikLog();
 
-            if (czyWypisywacDate)
-            {
-                DateTime data1 = DateTime.Now;
-                logSW.Write("{0} ", data1);
+            try
+            {         
+                if (czyWypisywacDate)
+                {
+                    DateTime data1 = DateTime.Now;
+                    logSW.Write("{0} ", data1);
+                }
+                logSW.WriteLine(tekst);
             }
-            logSW.WriteLine(tekst);
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         /// <summary>
@@ -77,7 +84,14 @@ namespace ABW_Project
         {
             if (logSW != null)
             {
-                logSW.Close();
+                try
+                {
+                    logSW.Close();
+                }
+                catch(Exception e)
+                {
+                    throw e;
+                }
             }
         }
     }

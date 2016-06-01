@@ -97,9 +97,9 @@ namespace ABW_Project
         /// </summary>
         /// <param name="probki">Sygnał spróbkowany</param>
         /// <param name="OknoT">Numer okna przez które przemnożymy sygnał</param>
-        public void PrzygotujDaneDoCZT(int[] probki, int OknoT)
+        public void PrzygotujDaneDoCZT(int[] probki, Okno okno)
         {
-            Okno.Funkcja(probki, OknoT); 
+            okno.Funkcja(probki);
         }
 
         /// <summary>
@@ -108,9 +108,9 @@ namespace ABW_Project
         /// <param name="probki">Sygnał spróbkowany</param>
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca widmo sygnału</returns>
-        public override double[] ObliczWidmo(int[] probki, int dokladnosc = 1)
+        public override double[] ObliczWidmo(int[] probki, Okno okno,int dokladnosc = 1)
         {
-            PrzygotujDaneDoCZT(probki, Okno.Blackmana);
+            PrzygotujDaneDoCZT(probki, okno);
 
             double[] wynik = new double[probki.Length];
 

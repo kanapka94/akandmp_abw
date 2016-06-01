@@ -47,6 +47,12 @@
     <Compile Include="Klasy log\BazaDanychLog.cs" />
     <Compile Include="Klasy log\GuiLog.cs" />
     <Compile Include="Klasy log\PorownanieLog.cs" />
+    <Compile Include="Okna\Okno.cs" />
+    <Compile Include="Okna\OknoBarletta.cs" />
+    <Compile Include="Okna\OknoBlackmana.cs" />
+    <Compile Include="Okna\OknoHamminga.cs" />
+    <Compile Include="Okna\OknoHanninga.cs" />
+    <Compile Include="Okna\OknoProstokatne.cs" />
     <Compile Include="stare klasy\DFT.cs" />
     <Compile Include="Algorytm.cs" />
     <Compile Include="FFT.cs" />

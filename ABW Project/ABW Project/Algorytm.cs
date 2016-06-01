@@ -15,7 +15,7 @@ namespace ABW_Project
     /// <summary>
     /// Klasa, którą dziedziczą klasy FFT, CZT oraz ESPRIT
     /// </summary>
-    class Algorytm
+    abstract class Algorytm
     {
         /// <summary>
         /// Metoda wydzielająca wartość przydźwięku sieciowego co sekundę
@@ -27,7 +27,7 @@ namespace ABW_Project
         /// <param name="gornaCzestosc">Górna częstotliwość (graniczna, badana)</param>
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca obiekt klasy Wynik</returns>
-        public Wynik WydzielPrzydzwiek(PlikWave plik,ref int stan,double dolnaCzestosc = 40, double gornaCzestosc = 60, int dokladnosc = -1)
+        public virtual Wynik WydzielPrzydzwiek(PlikWave plik,ref int stan, Okno okno,double dolnaCzestosc = 40, double gornaCzestosc = 60, int dokladnosc = -1)
         {
 
             
@@ -65,7 +65,7 @@ namespace ABW_Project
             int rozmiarWidma;
             for (int i = 0; i < wynik.czestotliwoscSygnalu.Length; i++)
             {
-                double[] widmo = ObliczWidmo(plik.PobierzProbki(),dokladnosc);
+                double[] widmo = ObliczWidmo(plik.PobierzProbki(), okno, dokladnosc);
                 rozmiarWidma = widmo.Length;
 
                 double przydzwiek = ZnajdzPrzydzwiekWWidmie(widmo,plik.czestotliwoscProbkowania,rozmiarWidma,dolnaCzestosc,gornaCzestosc);
@@ -103,12 +103,7 @@ namespace ABW_Project
         /// <param name="sygnal">Sygnał spróbkowany</param>
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca tablicę wartości widma</returns>
-        public virtual double[] ObliczWidmo(int[] sygnal, int dokladnosc)
-        {
-            // Algorytm powinien być nadpisany
-
-            return null;
-        }
+        public abstract double[] ObliczWidmo(int[] sygnal, Okno okno, int dokladnosc);
 
         // Metoda odnajdująca przydźwięk w widmie wybierając element maksymalny. 
         /*public virtual int ZnajdzPrzydzwiekWWidmie(double[] widmo, int indeksZakresDolny, int indeksZakresGorny, int czestotliwoscProbkowania, int rozmiarWidma)

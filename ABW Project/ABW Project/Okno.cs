@@ -3,7 +3,7 @@
 //oraz zamiana kodu na C#: Michał Paduch i Adam Konopka
 //Wyżej wymienieni autorzy udostępniają cały powyższy/poniższy kod zawarty w niniejszym pliku 
 //na zasadach licencji GNU GPLv2.http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-
+/*
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +12,7 @@ using System.Threading.Tasks;
 
 namespace ABW_Project
 {
-    /// <summary>
-    /// Klasa zawierająca metody okienkujące spróbkowany sygnał
-    /// </summary>
+    
     class Okno
     {
         public readonly static int Prostokatne = 1;
@@ -23,129 +21,13 @@ namespace ABW_Project
         public readonly static int Hamminga = 4;
         public readonly static int Blackmana = 5;
 
-        /// <summary>
-        /// Metoda modyfikująca sygnał
-        /// </summary>
-        /// <param name="x">Sygnał spróbkowany</param>
-        /// <returns>Zwraca zokienkowany sygnał</returns>
-        private static double[] OknoBartletta(double[] x)
-        {
-            double[] result;
-            int i;
-            double N;
-            double value;
-            double n;
 
-            result = new double[x.Length];
-            N = (double)x.Length;
 
-            for (i = 0; i < x.Length; i++)
-            {
 
-                value = x[i];
-                n = (double)i;
 
-                result[i] = (1.0 - (Math.Abs((n - ((N - 1.0) / 2.0))) / (N - 1.0))) * value;
-            }
+        
 
-            return result;
-        }
-
-        /// <summary>
-        /// Metoda modyfikująca sygnał
-        /// </summary>
-        /// <param name="x">Sygnał spróbkowany</param>
-        /// <returns>Zwraca zokienkowany sygnał</returns>
-        private static double[] OknoHanninga(double[] x)
-        {
-
-            double[] result;
-            int i;
-            double N;
-            double value;
-            double n;
-
-            result = new double[x.Length];
-            N = (double)x.Length;
-
-            for (i = 0; i < x.Length; i++)
-            {
-
-                value = x[i];
-                n = (double)i;
-
-                result[i] = (0.5 * (1.0 - Math.Cos(2.0 * Math.PI * n / (N - 1.0)))) * value;
-            }
-
-            return result;
-
-        }
-
-        /// <summary>
-        /// Metoda modyfikująca sygnał
-        /// </summary>
-        /// <param name="x">Sygnał spróbkowany</param>
-        /// <returns>Zwraca zokienkowany sygnał</returns>
-        private static double[] OknoHamminga(double[] x)
-        {
-
-            double[] result;
-            int i;
-            double N;
-            double value;
-            double n;
-
-            result = new double[x.Length];
-            N = (double)x.Length;
-
-            for (i = 0; i < x.Length; i++)
-            {
-
-                value = x[i];
-                n = (double)i;
-
-                result[i] = (0.54 - (0.46 * Math.Cos(2.0 * Math.PI * n / (N - 1.0)))) * value;
-            }
-
-            return result;
-
-        }
-
-        /// <summary>
-        /// Metoda modyfikująca sygnał
-        /// </summary>
-        /// <param name="x">Sygnał spróbkowany</param>
-        /// <returns>Zwraca zokienkowany sygnał</returns>
-        private static double[] OknoBlackmana(double[] x)
-        {
-
-            double[] result;
-            int i;
-            double N;
-            double value;
-            double n;
-
-            double[] parts;
-
-            parts = new double[2];
-            result = new double[x.Length];
-            N = (double)x.Length;
-
-            for (i = 0; i < x.Length; i++)
-            {
-
-                value = x[i];
-                n = (double)i;
-
-                parts[0] = 0.42 - (0.50 * Math.Cos(2.0 * Math.PI * n / (N - 1.0)));
-                parts[1] = 0.08 * Math.Cos(4 * Math.PI * n / (N - 1.0));
-
-                result[i] = (parts[0] + parts[1]) * value;
-            }
-
-            return result;
-
-        }
+        
 
         /// <summary>
         /// Metoda obsługująca wybór okna
@@ -190,3 +72,4 @@ namespace ABW_Project
         }
     }
 }
+*/
