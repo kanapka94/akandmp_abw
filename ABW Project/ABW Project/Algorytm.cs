@@ -18,19 +18,30 @@ namespace ABW_Project
     abstract class Algorytm
     {
         /// <summary>
+        /// Metoda zamieniająca dokładność z postaci liczby zmiennoprzecinkowej (0,002) na ilość próbek potrzebnych do osiągnięcia takiej dokładności.
+        /// </summary>
+        /// <param name="dokladnosc">Dokładnośc podana przez użytkownika</param>
+        /// <param name="czestotliwoscProbkowania">Częstotliwość próbkowania nagrania</param>
+        /// <returns>Zwraca ilość potrzebnych próbek</returns>
+        public int PrzeliczDokladnosc(double dokladnosc,int czestotliwoscProbkowania)
+        {
+            double dokladnosc2 = 1 / dokladnosc; // Ilość wartości zwracanych dla jednej sekundy
+            return czestotliwoscProbkowania * (int)dokladnosc2;
+        }
+
+        /// <summary>
         /// Metoda wydzielająca wartość przydźwięku sieciowego co sekundę
         /// </summary>
         /// <param name="plik">Obiekt klasy PlikWave</param>
-        //todo: Padi uzupełnij tutaj:
-        /// <param name="stan">...</param>
+        /// <param name="stan">Zmienna referencyjna wskazująca ilość procent wykonania algorytmu</param>
         /// <param name="dolnaCzestosc">Dolna częstotliwość (graniczna, badana)</param>
         /// <param name="gornaCzestosc">Górna częstotliwość (graniczna, badana)</param>
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca obiekt klasy Wynik</returns>
-        public virtual Wynik WydzielPrzydzwiek(PlikWave plik,ref int stan, Okno okno,double dolnaCzestosc = 40, double gornaCzestosc = 60, int dokladnosc = -1)
+        public virtual Wynik WydzielPrzydzwiek(PlikWave plik,ref int stan, Okno okno, string plikWidma, double dolnaCzestosc = 40, double gornaCzestosc = 60, double dokladnosc = 1)
         {
 
-            
+
             // Kod testujący do DFT =========================================================
             // ******************************************************************************
 
@@ -54,40 +65,32 @@ namespace ABW_Project
             *
             ********************************************************************************/
 
-            if (dokladnosc == -1) dokladnosc = plik.czestotliwoscProbkowania;       // Jeżeli dokladnosc == -1 to wynosi inaczej ilosci probek w pliku
+            if (dokladnosc < 0 || dokladnosc > 1)
+                throw new Exception("Dokładność musi być liczbą z zakresu 0-1.");
+                
+
+            if (dolnaCzestosc < 0) throw new Exception("Dolna częstotliwość poniżej 0");
+            if (gornaCzestosc < 0) throw new Exception("Gorna częstotliwość poniżej 0");
+            if (dolnaCzestosc > gornaCzestosc) throw new Exception("Górna częstotliwość jest mniejsza niż dolna częstotliwość");
+
+            int iloscProbekDoRozszerzenia = PrzeliczDokladnosc(dokladnosc, plik.czestotliwoscProbkowania);
 
             Wynik wynik = new Wynik();
             wynik.czestotliwoscSygnalu = new double[(int)plik.dlugoscWSekundach];   // Tworzy tablicę wynik, której długość wynosi tyle
                                                                                     // ile sekund ma nagranie. Jest to spowodowane tym
                                                                                     // aby dla każdej sekundy wybrać najlepszy przydźwięk
-            StreamWriter sw = new StreamWriter("plik.txt"); // Tymczasowe tylko do zapisu wyników widma
+            double[] widmo = new double[1];
+            StreamWriter sw = new StreamWriter(plikWidma); // Tymczasowe tylko do zapisu wyników widma
 
             int rozmiarWidma;
-            for (int i = 0; i < wynik.czestotliwoscSygnalu.Length; i++)
+            for (int sekunda = 0; sekunda < wynik.czestotliwoscSygnalu.Length; sekunda++)
             {
-                double[] widmo = ObliczWidmo(plik.PobierzProbki(), okno, dokladnosc);
+                widmo = ObliczWidmo(plik.PobierzProbki(), okno, iloscProbekDoRozszerzenia);
                 rozmiarWidma = widmo.Length;
-
                 double przydzwiek = ZnajdzPrzydzwiekWWidmie(widmo,plik.czestotliwoscProbkowania,rozmiarWidma,dolnaCzestosc,gornaCzestosc);
-
-                //  =========================================================================================================
-                sw.WriteLine();
-                sw.WriteLine("================================================================================");
-                sw.WriteLine("=> Widmo dla "+Convert.ToString(i+1)+" sekundy");          // Tymczasowe tylko do zapisu widma|
-                sw.WriteLine("> Dokładność = " + Convert.ToString((decimal)plik.czestotliwoscProbkowania / (decimal)rozmiarWidma));
-                sw.WriteLine("50 Hz na pozycji: " + hzNaIndeksWTablicy(50, plik.czestotliwoscProbkowania, rozmiarWidma));
-                sw.WriteLine("================================================================================");
-                sw.WriteLine();
-                for (int j = 0; j < widmo.Length; j++)                                   //                                 |
-                {   
-                    if(hzNaIndeksWTablicy(dolnaCzestosc,plik.czestotliwoscProbkowania,rozmiarWidma) < j)//
-                        if (hzNaIndeksWTablicy(gornaCzestosc, plik.czestotliwoscProbkowania, rozmiarWidma) > j)
-                            sw.WriteLine(Convert.ToString(j + " " + Math.Round((decimal)j * (decimal)plik.czestotliwoscProbkowania / (decimal)rozmiarWidma,3) + "Hz -> " + widmo[j] + dolnaCzestosc));                                   //                                 | 
-                }                                                                        //                                 |       
-                sw.WriteLine("Znaleziony Przydźwięk: " + Convert.ToString(przydzwiek));  //                                 |          
-                //  ========================================================================================================= 
-                wynik.czestotliwoscSygnalu[i] = przydzwiek;
-                stan = (int)((double)(i+1) / (double)wynik.czestotliwoscSygnalu.Length * 100.0);
+                sw.WriteLine("{0} {1}", sekunda, przydzwiek);
+                wynik.czestotliwoscSygnalu[sekunda] = przydzwiek;
+                stan = (int)((double)(sekunda+1) / (double)wynik.czestotliwoscSygnalu.Length * 100.0);
             }
             sw.Close();  // Tymczasowe tylko do zapisu wyników widma
 

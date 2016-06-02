@@ -20,7 +20,7 @@ namespace ABW_Project
         {
             int i;
             double N;
-            double value;
+            double wartosc;
             double n;
 
             N = (double)x.Length;
@@ -28,10 +28,10 @@ namespace ABW_Project
             for (i = 0; i < x.Length; i++)
             {
 
-                value = x[i];
+                wartosc = x[i];
                 n = (double)i;
 
-                x[i] = (1.0 - (Math.Abs((n - ((N - 1.0) / 2.0))) / (N - 1.0))) * value;
+                x[i] = (1.0 - (Math.Abs((n - ((N - 1.0) / 2.0))) / (N - 1.0))) * wartosc;
             }
 
             return x;

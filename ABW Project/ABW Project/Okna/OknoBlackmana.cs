@@ -21,7 +21,7 @@ namespace ABW_Project
 
             int i;
             double N;
-            double value;
+            double wartosc;
             double n;
 
             double[] parts;
@@ -32,13 +32,13 @@ namespace ABW_Project
             for (i = 0; i < x.Length; i++)
             {
 
-                value = x[i];
+                wartosc = x[i];
                 n = (double)i;
 
                 parts[0] = 0.42 - (0.50 * Math.Cos(2.0 * Math.PI * n / (N - 1.0)));
                 parts[1] = 0.08 * Math.Cos(4 * Math.PI * n / (N - 1.0));
 
-                x[i] = (parts[0] + parts[1]) * value;
+                x[i] = (parts[0] + parts[1]) * wartosc;
             }
 
             return x;

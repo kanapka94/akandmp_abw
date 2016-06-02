@@ -21,7 +21,7 @@ namespace ABW_Project
 
             int i;
             double N;
-            double value;
+            double wartosc;
             double n;
 
             N = (double)x.Length;
@@ -29,10 +29,10 @@ namespace ABW_Project
             for (i = 0; i < x.Length; i++)
             {
 
-                value = x[i];
+                wartosc = x[i];
                 n = (double)i;
 
-                x[i] = (0.5 * (1.0 - Math.Cos(2.0 * Math.PI * n / (N - 1.0)))) * value;
+                x[i] = (0.5 * (1.0 - Math.Cos(2.0 * Math.PI * n / (N - 1.0)))) * wartosc;
             }
 
             return x;

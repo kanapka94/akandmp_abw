@@ -205,10 +205,11 @@ namespace ABW_Project
             index = 0;
 
             // Log.Dodaj("Rozpoczęcie analizy FFT");
-             wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan,new OknoBlackmana(),49.8,51.2, 44100000).czestotliwoscSygnalu;
+            // wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan,new OknoBlackmana(),49.8,51.2, 220500).czestotliwoscSygnalu;
+            wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, new OknoBlackmana(), "widmo.txt" ,49.8, 50.2, 0.01).czestotliwoscSygnalu;
             //wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52).czestotliwoscSygnalu;
 
-            int potegaDwojki = (int)Math.Log(44100000, 2) + 1;
+            int potegaDwojki = (int)Math.Log(fft.PrzeliczDokladnosc(0.01,wv.czestotliwoscProbkowania), 2) + 1;
            // Log.Dodaj("Zakończenie analizy");
             stan.Zakoncz();
             Console.WriteLine("> Wynik FFT");
