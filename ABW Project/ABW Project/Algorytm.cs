@@ -23,7 +23,7 @@ namespace ABW_Project
         /// <param name="dokladnosc">Dokładnośc podana przez użytkownika</param>
         /// <param name="czestotliwoscProbkowania">Częstotliwość próbkowania nagrania</param>
         /// <returns>Zwraca ilość potrzebnych próbek</returns>
-        public abstract int PrzeliczDokladnosc(double dokladnosc,int czestotliwoscProbkowania);
+        public abstract int PrzeliczDokladnosc(double dokladnosc, int czestotliwoscProbkowania, double dolnaCzestosc = 0, double gornaCzestosc = 0);
 
         /// <summary>
         /// Metoda sprawdzająca czy podana dokładność jest prawidłowa dla poszczególnego algorytmu
@@ -105,7 +105,10 @@ namespace ABW_Project
         /// <param name="sygnal">Sygnał spróbkowany</param>
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca tablicę wartości widma</returns>
-        public abstract double[] ObliczWidmo(double[] sygnal, Okno okno, int dokladnosc);
+        public virtual double[] ObliczWidmo(double[] sygnal, Okno okno, int dokladnosc)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Metoda wirtualna. Jej zadaniem jest obliczanie widma sygnału dźwiękowego
@@ -115,26 +118,11 @@ namespace ABW_Project
         /// <param name="dolnyZakres">Dolny zakres liczenia widma</param>
         /// <param name="gornyZakres">Górny zakres obliczanego widma</param>
         /// <returns>Zwraca tablicę wartości widma</returns>
-        //public abstract double[] ObliczWidmo(double[] sygnal, Okno okno, int dokladnosc, double dolnaCzestosc, double gornaCzestosc);
-
-        // Metoda odnajdująca przydźwięk w widmie wybierając element maksymalny. 
-        /*public virtual int ZnajdzPrzydzwiekWWidmie(double[] widmo, int indeksZakresDolny, int indeksZakresGorny, int czestotliwoscProbkowania, int rozmiarWidma)
+        //
+        public virtual double[] ObliczWidmo(double[] sygnal, Okno okno, int dokladnosc, double dolnaCzestosc, double gornaCzestosc)
         {
-            if (indeksZakresDolny == -1) indeksZakresDolny = 0;
-            if (indeksZakresGorny == -1) indeksZakresGorny = widmo.Length - 1;
-
-            double max = widmo[indeksZakresDolny];
-            int indeksMax = indeksZakresDolny;
-            for (int index = indeksZakresDolny+1; index <= indeksZakresGorny; index++)
-            {
-                if (widmo[index] > max)
-                {
-                    max = widmo[index];
-                    indeksMax = index;
-                }
-            }
-            return 
-        }*/
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Metoda odnajdująca przydźwięk w widmie wybierając element maksymalny.

@@ -208,7 +208,7 @@ namespace ABW_Project
             // wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan,new OknoBlackmana(),49.8,51.2, 220500).czestotliwoscSygnalu;
             CZT czt = new CZT();
            // wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, new OknoBlackmana(), "widmo.txt" ,49.8, 50.2, 0.01).czestotliwoscSygnalu;
-            wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, new OknoBlackmana(), "widmo2.txt", 48, 52, 256).czestotliwoscSygnalu;
+            wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, new OknoBlackmana(), "widmo2.txt", 40, 60, 1).czestotliwoscSygnalu;
             //wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52).czestotliwoscSygnalu;
 
             int potegaDwojki = (int)Math.Log(fft.PrzeliczDokladnosc(0.01,wv.czestotliwoscProbkowania), 2) + 1;
@@ -238,8 +238,8 @@ namespace ABW_Project
                 Log.Dodaj(" w "+index+" sekundzie "+item+" hz");
             }*/
 
-           
 
+            AnalizaLog.Zamknij();
             /*int potegaDwojki = (int)Math.Log(20000000, 2) + 1;
             Console.WriteLine(wv.czestotliwoscProbkowania / (Math.Pow(2, potegaDwojki)));*/
 

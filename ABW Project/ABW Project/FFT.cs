@@ -33,7 +33,7 @@ namespace ABW_Project
         /// Metoda przeliczająca podaną dokładność
         /// </summary>
         /// <param name="dokladnosc"></param>
-        public override int PrzeliczDokladnosc(double dokladnosc, int czestotliwoscProbkowania)
+        public override int PrzeliczDokladnosc(double dokladnosc, int czestotliwoscProbkowania, double dolnaCzestosc = 0, double gornaCzestosc = 0)
         {
             double dokladnosc2 = 1 / dokladnosc; // Ilość wartości zwracanych dla jednej sekundy
             return czestotliwoscProbkowania* (int)dokladnosc2;
@@ -46,7 +46,7 @@ namespace ABW_Project
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <param name="OknoT">numer okna przez które przemnożymy sygnał</param>
         /// <returns>Zwraca zmieniony sygnał</returns>
-        public Complex[] PrzygotujDaneDoFFT(double[] probki, int dokladnosc,Okno okno)
+        public static Complex[] PrzygotujDaneDoFFT(double[] probki, int dokladnosc,Okno okno)
         {
             Complex[] wynik;
 
@@ -62,6 +62,52 @@ namespace ABW_Project
 
             return wynik;
         }
+
+        /// <summary>
+        /// Metoda uzupełnia sygnał zerami, tak aby jego długość była potęgą dwójki
+        /// </summary>
+        /// <param name="dane">spróbkowany sygnał</param>
+        /// <returns>Zwraca rozszerzony sygnał</returns>
+        public static Complex[] WypelnijZerami(Complex[] dane, int iloscProbek)
+        {
+
+            if ((dane.Length & (dane.Length - 1)) == 0) return dane;
+
+            double log2;
+            int log2_int;
+            int i;
+            Complex[] wynik;
+            int k;
+
+            //log2 = Math.Log((double)dane.Length) / Math.Log(2);
+            log2 = Math.Log((double)iloscProbek) / Math.Log(2);
+            log2_int = (int)Math.Round(log2);
+
+            wynik = null;
+
+            k = (int)Math.Pow(2.0, (double)log2_int);
+
+            if (k < iloscProbek) log2_int++; //in case when the k is too small
+
+            k = (int)Math.Pow(2.0, (double)log2_int);
+
+            wynik = new Complex[k];
+
+            for (i = 0; i < k; i++)
+            {
+                if (i < dane.Length)
+                {
+                    wynik[i] = dane[i];
+                }
+                else
+                {
+                    wynik[i] = 0;
+                }
+            }
+
+            return wynik;
+
+        }//end of WypelnijZerami
 
         /// <summary>
         /// Metoda uzupełnia sygnał zerami, tak aby jego długość była potęgą dwójki
@@ -218,7 +264,7 @@ namespace ABW_Project
         /// </summary>
         /// <param name="probki">Spróbkowany sygnał</param>
         /// <returns></returns>
-        public double[] PrzestawienieProbek(double[] probki)
+        public static double[] PrzestawienieProbek(double[] probki)
         {
             int a = 1;
             int N = probki.Length; //ilość próbek w sygnale
