@@ -41,7 +41,7 @@ namespace ABW_Project
         {
 
             int N = probki.Length;
-            int NM1 = N + iloscPrazkow - 2;
+            int NM1 = N + iloscPrazkow - 1;
             Complex A = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * czestoscDolna / czestoscProbkowania);
             Complex W = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * ((czestoscGorna - czestoscDolna) / (2 * (iloscPrazkow - 1)) / czestoscProbkowania));
 
