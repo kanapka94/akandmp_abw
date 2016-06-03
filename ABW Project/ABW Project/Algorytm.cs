@@ -34,37 +34,14 @@ namespace ABW_Project
         /// </summary>
         /// <param name="plik">Obiekt klasy PlikWave</param>
         /// <param name="stan">Zmienna referencyjna wskazująca ilość procent wykonania algorytmu</param>
+        /// <param name="okno">Obiekt, który obliczy okno sygnału</param>
+        /// <param name="plikPrzydzwieku">Plik, do którego zostanie zapisany znaleziony przydźwięk</param>
         /// <param name="dolnaCzestosc">Dolna częstotliwość (graniczna, badana)</param>
         /// <param name="gornaCzestosc">Górna częstotliwość (graniczna, badana)</param>
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca obiekt klasy Wynik</returns>
-        public virtual Wynik WydzielPrzydzwiek(PlikWave plik,ref int stan, Okno okno, string plikWidma, double dolnaCzestosc = 40, double gornaCzestosc = 60, double dokladnosc = 1)
-        {
-
-
-            // Kod testujący do DFT =========================================================
-            // ******************************************************************************
-
-            /********************************************************************************
-            *
-            *    Opis działania algorytmu
-             *    
-             *  Do metody wydziel przydzwiek podajemy nastepujace wartosci: 
-             *  > plik - obiekt klasy PlikWave przechowywujący metody pobierania próbek i nagłówków
-             *  > ref stan - referencja do zmiennej int wskazującej na aktualny stan wykonanej roboty
-             *  Wartości są w procentach więc powinny być z zakresu 0-100
-             *  > dolnaCzestosc - czestosc minimalna jaka ma byc wyszukiwana
-             *  > gornaCzestosc - czestosc maksymalna jaka ma byc wyszukana
-             *  > dokladnosc - ilosc probek, na których ma opierać się algorytm
-             *  
-             * Metoda na początku tworzy obiekt typu wynik z tablicą double o długości ilości sekund w nagraniu.
-             * Dla każdej sekundy wydzielony przydźwięk zapisze się w tablicy double.
-             * Następnie dla każdej sekundy oblicza widmo korzystajac z metody pobierzProbki, oraz podanej dokladnosci
-             * 
-             * 
-            *
-            ********************************************************************************/
-
+        public virtual Wynik WydzielPrzydzwiek(PlikWave plik,ref int stan, Okno okno, string plikPrzydzwieku, double dolnaCzestosc = 40, double gornaCzestosc = 60, double dokladnosc = 1)
+        { 
             if (dokladnosc < 0 || dokladnosc > 1)
                 throw new Exception("Dokładność musi być liczbą z zakresu 0-1.");
             if (dolnaCzestosc < 0) throw new Exception("Dolna częstotliwość poniżej 0");
@@ -82,7 +59,7 @@ namespace ABW_Project
 
             try
             {
-                sw = new StreamWriter(plikWidma); // Tymczasowe tylko do zapisu wyników widma
+                sw = new StreamWriter(plikPrzydzwieku); // Tymczasowe tylko do zapisu wyników widma
             }
             catch (Exception e)
             {
@@ -95,16 +72,30 @@ namespace ABW_Project
                 widmo = ObliczWidmo(plik.PobierzProbki(), okno, iloscProbekDoRozszerzenia);
                 rozmiarWidma = widmo.Length;
                 double przydzwiek = ZnajdzPrzydzwiekWWidmie(widmo,plik.czestotliwoscProbkowania,rozmiarWidma,dolnaCzestosc,gornaCzestosc);
-                sw.WriteLine("{0} {1}", sekunda, przydzwiek);
+
+                try
+                {
+                    sw.WriteLine("{0} {1}", sekunda, przydzwiek);
+                }
+                catch(Exception ex)
+                {
+                    throw ex;
+                }
+
                 wynik.czestotliwoscSygnalu[sekunda] = przydzwiek;
                 stan = (int)((double)(sekunda+1) / (double)wynik.czestotliwoscSygnalu.Length * 100.0);
             }
-            sw.Close();  // Tymczasowe tylko do zapisu wyników widma
+
+            try
+            {
+                sw.Close();  // Tymczasowe tylko do zapisu wyników widma
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
             return wynik;
-
-            // ******************************************************************************
-            // Kod testujący do DFT =========================================================a
         }
 
         /// <summary>
@@ -148,6 +139,11 @@ namespace ABW_Project
 
             int indeksZakresDolny = hzNaIndeksWTablicy(hzZakresDolny,czestotliwoscProbkowania,rozmiarWidma);
             int indeksZakresGorny = hzNaIndeksWTablicy(hzZakresGorny, czestotliwoscProbkowania, rozmiarWidma);
+
+            if (indeksZakresDolny >= widmo.Length || indeksZakresDolny < 0)
+                throw new Exception("Dolny zakres widma w szukaniu przydźwięku nie mieści się w widmie");
+            if (indeksZakresGorny >= widmo.Length || indeksZakresGorny < 0)
+                throw new Exception("Górny zakres widma w szukaniu przydźwięku nie mieści się w widmie");
 
             double max = widmo[(int)indeksZakresDolny];
             int indeksMax = (int)indeksZakresDolny;
