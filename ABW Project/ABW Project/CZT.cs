@@ -35,7 +35,7 @@ namespace ABW_Project
             Complex A = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * czestoscDolna / czestoscProbkowania);
             Complex W = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * ((czestoscGorna - czestoscDolna) / (2 * (iloscPrazkow - 1)) / czestoscProbkowania));
 
-            Complex[] y1 = new Complex[N];
+            Complex[] y1 = new Complex[NM1];
             Complex[] y2 = new Complex[NM1];
 
             int k;
@@ -50,13 +50,13 @@ namespace ABW_Project
                 y2[k] = Complex.Pow(W, Math.Pow(-k, 2));
             }
 
-            for (k = N; k < NM1; k++)
+            for (k = iloscPrazkow; k < NM1; k++)
             {
                 y2[k] = Complex.Pow(W, Math.Pow(-(NM1 - k), 2));
             }
 
-            Complex[] Y1 = FFT.fft(y1);
-            Complex[] Y2 = FFT.fft(y2);
+            Complex[] Y1 = FFT.fftFor(y1);
+            Complex[] Y2 = FFT.fftFor(y2);
             Complex[] Y = new Complex[Y2.Length];
 
             for (int i = 0; i < Y2.Length; i++)
@@ -86,7 +86,7 @@ namespace ABW_Project
 
             for (k = 0; k < iloscPrazkow; k++)
             {
-                XcztN[k] = y[k] * Complex.Pow(W, Math.Pow(k, 2));
+                XcztN[k] = Complex.Multiply(y[k],Complex.Pow(W, Math.Pow(k, 2)));
             }
 
             return XcztN;
