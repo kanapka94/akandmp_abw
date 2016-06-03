@@ -208,7 +208,7 @@ namespace ABW_Project
             // wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan,new OknoBlackmana(),49.8,51.2, 220500).czestotliwoscSygnalu;
             CZT czt = new CZT();
            // wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, new OknoBlackmana(), "widmo.txt" ,49.8, 50.2, 0.01).czestotliwoscSygnalu;
-            wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, new OknoBlackmana(), "widmo2.txt", 40, 60, 1).czestotliwoscSygnalu;
+            wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, new OknoBlackmana(), "widmo2.txt", 45, 55, 0.001).czestotliwoscSygnalu;
             //wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52).czestotliwoscSygnalu;
 
             int potegaDwojki = (int)Math.Log(fft.PrzeliczDokladnosc(0.01,wv.czestotliwoscProbkowania), 2) + 1;

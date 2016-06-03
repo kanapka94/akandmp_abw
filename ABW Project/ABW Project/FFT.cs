@@ -109,12 +109,13 @@ namespace ABW_Project
 
         }//end of WypelnijZerami
 
+
         /// <summary>
         /// Metoda uzupełnia sygnał zerami, tak aby jego długość była potęgą dwójki
         /// </summary>
         /// <param name="dane">spróbkowany sygnał</param>
         /// <returns>Zwraca rozszerzony sygnał</returns>
-        public static double[] WypelnijZerami(double[] dane,int iloscProbek)
+        public static double[] WypelnijZerami(double[] dane, int iloscProbek)
         {
 
             if ((dane.Length & (dane.Length - 1)) == 0) return dane;
