@@ -67,8 +67,6 @@ namespace ABW_Project
 
             if (dokladnosc < 0 || dokladnosc > 1)
                 throw new Exception("Dokładność musi być liczbą z zakresu 0-1.");
-                
-
             if (dolnaCzestosc < 0) throw new Exception("Dolna częstotliwość poniżej 0");
             if (gornaCzestosc < 0) throw new Exception("Gorna częstotliwość poniżej 0");
             if (dolnaCzestosc > gornaCzestosc) throw new Exception("Górna częstotliwość jest mniejsza niż dolna częstotliwość");
@@ -79,9 +77,18 @@ namespace ABW_Project
             wynik.czestotliwoscSygnalu = new double[(int)plik.dlugoscWSekundach];   // Tworzy tablicę wynik, której długość wynosi tyle
                                                                                     // ile sekund ma nagranie. Jest to spowodowane tym
                                                                                     // aby dla każdej sekundy wybrać najlepszy przydźwięk
-            double[] widmo = new double[1];
-            StreamWriter sw = new StreamWriter(plikWidma); // Tymczasowe tylko do zapisu wyników widma
+            double[] widmo;
+            StreamWriter sw;
 
+            try
+            {
+                sw = new StreamWriter(plikWidma); // Tymczasowe tylko do zapisu wyników widma
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            
             int rozmiarWidma;
             for (int sekunda = 0; sekunda < wynik.czestotliwoscSygnalu.Length; sekunda++)
             {
