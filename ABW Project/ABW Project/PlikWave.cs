@@ -41,7 +41,7 @@ namespace ABW_Project
         /// </summary>
         ~PlikWave()
         {
-           //destruktor działa poprawnie
+            //destruktor działa poprawnie
             ZamknijPlik();
         }
 
@@ -52,7 +52,14 @@ namespace ABW_Project
         {
             if (plik != null)
             {
-                plik.Close();
+                try
+                {
+                    plik.Close();
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }             
             }
         }
         
@@ -62,72 +69,80 @@ namespace ABW_Project
         /// <param name="adresPliku">Ścieżka dostępu do pliku .wav</param>
         public void WczytajZPliku(string adresPliku)
         {
-            plik = new BinaryReader(new FileStream(adresPliku,FileMode.Open));
-            byte[] readedBytes = plik.ReadBytes(4);
-            idRiff = Convert.ToString(((char)readedBytes[0])) + Convert.ToString(((char)readedBytes[1])) + Convert.ToString(((char)readedBytes[2])) + Convert.ToString(((char)readedBytes[3]));
+            byte[] readedBytes;
 
-            readedBytes = plik.ReadBytes(4);
-            rozmiarPliku = readedBytes[0] + readedBytes[1] * (int)Math.Pow(256, 1) + readedBytes[2] * (int)Math.Pow(256, 2) + readedBytes[3] * (int)Math.Pow(256, 3);
-
-            readedBytes = plik.ReadBytes(4);
-            idFormatu = Convert.ToString(((char)readedBytes[0])) + Convert.ToString(((char)readedBytes[1])) + Convert.ToString(((char)readedBytes[2])) + Convert.ToString(((char)readedBytes[3]));
-
-            readedBytes = plik.ReadBytes(4);
-            idOpisu = Convert.ToString(((char)readedBytes[0])) + Convert.ToString(((char)readedBytes[1])) + Convert.ToString(((char)readedBytes[2])) + Convert.ToString(((char)readedBytes[3]));
-
-            readedBytes = plik.ReadBytes(4);
-            rozmiarOpisu = readedBytes[0] + readedBytes[1] * (int)Math.Pow(256, 1) + readedBytes[2] * (int)Math.Pow(256, 2) + readedBytes[3] * (int)Math.Pow(256, 3);
-
-            readedBytes = plik.ReadBytes(2);
-            rodzajKompresji = readedBytes[1] * 10 + readedBytes[0];
-
-            readedBytes = plik.ReadBytes(2);
-            iloscKanalow = readedBytes[0] + readedBytes[1] * (int)Math.Pow(256, 1);
-
-            readedBytes = plik.ReadBytes(4);
-            czestotliwoscProbkowania = readedBytes[0] + readedBytes[1] * (int)Math.Pow(256, 1) + readedBytes[2] * (int)Math.Pow(256, 2) + readedBytes[3] * (int)Math.Pow(256, 3);
-
-            readedBytes = plik.ReadBytes(4);
-            czestotliwoscBajtow = readedBytes[0] + readedBytes[1] * (int)Math.Pow(256, 1) + readedBytes[2] * (int)Math.Pow(256, 2) + readedBytes[3] * (int)Math.Pow(256, 3);
-
-            readedBytes = plik.ReadBytes(2);
-            rozmiarProbki = readedBytes[0] + readedBytes[1] * 256;
-
-            readedBytes = plik.ReadBytes(2);
-            rozdzielczosc = readedBytes[0] + readedBytes[1] * 256;
-
-            bitowNaKanal = (rozmiarProbki / iloscKanalow);
-
-            //byte readedBytes1 = plik.ReadBytes(1)[0];
-            //byte readedBytes2 = plik.ReadBytes(1)[0];
-            //byte readedBytes3 = plik.ReadBytes(1)[0];
-            //byte readedBytes4 = plik.ReadBytes(1)[0];
-
-            //while (readedBytes1 == 98 && readedBytes2 == 121 && readedBytes3 == 116 && readedBytes4 == 101)
-            //{
-            //    readedBytes3 = readedBytes4;
-            //    readedBytes2 = readedBytes3;
-            //    readedBytes1 = readedBytes2;
-            //    readedBytes4 = plik.ReadBytes(1)[0];
-            //}
-
-            int ilePominac = 0;
-            ilePominac = rozmiarOpisu - 16;
-
-            if (ilePominac > 0)
+            try
             {
-                plik.ReadBytes(ilePominac+4);     //pomija Dodatkowe parametry, ktore sa nam niepotrzebne
+
+                plik = new BinaryReader(new FileStream(adresPliku, FileMode.Open));
+                readedBytes = plik.ReadBytes(4);
+                idRiff = Convert.ToString(((char)readedBytes[0])) + Convert.ToString(((char)readedBytes[1])) + Convert.ToString(((char)readedBytes[2])) + Convert.ToString(((char)readedBytes[3]));
+
+                readedBytes = plik.ReadBytes(4);
+                rozmiarPliku = readedBytes[0] + readedBytes[1] * (int)Math.Pow(256, 1) + readedBytes[2] * (int)Math.Pow(256, 2) + readedBytes[3] * (int)Math.Pow(256, 3);
+
+                readedBytes = plik.ReadBytes(4);
+                idFormatu = Convert.ToString(((char)readedBytes[0])) + Convert.ToString(((char)readedBytes[1])) + Convert.ToString(((char)readedBytes[2])) + Convert.ToString(((char)readedBytes[3]));
+
+                readedBytes = plik.ReadBytes(4);
+                idOpisu = Convert.ToString(((char)readedBytes[0])) + Convert.ToString(((char)readedBytes[1])) + Convert.ToString(((char)readedBytes[2])) + Convert.ToString(((char)readedBytes[3]));
+
+                readedBytes = plik.ReadBytes(4);
+                rozmiarOpisu = readedBytes[0] + readedBytes[1] * (int)Math.Pow(256, 1) + readedBytes[2] * (int)Math.Pow(256, 2) + readedBytes[3] * (int)Math.Pow(256, 3);
+
+                readedBytes = plik.ReadBytes(2);
+                rodzajKompresji = readedBytes[1] * 10 + readedBytes[0];
+
+                if(rodzajKompresji != 1)
+                {
+                    throw new Exception("Plik posiada inną modulację niż PCM");
+                }
+
+                readedBytes = plik.ReadBytes(2);
+                iloscKanalow = readedBytes[0] + readedBytes[1] * (int)Math.Pow(256, 1);
+
+                readedBytes = plik.ReadBytes(4);
+                czestotliwoscProbkowania = readedBytes[0] + readedBytes[1] * (int)Math.Pow(256, 1) + readedBytes[2] * (int)Math.Pow(256, 2) + readedBytes[3] * (int)Math.Pow(256, 3);
+
+                readedBytes = plik.ReadBytes(4);
+                czestotliwoscBajtow = readedBytes[0] + readedBytes[1] * (int)Math.Pow(256, 1) + readedBytes[2] * (int)Math.Pow(256, 2) + readedBytes[3] * (int)Math.Pow(256, 3);
+
+                readedBytes = plik.ReadBytes(2);
+                rozmiarProbki = readedBytes[0] + readedBytes[1] * 256;
+
+                readedBytes = plik.ReadBytes(2);
+                rozdzielczosc = readedBytes[0] + readedBytes[1] * 256;
+
             }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            try
+            {
+                bitowNaKanal = (rozmiarProbki / iloscKanalow);
 
-            readedBytes = plik.ReadBytes(4);
-            daneID = Convert.ToString(((char)readedBytes[0])) + Convert.ToString(((char)readedBytes[1])) + Convert.ToString(((char)readedBytes[2])) + Convert.ToString(((char)readedBytes[3]));
+                int ilePominac = 0;
+                ilePominac = rozmiarOpisu - 16;
 
-            readedBytes = plik.ReadBytes(4);
-            rozmiarDanych = readedBytes[0] + readedBytes[1] * (int)Math.Pow(256, 1) + readedBytes[2] * (int)Math.Pow(256, 2) + readedBytes[3] * (int)Math.Pow(256, 3);
+                if (ilePominac > 0)
+                {
+                    plik.ReadBytes(ilePominac + 4);     //pomija Dodatkowe parametry, ktore sa nam niepotrzebne
+                }
 
-            iloscProbek = (rozmiarDanych) / rozmiarProbki;
-            dlugoscWSekundach = (double)iloscProbek / czestotliwoscProbkowania;
-            
+                readedBytes = plik.ReadBytes(4);
+                daneID = Convert.ToString(((char)readedBytes[0])) + Convert.ToString(((char)readedBytes[1])) + Convert.ToString(((char)readedBytes[2])) + Convert.ToString(((char)readedBytes[3]));
+
+                readedBytes = plik.ReadBytes(4);
+                rozmiarDanych = readedBytes[0] + readedBytes[1] * (int)Math.Pow(256, 1) + readedBytes[2] * (int)Math.Pow(256, 2) + readedBytes[3] * (int)Math.Pow(256, 3);
+
+                iloscProbek = (rozmiarDanych) / rozmiarProbki;
+                dlugoscWSekundach = (double)iloscProbek / czestotliwoscProbkowania;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }  
         }
 
         /// <summary>
@@ -137,7 +152,16 @@ namespace ABW_Project
         /// <returns>Zwraca wartość próbki</returns>
         public double NastepnaProbka(byte kanal = 0)
         {
-            byte[] readedBytes = plik.ReadBytes(rozmiarProbki);
+            byte[] readedBytes;
+            try
+            {
+                readedBytes = plik.ReadBytes(rozmiarProbki);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            
             int dane = 0;
             int pozycjaKanalu = kanal * bitowNaKanal;
 
@@ -156,7 +180,7 @@ namespace ABW_Project
         public double[] PobierzProbki(byte kanal = 0, int probkiDoOdczytania = -1)
         {
             if (probkiDoOdczytania == -1) probkiDoOdczytania = czestotliwoscProbkowania;
-
+            if (probkiDoOdczytania <= 0) throw new Exception("Ilość odczytanych próbek musi być liczbą większą od 0");
             double[] probki = new double[probkiDoOdczytania];
 
             for (int i = 0; i < probkiDoOdczytania; i++)

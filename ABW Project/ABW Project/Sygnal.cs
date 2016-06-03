@@ -28,12 +28,13 @@ namespace ABW_Project
             int i;
 
             wynik = 0;
-
-            for (i = 0; i < sygnal.Length; i++)
+            if (sygnal != null && sygnal.Length > 0)
             {
+                for (i = 0; i < sygnal.Length; i++)
+                {
                 wynik += (sygnal[i] * sygnal[i]);
+                }
             }
-
             return wynik;
         }
 
@@ -44,11 +45,12 @@ namespace ABW_Project
         /// <returns>Zwraca moc sygnału</returns>
         public static double Moc(double[] sygnal)
         {
-            double wynik;
-
-            wynik = Energia(sygnal) / ((double)sygnal.Length);
-
-            return wynik;
+            double wynik = 0;
+            if (sygnal != null && sygnal.Length > 0)
+            {
+                wynik = Energia(sygnal) / ((double)sygnal.Length);
+            }
+            return wynik;     
         }
     }
 }
