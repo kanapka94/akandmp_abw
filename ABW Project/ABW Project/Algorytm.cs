@@ -23,11 +23,13 @@ namespace ABW_Project
         /// <param name="dokladnosc">Dokładnośc podana przez użytkownika</param>
         /// <param name="czestotliwoscProbkowania">Częstotliwość próbkowania nagrania</param>
         /// <returns>Zwraca ilość potrzebnych próbek</returns>
-        public int PrzeliczDokladnosc(double dokladnosc,int czestotliwoscProbkowania)
-        {
-            double dokladnosc2 = 1 / dokladnosc; // Ilość wartości zwracanych dla jednej sekundy
-            return czestotliwoscProbkowania * (int)dokladnosc2;
-        }
+        public abstract int PrzeliczDokladnosc(double dokladnosc,int czestotliwoscProbkowania);
+
+        /// <summary>
+        /// Metoda sprawdzająca czy podana dokładność jest prawidłowa dla poszczególnego algorytmu
+        /// </summary>
+        /// <param name="dokladnosc"></param>
+        public abstract void SprawdzDokladnosc(double dokladnosc);
 
         /// <summary>
         /// Metoda wydzielająca wartość przydźwięku sieciowego co sekundę
@@ -41,9 +43,8 @@ namespace ABW_Project
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca obiekt klasy Wynik</returns>
         public virtual Wynik WydzielPrzydzwiek(PlikWave plik,ref int stan, Okno okno, string plikPrzydzwieku, double dolnaCzestosc = 40, double gornaCzestosc = 60, double dokladnosc = 1)
-        { 
-            if (dokladnosc < 0 || dokladnosc > 1)
-                throw new Exception("Dokładność musi być liczbą z zakresu 0-1.");
+        {
+            SprawdzDokladnosc(dokladnosc);
             if (dolnaCzestosc < 0) throw new Exception("Dolna częstotliwość poniżej 0");
             if (gornaCzestosc < 0) throw new Exception("Gorna częstotliwość poniżej 0");
             if (dolnaCzestosc > gornaCzestosc) throw new Exception("Górna częstotliwość jest mniejsza niż dolna częstotliwość");
@@ -105,6 +106,16 @@ namespace ABW_Project
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca tablicę wartości widma</returns>
         public abstract double[] ObliczWidmo(double[] sygnal, Okno okno, int dokladnosc);
+
+        /// <summary>
+        /// Metoda wirtualna. Jej zadaniem jest obliczanie widma sygnału dźwiękowego
+        /// </summary>
+        /// <param name="sygnal">Sygnał spróbkowany</param>
+        /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
+        /// <param name="dolnyZakres">Dolny zakres liczenia widma</param>
+        /// <param name="gornyZakres">Górny zakres obliczanego widma</param>
+        /// <returns>Zwraca tablicę wartości widma</returns>
+        //public abstract double[] ObliczWidmo(double[] sygnal, Okno okno, int dokladnosc, double dolnaCzestosc, double gornaCzestosc);
 
         // Metoda odnajdująca przydźwięk w widmie wybierając element maksymalny. 
         /*public virtual int ZnajdzPrzydzwiekWWidmie(double[] widmo, int indeksZakresDolny, int indeksZakresGorny, int czestotliwoscProbkowania, int rozmiarWidma)

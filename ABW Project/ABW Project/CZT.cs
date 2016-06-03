@@ -18,6 +18,16 @@ namespace ABW_Project
     /// </summary>
     class CZT : Algorytm
     {
+        public override int PrzeliczDokladnosc(double dokladnosc, int czestotliwoscProbkowania)
+        {
+            return (int)dokladnosc;
+        }
+
+        public override void SprawdzDokladnosc(double dokladnosc)
+        {
+
+        }
+
         /// <summary>
         /// CZT
         /// </summary>
@@ -31,7 +41,7 @@ namespace ABW_Project
         {
 
             int N = probki.Length;
-            int NM1 = N + iloscPrazkow - 1;
+            int NM1 = N + iloscPrazkow - 2;
             Complex A = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * czestoscDolna / czestoscProbkowania);
             Complex W = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * ((czestoscGorna - czestoscDolna) / (2 * (iloscPrazkow - 1)) / czestoscProbkowania));
 
@@ -108,7 +118,7 @@ namespace ABW_Project
         /// <param name="probki">Sygnał spróbkowany</param>
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca widmo sygnału</returns>
-        public override double[] ObliczWidmo(double[] probki, Okno okno,int dokladnosc = 1)
+        public override double[] ObliczWidmo(double[] probki, Okno okno,int dokladnosc = 1)/*, double dolnaCzestosc = 48, double gornaCzestosc = 52*/
         {
             PrzygotujDaneDoCZT(probki, okno);
 
@@ -116,7 +126,7 @@ namespace ABW_Project
 
             Complex[] sygnal = new Complex[probki.Length];
 
-            sygnal = czt(probki, 44100, 256, 48, 52);   //uruchamianie CZT ze stało określonymia parametrami
+            sygnal = czt(probki, probki.Length, dokladnosc, 48, 52);   //uruchamianie CZT ze stało określonymia parametrami
 
             for (int i = 0; i < sygnal.Length; i++)
             {

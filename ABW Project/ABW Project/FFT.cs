@@ -20,6 +20,26 @@ namespace ABW_Project
     class FFT : Algorytm
     {
         /// <summary>
+        /// Metoda sprawdzająca czy podana dokładność jest z zakresu 0-1
+        /// </summary>
+        /// <param name="dokladnosc"></param>
+        public override void SprawdzDokladnosc(double dokladnosc)
+        {
+            if (dokladnosc <= 0 && dokladnosc > 1)
+                throw new Exception("Dokładność musi być liczbą z zakresu 0-1.");
+        }
+
+        /// <summary>
+        /// Metoda przeliczająca podaną dokładność
+        /// </summary>
+        /// <param name="dokladnosc"></param>
+        public override int PrzeliczDokladnosc(double dokladnosc, int czestotliwoscProbkowania)
+        {
+            double dokladnosc2 = 1 / dokladnosc; // Ilość wartości zwracanych dla jednej sekundy
+            return czestotliwoscProbkowania* (int)dokladnosc2;
+        }
+
+        /// <summary>
         /// Metoda przygotowująca sygnał spróbkowany do FFT
         /// </summary>
         /// <param name="probki">sygnał spróbkowany</param>
