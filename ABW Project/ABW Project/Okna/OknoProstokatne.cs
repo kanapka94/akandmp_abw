@@ -16,6 +16,7 @@ namespace ABW_Project
 
         public override double[] Funkcja(double[] x)
         {
+            AnalizaLog.Postep("Obliczam okno korzystając z okna Prostokątnego");
             return x;
         }
     }

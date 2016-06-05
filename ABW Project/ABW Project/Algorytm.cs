@@ -44,23 +44,48 @@ namespace ABW_Project
         /// <returns>Zwraca obiekt klasy Wynik</returns>
         public virtual Wynik WydzielPrzydzwiek(PlikWave plik,ref int stan, Okno okno, string plikPrzydzwieku, double dolnaCzestosc = 40, double gornaCzestosc = 60, double dokladnosc = 1)
         {
+            AnalizaLog.Postep("Rozpoczeto analize");
+            AnalizaLog.Postep("Sprawdzam dokladnosc");
             SprawdzDokladnosc(dokladnosc);
-            if (dolnaCzestosc < 0) throw new Exception("Dolna częstotliwość poniżej 0");
-            if (gornaCzestosc < 0) throw new Exception("Gorna częstotliwość poniżej 0");
-            if (dolnaCzestosc > gornaCzestosc) throw new Exception("Górna częstotliwość jest mniejsza niż dolna częstotliwość");
+
+            if (dolnaCzestosc < 0)
+            {
+                AnalizaLog.Blad("Dolna częstotliwość poniżej 0");
+                throw new Exception("Dolna częstotliwość poniżej 0");
+            }
+
+            if (gornaCzestosc < 0)
+            {
+                AnalizaLog.Blad("Gorna częstotliwość poniżej 0");
+                throw new Exception("Gorna częstotliwość poniżej 0");
+            }
+
+            if (dolnaCzestosc > gornaCzestosc)
+            {
+                AnalizaLog.Blad("Górna częstotliwość jest mniejsza niż dolna częstotliwość");
+                throw new Exception("Górna częstotliwość jest mniejsza niż dolna częstotliwość");
+            }
+
 
             int iloscProbekDoRozszerzenia = PrzeliczDokladnosc(dokladnosc, plik.czestotliwoscProbkowania);
+            AnalizaLog.Postep("Ilość próbek do rozszerzenia: ");
+            AnalizaLog.Dodaj(Convert.ToString(iloscProbekDoRozszerzenia),false);
 
             Wynik wynik = new Wynik();
             wynik.czestotliwoscSygnalu = new double[(int)plik.dlugoscWSekundach];   // Tworzy tablicę wynik, której długość wynosi tyle
                                                                                     // ile sekund ma nagranie. Jest to spowodowane tym
                                                                                     // aby dla każdej sekundy wybrać najlepszy przydźwięk
+              
+
             double[] widmo;
             StreamWriter sw;
 
             try
             {
+
                 sw = new StreamWriter(plikPrzydzwieku); // Tymczasowe tylko do zapisu wyników widma
+                AnalizaLog.Postep("Utworzono plik z przydźwiękiem. Nazwa pliku:");
+                AnalizaLog.Dodaj(plikPrzydzwieku);
             }
             catch (Exception e)
             {
@@ -70,16 +95,26 @@ namespace ABW_Project
             int rozmiarWidma;
             for (int sekunda = 0; sekunda < wynik.czestotliwoscSygnalu.Length; sekunda++)
             {
+                AnalizaLog.Postep("Analizuję " + Convert.ToString(sekunda) + " sekundę");
+                AnalizaLog.Postep("Obliczam widmo");
                 widmo = ObliczWidmo(plik.PobierzProbki(), okno, iloscProbekDoRozszerzenia);
+                AnalizaLog.Postep("Widmo obliczone, liczba elementów widma: ");
                 rozmiarWidma = widmo.Length;
+                AnalizaLog.Dodaj(Convert.ToString(rozmiarWidma), false);
+
+                AnalizaLog.Postep("Szukam przydźwięku");
                 double przydzwiek = ZnajdzPrzydzwiekWWidmie(widmo,plik.czestotliwoscProbkowania,rozmiarWidma,dolnaCzestosc,gornaCzestosc);
+                AnalizaLog.Postep("Przydźwięk znaleziony! Wartość:");
+                AnalizaLog.Dodaj(Convert.ToString(przydzwiek),false);
 
                 try
                 {
+                    AnalizaLog.Dodaj("Zapisałem wynik do pliku");
                     sw.WriteLine("{0} {1}", sekunda, przydzwiek);
                 }
                 catch(Exception ex)
                 {
+                    AnalizaLog.Blad("Błąd podczas zapisu do pliku przydźwięku: " + ex.Message);
                     throw ex;
                 }
 
@@ -93,6 +128,7 @@ namespace ABW_Project
             }
             catch (Exception ex)
             {
+                AnalizaLog.Blad("Błąd podczas zamykania pliku przydźwięku: " + ex.Message);
                 throw ex;
             }
 
@@ -140,9 +176,15 @@ namespace ABW_Project
             int indeksZakresGorny = hzNaIndeksWTablicy(hzZakresGorny, czestotliwoscProbkowania, rozmiarWidma);
 
             if (indeksZakresDolny >= widmo.Length || indeksZakresDolny < 0)
+            {
+                AnalizaLog.Blad("Dolny zakres widma w szukaniu przydźwięku nie mieści się w widmie");
                 throw new Exception("Dolny zakres widma w szukaniu przydźwięku nie mieści się w widmie");
+            }
             if (indeksZakresGorny >= widmo.Length || indeksZakresGorny < 0)
+            {
+                AnalizaLog.Blad("Górny zakres widma w szukaniu przydźwięku nie mieści się w widmie");
                 throw new Exception("Górny zakres widma w szukaniu przydźwięku nie mieści się w widmie");
+            }
 
             double max = widmo[(int)indeksZakresDolny];
             int indeksMax = (int)indeksZakresDolny;

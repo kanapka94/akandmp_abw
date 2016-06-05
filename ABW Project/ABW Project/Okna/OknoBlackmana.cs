@@ -18,6 +18,7 @@ namespace ABW_Project
         /// <returns>Zwraca zokienkowany sygnał za pomocą Okna Blackmana</returns>
         public override double[] Funkcja(double[] x)
         {
+            AnalizaLog.Postep("Obliczam okno korzystając z okna Blackmana");
 
             int i;
             double N;

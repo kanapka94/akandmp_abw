@@ -18,6 +18,7 @@ namespace ABW_Project
         /// <returns>Zwraca zokienkowany sygnał za pomocą okna Hamminga</returns>
         public override double[] Funkcja(double[] x)
         {
+            AnalizaLog.Postep("Obliczam okno korzystając z okna Hamminga");
 
             int i;
             double N;

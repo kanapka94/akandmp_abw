@@ -79,14 +79,14 @@ namespace ABW_Project
             {
                 widmo = ObliczWidmo(plik.PobierzProbki(), okno, iloscPrazkow,dolnaCzestosc,gornaCzestosc);
                 rozmiarWidma = widmo.Length;
-                double przydzwiek = ZnajdzPrzydzwiekWWidmie2(widmo);
-                przydzwiek = dolnaCzestosc + (double)przydzwiek * dokladnosc;
-
-
+                double przydzwiek = ZnajdzPrzydzwiekWWidmieCzt(widmo, dolnaCzestosc, dokladnosc);
 
                 try
                 {
                     sw.WriteLine("sekunda");
+                    sw.WriteLine("Dokładność {0}", dokladnosc);
+                    sw.WriteLine("Dokładność {0}", dolnaCzestosc);
+                    sw.WriteLine("Widmo {0}", widmo.Length);
                     for (int i = 0; i < widmo.Length; i++)
                     {
                         
@@ -120,7 +120,7 @@ namespace ABW_Project
         /// </summary>
         /// <param name="widmo">Widmo sygnału dźwiękowego</param>
         /// <returns>Zwraca maksymalny wartość przydźwięku sieciowego</returns>
-        public int ZnajdzPrzydzwiekWWidmie2(double[] widmo)
+        public double ZnajdzPrzydzwiekWWidmieCzt(double[] widmo, double dolnaCzestosc, double dokladnosc)
         {
             double max = widmo[0];
             int indeksMax = 0;
@@ -133,7 +133,7 @@ namespace ABW_Project
                 }
             }
 
-            return indeksMax;
+            return dolnaCzestosc + (double)indeksMax * dokladnosc;
         }
 
         /// <summary>
@@ -147,32 +147,15 @@ namespace ABW_Project
         /// <returns>Zwraca wartości danej częstotliwości</returns>
         public static Complex[] czt(double[] probki, int czestoscProbkowania, int iloscPrazkow, double czestoscDolna, double czestoscGorna)
         {
-             int N = probki.Length;
-             int NM1 = N + iloscPrazkow - 1;
-             Complex A = Complex.Exp(Complex.ImaginaryOne * 2 * Math.PI * czestoscDolna / czestoscProbkowania);
-             Complex W = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * ((czestoscGorna - czestoscDolna) / ((iloscPrazkow - 1)) / czestoscProbkowania));
+            int N = probki.Length;
+            int NM1 = N + iloscPrazkow - 1;
+            Complex A = Complex.Exp(Complex.ImaginaryOne * 2 * Math.PI * czestoscDolna / czestoscProbkowania);
+            Complex W = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * ((czestoscGorna - czestoscDolna) / (2 * (iloscPrazkow - 1)) / czestoscProbkowania));
 
-             Complex[] y1 = new Complex[NM1];
-             Complex[] y2 = new Complex[NM1];
+            Complex[] y1 = new Complex[NM1];
+            Complex[] y2 = new Complex[NM1];
 
-             int k;
-
-            //for (k = 0; k < NM1; k++)
-            //{
-            //    if (k < N) y1[k] = Complex.Pow(A * Complex.Pow(W, k), k) * probki[k]; else y1[k] = 0;
-            //    if (k < iloscPrazkow) y2[k] = Complex.Pow(W, -Math.Pow(k, 2)); else y2[k] = Complex.Pow(W, -Math.Pow((NM1 - k), 2));
-            //}
-
-            /* int N = probki.Length;
-             int NM1 = N + iloscPrazkow - 1;
-             Complex A = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * czestoscDolna / czestoscProbkowania);
-             Complex W = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * ((czestoscGorna - czestoscDolna) / (2 * (iloscPrazkow - 1)) / czestoscProbkowania));
-
-             Complex[] y1 = new Complex[NM1];
-             Complex[] y2 = new Complex[NM1];
-             
             int k;
-            */
 
             for (k = 0; k < N; k++)
             {
@@ -188,8 +171,6 @@ namespace ABW_Project
             {
                 y2[k] = Complex.Pow(W, -Math.Pow((NM1 - k), 2));
             }
-
-
 
             y1 = FFT.WypelnijZerami(y1,y1.Length);
             y2 = FFT.WypelnijZerami(y2,y2.Length);

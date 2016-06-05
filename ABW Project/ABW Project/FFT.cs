@@ -48,16 +48,19 @@ namespace ABW_Project
         /// <returns>Zwraca zmieniony sygnał</returns>
         public static Complex[] PrzygotujDaneDoFFT(double[] probki, int dokladnosc,Okno okno)
         {
+            AnalizaLog.Postep("Przygotowuję dane do FFT");
             Complex[] wynik;
 
             okno.Funkcja(probki);
             probki = WypelnijZerami(probki,dokladnosc);
+            AnalizaLog.Postep("Przestawiam próbki");
             PrzestawienieProbek(probki);
             wynik = new Complex[probki.Length];
 
+            AnalizaLog.Postep("Normalizuję próbki");
             for (int i = 0; i < probki.Length; i++)
             {
-                wynik[i] = new Complex(probki[i] / (double)probki.Length, 0.0);
+                wynik[i] = new Complex(probki[i] / (double)probki.Length, 0.0);//
             }
 
             return wynik;
@@ -70,7 +73,7 @@ namespace ABW_Project
         /// <returns>Zwraca rozszerzony sygnał</returns>
         public static Complex[] WypelnijZerami(Complex[] dane, int iloscProbek)
         {
-
+            AnalizaLog.Postep("Dopełniam zerami");
             if ((dane.Length & (dane.Length - 1)) == 0) return dane;
 
             double log2;
@@ -104,6 +107,8 @@ namespace ABW_Project
                     wynik[i] = 0;
                 }
             }
+            AnalizaLog.Postep("Dopelniam zerami do potegi:");
+            AnalizaLog.Dodaj(Convert.ToString(wynik.Length), false);
 
             return wynik;
 
@@ -164,9 +169,12 @@ namespace ABW_Project
         /// <returns>Zwraca widmo sygnału</returns>
         public override double[] ObliczWidmo(double[] sygnal, Okno okno, int dokladnosc = -1)
         {
+            AnalizaLog.Postep("Obliczam widmo metodą FFt");
             Complex[] y = PrzygotujDaneDoFFT(sygnal,dokladnosc, okno);
             double[] wynik = new double[y.Length];
+            AnalizaLog.Postep("Obliczam FFT");
             y = fftFor(y);
+            AnalizaLog.Postep("Obliczam wynik");
             for (int i = 0; i < y.Length ; i++)
             {
                 wynik[i] = Complex.Abs(y[i]);
