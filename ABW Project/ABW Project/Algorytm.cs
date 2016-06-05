@@ -146,6 +146,9 @@ namespace ABW_Project
 
             double max = widmo[(int)indeksZakresDolny];
             int indeksMax = (int)indeksZakresDolny;
+
+            AnalizaLog.Dodaj("--- częstotliwość   |   wartości widma ---------------");
+
             for (int index = (int)indeksZakresDolny + 1; index <= indeksZakresGorny; index++)
             {
                 if (widmo[index] > max)
@@ -153,6 +156,7 @@ namespace ABW_Project
                     max = widmo[index];
                     indeksMax = index;
                 }
+                AnalizaLog.Dodaj(indeksTablicyNaHz(indeksMax, czestotliwoscProbkowania, rozmiarWidma).ToString()+" "+widmo[index].ToString(), false);
             }
             return indeksTablicyNaHz(indeksMax, czestotliwoscProbkowania, rozmiarWidma);
         }
