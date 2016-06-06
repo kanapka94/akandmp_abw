@@ -16,6 +16,8 @@ namespace ABW_Project
     /// </summary>
     class PlikWave
     {
+        public string nazwaPliku;
+
         public string idRiff;
         public string idFormatu;
         public int rozmiarOpisu;
@@ -55,11 +57,30 @@ namespace ABW_Project
                 try
                 {
                     plik.Close();
+                    nazwaPliku = "";
                 }
                 catch (Exception e)
                 {
                     throw e;
                 }             
+            }
+        }
+
+        /// <summary>
+        /// Metoda zamykająca plik
+        /// </summary>
+        public void Przeladuj()
+        {
+            if (plik != null)
+            {
+                string tymczasowaNazwaPliku = nazwaPliku;
+                ZamknijPlik();
+                WczytajZPliku(tymczasowaNazwaPliku);
+            }
+            else
+            {
+                AnalizaLog.Blad("Próba przeładowania nieotwartego pliku");
+                throw new Exception("Próba przeładowania nieotwartego pliku");
             }
         }
         
@@ -73,8 +94,10 @@ namespace ABW_Project
 
             try
             {
-
                 plik = new BinaryReader(new FileStream(adresPliku, FileMode.Open));
+
+                nazwaPliku = adresPliku;
+
                 readedBytes = plik.ReadBytes(4);
                 idRiff = Convert.ToString(((char)readedBytes[0])) + Convert.ToString(((char)readedBytes[1])) + Convert.ToString(((char)readedBytes[2])) + Convert.ToString(((char)readedBytes[3]));
 
