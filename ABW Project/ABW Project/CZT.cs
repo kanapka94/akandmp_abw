@@ -51,12 +51,36 @@ namespace ABW_Project
         /// <returns>Zwraca obiekt klasy Wynik</returns>
         public override Wynik WydzielPrzydzwiek(PlikWave plik, ref int stan, Okno okno, string plikPrzydzwieku, double dolnaCzestosc = 40, double gornaCzestosc = 60, double dokladnosc = 1)
         {
-            SprawdzDokladnosc(dokladnosc);
-            if (dolnaCzestosc < 0) throw new Exception("Dolna częstotliwość poniżej 0");
-            if (gornaCzestosc < 0) throw new Exception("Gorna częstotliwość poniżej 0");
-            if (dolnaCzestosc > gornaCzestosc) throw new Exception("Górna częstotliwość jest mniejsza niż dolna częstotliwość");
+            AnalizaLog.Postep("Rozpoczynam metodę 'WydzielPrzydzwiek'");
+            AnalizaLog.Dodaj("Parametry:",false);
+
+            AnalizaLog.Dodaj("  Długość pliku: "+plik.dlugoscWSekundach.ToString(),false);
+            AnalizaLog.Dodaj("  Wybrane okno: " + okno.ToString(), false);
+            AnalizaLog.Dodaj("  Nazwa pliku przydźwięku: " + plikPrzydzwieku, false);
+            AnalizaLog.Dodaj("  Dolna częstotliwość: " + dolnaCzestosc.ToString(), false);
+            AnalizaLog.Dodaj("  Górna częstotliwość: " + gornaCzestosc.ToString(), false);
+            AnalizaLog.Dodaj("  Dokładność: " + dokladnosc.ToString(), false);
+
+            SprawdzDokladnosc(dokladnosc);  // ?
+            if (dolnaCzestosc < 0)
+            {
+                AnalizaLog.Blad("Dolna częstotliwość poniżej 0");
+                throw new Exception("Dolna częstotliwość poniżej 0");
+            }
+            if (gornaCzestosc < 0)
+            {
+                AnalizaLog.Blad("Gorna częstotliwość poniżej 0");
+                throw new Exception("Gorna częstotliwość poniżej 0");
+            }
+            if (dolnaCzestosc > gornaCzestosc)
+            {
+                AnalizaLog.Blad("Górna częstotliwość jest mniejsza niż dolna częstotliwość");
+                throw new Exception("Górna częstotliwość jest mniejsza niż dolna częstotliwość");
+            }
 
             int iloscPrazkow = PrzeliczDokladnosc(dokladnosc, plik.czestotliwoscProbkowania,dolnaCzestosc,gornaCzestosc);
+            AnalizaLog.Postep("Ilość prążków: "+iloscPrazkow.ToString());
+
 
             Wynik wynik = new Wynik();
             wynik.czestotliwoscSygnalu = new double[(int)plik.dlugoscWSekundach];   // Tworzy tablicę wynik, której długość wynosi tyle
@@ -71,22 +95,24 @@ namespace ABW_Project
             }
             catch (Exception e)
             {
+                AnalizaLog.Blad(e.Message);
                 throw e;
             }
 
+            AnalizaLog.Postep("Obliczam widmo");
             int rozmiarWidma;
             for (int sekunda = 0; sekunda < wynik.czestotliwoscSygnalu.Length; sekunda++)
             {
                 widmo = ObliczWidmo(plik.PobierzProbki(), okno, iloscPrazkow,dolnaCzestosc,gornaCzestosc);
                 rozmiarWidma = widmo.Length;
-                double przydzwiek = ZnajdzPrzydzwiekWWidmieCzt(widmo, dolnaCzestosc, dokladnosc);
+                double przydzwiek = ZnajdzPrzydzwiekWWidmie2(widmo);
+                przydzwiek = dolnaCzestosc + (double)przydzwiek * dokladnosc;
+
+
 
                 try
                 {
                     sw.WriteLine("sekunda");
-                    sw.WriteLine("Dokładność {0}", dokladnosc);
-                    sw.WriteLine("Dokładność {0}", dolnaCzestosc);
-                    sw.WriteLine("Widmo {0}", widmo.Length);
                     for (int i = 0; i < widmo.Length; i++)
                     {
                         
@@ -96,6 +122,7 @@ namespace ABW_Project
                 }
                 catch (Exception ex)
                 {
+                    AnalizaLog.Blad(ex.Message);
                     throw ex;
                 }
 
@@ -109,9 +136,12 @@ namespace ABW_Project
             }
             catch (Exception ex)
             {
+                AnalizaLog.Blad(ex.Message);
                 throw ex;
             }
 
+
+            AnalizaLog.Postep("Wydzielanie przydźwięku zakończone.");
             return wynik;
         }
 
@@ -120,8 +150,10 @@ namespace ABW_Project
         /// </summary>
         /// <param name="widmo">Widmo sygnału dźwiękowego</param>
         /// <returns>Zwraca maksymalny wartość przydźwięku sieciowego</returns>
-        public double ZnajdzPrzydzwiekWWidmieCzt(double[] widmo, double dolnaCzestosc, double dokladnosc)
+        public int ZnajdzPrzydzwiekWWidmie2(double[] widmo)
         {
+            AnalizaLog.Postep("Uruchamiam metodę 'ZnajdzPrzydzwiekWWidmie2'");
+            AnalizaLog.Postep("Znajduję przydźwięk w widmie");
             double max = widmo[0];
             int indeksMax = 0;
             for (int index = 1; index < widmo.Length; index++)
@@ -133,7 +165,8 @@ namespace ABW_Project
                 }
             }
 
-            return dolnaCzestosc + (double)indeksMax * dokladnosc;
+            AnalizaLog.Postep("Znajdowanie przydźwięku zakończone");
+            return indeksMax;
         }
 
         /// <summary>
@@ -147,15 +180,41 @@ namespace ABW_Project
         /// <returns>Zwraca wartości danej częstotliwości</returns>
         public static Complex[] czt(double[] probki, int czestoscProbkowania, int iloscPrazkow, double czestoscDolna, double czestoscGorna)
         {
+            AnalizaLog.Postep("Rozpoczynam metodę 'czt'");
+            AnalizaLog.Dodaj("Parametry:", false);
+
+            AnalizaLog.Dodaj("  Ilość próbek: " + probki.Length.ToString(), false);
+            AnalizaLog.Dodaj("  Częstotliwość próbkowania: " + czestoscProbkowania.ToString(), false);
+            AnalizaLog.Dodaj("  Ilość prążków: " + iloscPrazkow.ToString(), false);
+            AnalizaLog.Dodaj("  Dolna częstotliwość: " + czestoscDolna.ToString(), false);
+            AnalizaLog.Dodaj("  Górna częstotliwość: " + czestoscGorna.ToString(), false);
+
             int N = probki.Length;
-            int NM1 = N + iloscPrazkow - 1;
-            Complex A = Complex.Exp(Complex.ImaginaryOne * 2 * Math.PI * czestoscDolna / czestoscProbkowania);
-            Complex W = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * ((czestoscGorna - czestoscDolna) / (2 * (iloscPrazkow - 1)) / czestoscProbkowania));
+             int NM1 = N + iloscPrazkow - 1;
+             Complex A = Complex.Exp(Complex.ImaginaryOne * 2 * Math.PI * czestoscDolna / czestoscProbkowania);
+             Complex W = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * ((czestoscGorna - czestoscDolna) / ((iloscPrazkow - 1)) / czestoscProbkowania));
 
-            Complex[] y1 = new Complex[NM1];
-            Complex[] y2 = new Complex[NM1];
+             Complex[] y1 = new Complex[NM1];
+             Complex[] y2 = new Complex[NM1];
 
+             int k;
+
+            //for (k = 0; k < NM1; k++)
+            //{
+            //    if (k < N) y1[k] = Complex.Pow(A * Complex.Pow(W, k), k) * probki[k]; else y1[k] = 0;
+            //    if (k < iloscPrazkow) y2[k] = Complex.Pow(W, -Math.Pow(k, 2)); else y2[k] = Complex.Pow(W, -Math.Pow((NM1 - k), 2));
+            //}
+
+            /* int N = probki.Length;
+             int NM1 = N + iloscPrazkow - 1;
+             Complex A = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * czestoscDolna / czestoscProbkowania);
+             Complex W = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * ((czestoscGorna - czestoscDolna) / (2 * (iloscPrazkow - 1)) / czestoscProbkowania));
+
+             Complex[] y1 = new Complex[NM1];
+             Complex[] y2 = new Complex[NM1];
+             
             int k;
+            */
 
             for (k = 0; k < N; k++)
             {
@@ -171,6 +230,8 @@ namespace ABW_Project
             {
                 y2[k] = Complex.Pow(W, -Math.Pow((NM1 - k), 2));
             }
+
+
 
             y1 = FFT.WypelnijZerami(y1,y1.Length);
             y2 = FFT.WypelnijZerami(y2,y2.Length);
@@ -201,6 +262,7 @@ namespace ABW_Project
                 XcztN[k] = y[k] * Complex.Pow(W, Math.Pow(k, 2));
             }
 
+            AnalizaLog.Postep("CZT zakończone.");
             return XcztN;
         }
 
@@ -211,7 +273,9 @@ namespace ABW_Project
         /// <param name="OknoT">Numer okna przez które przemnożymy sygnał</param>
         public void PrzygotujDaneDoCZT(double[] probki, Okno okno)
         {
+            AnalizaLog.Postep("Uruchamiam metodę 'PrzygotujDaneDoCZT'");
             okno.Funkcja(probki);
+            AnalizaLog.Postep("Zakończone przygotowywanie danych.");
         }
 
         /// <summary>
@@ -222,6 +286,7 @@ namespace ABW_Project
         /// <returns>Zwraca widmo sygnału</returns>
         public override double[] ObliczWidmo(double[] probki, Okno okno, int iloscPrazkow, double dolnaCzestosc, double gornaCzestosc)
         {
+            AnalizaLog.Postep("Uruchamiam metodę 'ObliczWidmo'");
             PrzygotujDaneDoCZT(probki, okno);
 
             double[] wynik = new double[iloscPrazkow];
@@ -231,7 +296,8 @@ namespace ABW_Project
             {
                 wynik[i] = Complex.Abs(sygnal[i]);
             }
-            
+
+            AnalizaLog.Postep("Widmo obliczone - koniec metody");
             return wynik;
         }
     }

@@ -132,14 +132,17 @@ namespace ABW_Project
         static void Main(string[] args)
         {
             PlikWave wv = new PlikWave();
-            //wv.WczytajZPliku("BRK.wav");
-            wv.WczytajZPliku("plik.wav");
-            BazaDanychLog.Dodaj("a1");
-            BazaDanychLog.Blad("a2");
-            BazaDanychLog.Postep("a3");
-            BazaDanychLog.Zamknij();
 
-            //Log.Dodaj("-------------------- Nowa analiza -----------------------");                        
+            Console.WriteLine("Podaj ścieżkę do pliku .wav");
+
+            string ścieżka = Console.ReadLine();
+
+            //wv.WczytajZPliku("plik.wav");
+            wv.WczytajZPliku(ścieżka);
+
+
+
+            //AnalizaLog.Dodaj("-------------------- Nowa analiza -----------------------");                    
 
             Console.WriteLine("\n ========== Nagłówki ========== \n");
 
@@ -177,26 +180,27 @@ namespace ABW_Project
             stan.Rozpocznij();
             index = 0;
 
-            Log.Dodaj("Rozpoczęcie analizy DFT");
+            AnalizaLog.Dodaj("Rozpoczęcie analizy DFT");
             wynik = dft.WydzielPrzydzwiek(wv, ref stan.stan).czestotliwoscSygnalu;
 
-            Log.Dodaj("Zakończenie analizy");
+            AnalizaLog.Dodaj("Zakończenie analizy");
             stan.Zakoncz();
 
             Console.WriteLine("> Wynik FFT");
             Console.WriteLine();
-            Log.Dodaj("Wyniki:", false);
+            AnalizaLog.Dodaj("Wyniki:", false);
             foreach (double item in wynik)
             {
                 Console.WriteLine(" W {0} sekundzie {1} hz", ++index, item);
-                Log.Dodaj(" w " + index + " sekundzie " + item + " hz");
+                AnalizaLog.Dodaj(" w " + index + " sekundzie " + item + " hz");
             }
             */
             Console.WriteLine("\n ========== FFT ========== \n");
 
             wv.ZamknijPlik();
             wv = new PlikWave();
-            wv.WczytajZPliku("plik.wav");
+            //wv.WczytajZPliku("plik.wav");
+            wv.WczytajZPliku(ścieżka);
 
             Console.WriteLine(" Analiza...\n");
             stan = new Stan();
@@ -205,23 +209,80 @@ namespace ABW_Project
             //CZT czt = new CZT();
 
             stan.Init(Console.CursorLeft, Console.CursorTop);
-            stan.Rozpocznij();
+            //stan.Rozpocznij();
             index = 0;
 
-            wynik = new double[10];
+            AnalizaLog.Dodaj("Rozpoczęcie analizy FFT");
 
-            // Log.Dodaj("Rozpoczęcie analizy FFT");
-            // wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan,new OknoBlackmana(),49.8,51.2, 220500).czestotliwoscSygnalu;
             CZT czt = new CZT();
-            wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, new OknoProstokatne(), "widmo.txt" ,49.8, 50.2, 1).czestotliwoscSygnalu;
+            //wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, new OknoBlackmana(), "widmo.txt", 49.8, 50.2, 0.01).czestotliwoscSygnalu;
+
+            Console.WriteLine("Wybierz okno: ");
+            Console.WriteLine("- 1: Okno Prostokątne");
+            Console.WriteLine("- 2: Okno Barletta");
+            Console.WriteLine("- 3: Okno Hanninga");
+            Console.WriteLine("- 4: Okno Hamminga");
+            Console.WriteLine("- 5: Okno Blackmana");
+
+            int indeksOkna;
+
+            try
+            {
+                indeksOkna = Convert.ToInt32(Console.ReadLine());    
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+            Okno okno;
+
+            switch (indeksOkna)
+            {
+                case 1:
+                    okno = new OknoProstokatne();
+                    break;
+                case 2:
+                    okno = new OknoBarletta();
+                    break;
+                case 3:
+                    okno = new OknoHanninga();
+                    break;
+                case 4:
+                    okno = new OknoHamminga();
+                    break;
+                case 5:
+                    okno = new OknoBlackmana();
+                    break;
+                default:
+                    throw new Exception("Niepoprawny indeks okna!");
+            }
+
+            double dolnyZakres, gornyZakres, dokladnosc;
+
+            try
+            {
+                Console.WriteLine("\nTeraz podaj dolny zakres szukanego przydźwięku (np. 48,9):");
+                dolnyZakres = Convert.ToDouble(Console.ReadLine());
+                Console.WriteLine("\nTeraz podaj górny zakres szukanego przydźwięku (np. 51,9):");
+                gornyZakres = Convert.ToDouble(Console.ReadLine());
+                Console.WriteLine("\nTeraz podaj dokładność (np. 0,001):");
+                dokladnosc = Convert.ToDouble(Console.ReadLine());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
+            wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, okno, "widmo.txt" ,dolnyZakres, gornyZakres, dokladnosc).czestotliwoscSygnalu;
             //wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, new OknoBlackmana(), "widmo2.txt", 45, 55, 0.001).czestotliwoscSygnalu;
             //wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52).czestotliwoscSygnalu;
 
-            
-
-        int potegaDwojki = (int)Math.Log(fft.PrzeliczDokladnosc(0.01,wv.czestotliwoscProbkowania), 2) + 1;
-           // Log.Dodaj("Zakończenie analizy");
-            stan.Zakoncz();
+            int potegaDwojki = (int)Math.Log(fft.PrzeliczDokladnosc(0.01,wv.czestotliwoscProbkowania), 2) + 1;
+           // AnalizaLog.Dodaj("Zakończenie analizy");
+           // stan.Zakoncz();
             Console.WriteLine("> Wynik FFT");
             Console.WriteLine();
 
@@ -230,20 +291,20 @@ namespace ABW_Project
             Console.WriteLine(" Rozmiar widma: {0}", Math.Pow(2, potegaDwojki));
 
             Console.WriteLine();
-          //  Log.Dodaj("Wyniki:", false);
+          //  AnalizaLog.Dodaj("Wyniki:", false);
             foreach (double item in wynik)
             {
                 Console.WriteLine(" W {0} sekundzie {1} hz", ++index, item);
-               // Log.Dodaj(" w " + index + " sekundzie " + item + " hz");
+               // AnalizaLog.Dodaj(" w " + index + " sekundzie " + item + " hz");
             }
 
             /*Console.WriteLine("> Wynik DFT");
             Console.WriteLine();
-            Log.Dodaj("Wyniki:", false);
+            AnalizaLog.Dodaj("Wyniki:", false);
             foreach (double item in wynik)
             {
                 Console.WriteLine(" W {0} sekundzie {1} hz", ++index, item);
-                Log.Dodaj(" w "+index+" sekundzie "+item+" hz");
+                AnalizaLog.Dodaj(" w "+index+" sekundzie "+item+" hz");
             }*/
 
 
@@ -260,7 +321,7 @@ namespace ABW_Project
             for (int i = indexP; i < indexK; i++)
             {
                 Console.WriteLine(" W {0} sekundzie {1} hz", index, wynik[i]/100);
-                Log.Dodaj(" w " + index + " sekundzie " + wynik[i] + " hz");
+                AnalizaLog.Dodaj(" w " + index + " sekundzie " + wynik[i] + " hz");
                 index++;
             }*/
 
@@ -273,6 +334,8 @@ namespace ABW_Project
 
             Console.WriteLine();
             Console.WriteLine(" === Koniec ===");
+
+            Console.WriteLine("\n\nDane widma zapisane w pliku: AnalizaLog.txt");
 
             /*
              * Testujący DFT
