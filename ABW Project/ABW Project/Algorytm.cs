@@ -42,98 +42,7 @@ namespace ABW_Project
         /// <param name="gornaCzestosc">Górna częstotliwość (graniczna, badana)</param>
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca obiekt klasy Wynik</returns>
-        public virtual Wynik WydzielPrzydzwiek(PlikWave plik,ref int stan, Okno okno, string plikPrzydzwieku, double dolnaCzestosc = 40, double gornaCzestosc = 60, double dokladnosc = 1)
-        {
-            AnalizaLog.Postep("Rozpoczeto analize");
-            AnalizaLog.Postep("Sprawdzam dokladnosc");
-            SprawdzDokladnosc(dokladnosc);
-
-            if (dolnaCzestosc < 0)
-            {
-                AnalizaLog.Blad("Dolna częstotliwość poniżej 0");
-                throw new Exception("Dolna częstotliwość poniżej 0");
-            }
-
-            if (gornaCzestosc < 0)
-            {
-                AnalizaLog.Blad("Gorna częstotliwość poniżej 0");
-                throw new Exception("Gorna częstotliwość poniżej 0");
-            }
-
-            if (dolnaCzestosc > gornaCzestosc)
-            {
-                AnalizaLog.Blad("Górna częstotliwość jest mniejsza niż dolna częstotliwość");
-                throw new Exception("Górna częstotliwość jest mniejsza niż dolna częstotliwość");
-            }
-
-
-            int iloscProbekDoRozszerzenia = PrzeliczDokladnosc(dokladnosc, plik.czestotliwoscProbkowania);
-            AnalizaLog.Postep("Ilość próbek do rozszerzenia: ");
-            AnalizaLog.Dodaj(Convert.ToString(iloscProbekDoRozszerzenia),false);
-
-            Wynik wynik = new Wynik();
-            wynik.czestotliwoscSygnalu = new double[(int)plik.dlugoscWSekundach];   // Tworzy tablicę wynik, której długość wynosi tyle
-                                                                                    // ile sekund ma nagranie. Jest to spowodowane tym
-                                                                                    // aby dla każdej sekundy wybrać najlepszy przydźwięk
-              
-
-            double[] widmo;
-            StreamWriter sw;
-
-            try
-            {
-
-                sw = new StreamWriter(plikPrzydzwieku); // Tymczasowe tylko do zapisu wyników widma
-                AnalizaLog.Postep("Utworzono plik z przydźwiękiem. Nazwa pliku:");
-                AnalizaLog.Dodaj(plikPrzydzwieku);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            
-            int rozmiarWidma;
-            for (int sekunda = 0; sekunda < wynik.czestotliwoscSygnalu.Length; sekunda++)
-            {
-                AnalizaLog.Postep("Analizuję " + Convert.ToString(sekunda) + " sekundę");
-                AnalizaLog.Postep("Obliczam widmo");
-                widmo = ObliczWidmo(plik.PobierzProbki(), okno, iloscProbekDoRozszerzenia);
-                AnalizaLog.Postep("Widmo obliczone, liczba elementów widma: ");
-                rozmiarWidma = widmo.Length;
-                AnalizaLog.Dodaj(Convert.ToString(rozmiarWidma), false);
-
-                AnalizaLog.Postep("Szukam przydźwięku");
-                double przydzwiek = ZnajdzPrzydzwiekWWidmie(widmo,plik.czestotliwoscProbkowania,rozmiarWidma,dolnaCzestosc,gornaCzestosc);
-                AnalizaLog.Postep("Przydźwięk znaleziony! Wartość:");
-                AnalizaLog.Dodaj(Convert.ToString(przydzwiek),false);
-
-                try
-                {
-                    AnalizaLog.Dodaj("Zapisałem wynik do pliku");
-                    sw.WriteLine("{0} {1}", sekunda, przydzwiek);
-                }
-                catch(Exception ex)
-                {
-                    AnalizaLog.Blad("Błąd podczas zapisu do pliku przydźwięku: " + ex.Message);
-                    throw ex;
-                }
-
-                wynik.czestotliwoscSygnalu[sekunda] = przydzwiek;
-                stan = (int)((double)(sekunda+1) / (double)wynik.czestotliwoscSygnalu.Length * 100.0);
-            }
-
-            try
-            {
-                sw.Close();  // Tymczasowe tylko do zapisu wyników widma
-            }
-            catch (Exception ex)
-            {
-                AnalizaLog.Blad("Błąd podczas zamykania pliku przydźwięku: " + ex.Message);
-                throw ex;
-            }
-
-            return wynik;
-        }
+        public abstract Wynik WydzielPrzydzwiek(PlikWave plik, ref int stan, Okno okno, string plikPrzydzwieku, double dolnaCzestosc = 40, double gornaCzestosc = 60, double dokladnosc = 1);
 
         /// <summary>
         /// Metoda wirtualna. Jej zadaniem jest obliczanie widma sygnału dźwiękowego
@@ -141,10 +50,7 @@ namespace ABW_Project
         /// <param name="sygnal">Sygnał spróbkowany</param>
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca tablicę wartości widma</returns>
-        public virtual double[] ObliczWidmo(double[] sygnal, Okno okno, int dokladnosc)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract double[] ObliczWidmo(double[] sygnal, Okno okno, int dokladnosc);
 
         /// <summary>
         /// Metoda wirtualna. Jej zadaniem jest obliczanie widma sygnału dźwiękowego
@@ -154,73 +60,6 @@ namespace ABW_Project
         /// <param name="dolnyZakres">Dolny zakres liczenia widma</param>
         /// <param name="gornyZakres">Górny zakres obliczanego widma</param>
         /// <returns>Zwraca tablicę wartości widma</returns>
-        //
-        public virtual double[] ObliczWidmo(double[] sygnal, Okno okno, int dokladnosc, double dolnaCzestosc, double gornaCzestosc)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Metoda odnajdująca przydźwięk w widmie wybierając element maksymalny.
-        /// </summary>
-        /// <param name="widmo">Widmo dźwięku</param>
-        /// <param name="czestotliwoscProbkowania">Częstotliwość próbkowania</param>
-        /// <param name="rozmiarWidma">Rozmiar widma</param>
-        /// <param name="hzZakresDolny">Dolna granica badanych częstotliwości</param>
-        /// <param name="hzZakresGorny">Górna granica badanych częstotliwości</param>
-        /// <returns>Zwraca wartość przydźwięku sieciowego znalezionego w widmie</returns>
-        public virtual double ZnajdzPrzydzwiekWWidmie(double[] widmo, int czestotliwoscProbkowania, int rozmiarWidma, double hzZakresDolny, double hzZakresGorny)
-        {
-
-            int indeksZakresDolny = hzNaIndeksWTablicy(hzZakresDolny,czestotliwoscProbkowania,rozmiarWidma);
-            int indeksZakresGorny = hzNaIndeksWTablicy(hzZakresGorny, czestotliwoscProbkowania, rozmiarWidma);
-
-            if (indeksZakresDolny >= widmo.Length || indeksZakresDolny < 0)
-            {
-                AnalizaLog.Blad("Dolny zakres widma w szukaniu przydźwięku nie mieści się w widmie");
-                throw new Exception("Dolny zakres widma w szukaniu przydźwięku nie mieści się w widmie");
-            }
-            if (indeksZakresGorny >= widmo.Length || indeksZakresGorny < 0)
-            {
-                AnalizaLog.Blad("Górny zakres widma w szukaniu przydźwięku nie mieści się w widmie");
-                throw new Exception("Górny zakres widma w szukaniu przydźwięku nie mieści się w widmie");
-            }
-
-            double max = widmo[(int)indeksZakresDolny];
-            int indeksMax = (int)indeksZakresDolny;
-            for (int index = (int)indeksZakresDolny + 1; index <= indeksZakresGorny; index++)
-            {
-                if (widmo[index] > max)
-                {
-                    max = widmo[index];
-                    indeksMax = index;
-                }
-            }
-            return indeksTablicyNaHz(indeksMax, czestotliwoscProbkowania, rozmiarWidma);
-        }
-
-        /// <summary>
-        /// Metoda zwracająca indeks częstotliwości
-        /// </summary>
-        /// <param name="hz">Częstotliwość, której chcemy znaleźć indeks</param>
-        /// <param name="czestotliwoscProbkowania">Częstotliwość próbkowania</param>
-        /// <param name="rozmiarWidma">Rozmiar widma</param>
-        /// <returns>Zwraca indeks danej częstotliwości w tablicy</returns>
-        public int hzNaIndeksWTablicy(double hz,double czestotliwoscProbkowania, double rozmiarWidma)
-        {
-            return (int)Math.Round(((decimal)hz * (decimal)rozmiarWidma / (decimal)czestotliwoscProbkowania));
-        }
-
-        /// <summary>
-        /// Metoda zwracająca wartość częstotliwości pod podanym indeksem
-        /// </summary>
-        /// <param name="indeks">Indeks elementu tablicy</param>
-        /// <param name="czestotliwoscProbkowania">Częstotliwość próbkowania</param>
-        /// <param name="rozmiarWidma">Rozmiar widma</param>
-        /// <returns>Zwraca wartość częstotliwości ukrytej pod danym indeksem w tablicy</returns>
-        public double indeksTablicyNaHz(int indeks, double czestotliwoscProbkowania, decimal rozmiarWidma)
-        {
-            return (double)((decimal)indeks * (decimal)czestotliwoscProbkowania / (decimal)rozmiarWidma);
-        }
+        public abstract double[] ObliczWidmo(double[] sygnal, Okno okno, int dokladnosc, double dolnaCzestosc, double gornaCzestosc);
     }
 }
