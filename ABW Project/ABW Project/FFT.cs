@@ -241,7 +241,9 @@ namespace ABW_Project
                 y[i] = Complex.Conjugate(x[i]);
             }
 
-            y = fft(y);
+            PrzestawienieProbek(x);
+
+            y = fftFor(y);
 
             for (int i = 0; i < N; i++)
             {
@@ -265,7 +267,7 @@ namespace ABW_Project
         /// </summary>
         /// <param name="probki">Spróbkowany sygnał</param>
         /// <returns></returns>
-        public static double[] PrzestawienieProbek(double[] probki)
+        public static void PrzestawienieProbek(double[] probki)
         {
             int a = 1;
             int N = probki.Length; //ilość próbek w sygnale
@@ -289,8 +291,39 @@ namespace ABW_Project
                 }
                 a = a + c;          
             }
+          
+        }
 
-            return probki;
+        /// <summary>
+        /// Metoda przestawiająca próbki w sygnal spróbkowanym (przygotowuje dane do FFT)
+        /// </summary>
+        /// <param name="sygnal">Spróbkowany sygnał</param>
+        /// <returns></returns>
+        public static void PrzestawienieProbek(Complex[] sygnal)
+        {
+            int a = 1;
+            int N = sygnal.Length; //ilość próbek w sygnale
+            int c;
+
+            Complex T;  //zmienna pomocnicza przechowująca wartość próbki
+
+            for (int b = 1; b < N; b++)
+            {
+                if (b < a)
+                {
+                    T = sygnal[a - 1];
+                    sygnal[a - 1] = sygnal[b - 1];
+                    sygnal[b - 1] = T;
+                }
+                c = N / 2;
+                while (c < a)
+                {
+                    a = a - c;
+                    c = c / 2;
+                }
+                a = a + c;
+            }
+
         }
 
         /// <summary>

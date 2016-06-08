@@ -236,6 +236,9 @@ namespace ABW_Project
             y1 = FFT.WypelnijZerami(y1,y1.Length);
             y2 = FFT.WypelnijZerami(y2,y2.Length);
 
+            FFT.PrzestawienieProbek(y1);
+            FFT.PrzestawienieProbek(y2);
+
             Complex[] Y1 = FFT.fftFor(y1);
             Complex[] Y2 = FFT.fftFor(y2);
             Complex[] Y = new Complex[Y2.Length];
