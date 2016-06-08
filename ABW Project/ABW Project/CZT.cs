@@ -49,8 +49,11 @@ namespace ABW_Project
         /// <param name="gornaCzestosc">Górna częstotliwość (graniczna, badana)</param>
         /// <param name="dokladnosc">dokładność badanych częstotliwości (wyrażona w ilości próbek)</param>
         /// <returns>Zwraca obiekt klasy Wynik</returns>
-        public override Wynik WydzielPrzydzwiek(PlikWave plik, ref int stan, Okno okno, string plikPrzydzwieku, double dolnaCzestosc = 40, double gornaCzestosc = 60, double dokladnosc = 1)
+        public override Wynik WydzielPrzydzwiek(PlikWave plik, ref int stan, Okno okno, string plikPrzydzwieku, double dolnaCzestosc = 40, double gornaCzestosc = 60, double dokladnosc = 1, int poczatkowaSekunda = 0, int koncowaSekunda = -1)
         {
+            if (koncowaSekunda == -1) koncowaSekunda = (int)plik.dlugoscWSekundach;
+            SprawdzDlugosc((int)plik.dlugoscWSekundach, poczatkowaSekunda, koncowaSekunda);
+
             AnalizaLog.Postep("Rozpoczynam metodę 'WydzielPrzydzwiek'");
             AnalizaLog.Dodaj("Parametry:",false);
 
@@ -60,6 +63,8 @@ namespace ABW_Project
             AnalizaLog.Dodaj("  Dolna częstotliwość: " + dolnaCzestosc.ToString(), false);
             AnalizaLog.Dodaj("  Górna częstotliwość: " + gornaCzestosc.ToString(), false);
             AnalizaLog.Dodaj("  Dokładność: " + dokladnosc.ToString(), false);
+            AnalizaLog.Dodaj("  Analiza nagania od : " + poczatkowaSekunda.ToString() + " do " + koncowaSekunda.ToString(), false);
+
 
             SprawdzDokladnosc(dokladnosc);  // ?
             if (dolnaCzestosc < 0)
@@ -101,7 +106,11 @@ namespace ABW_Project
 
             AnalizaLog.Postep("Obliczam widmo");
             int rozmiarWidma;
-            for (int sekunda = 0; sekunda < wynik.czestotliwoscSygnalu.Length; sekunda++)
+            for (int i = 0; i < poczatkowaSekunda; i++)
+            {
+                plik.PobierzProbki();
+            }
+            for (int sekunda = poczatkowaSekunda; sekunda < koncowaSekunda; sekunda++)
             {
                 widmo = ObliczWidmo(plik.PobierzProbki(), okno, iloscPrazkow,dolnaCzestosc,gornaCzestosc);
                 rozmiarWidma = widmo.Length;
@@ -289,6 +298,8 @@ namespace ABW_Project
         /// <returns>Zwraca widmo sygnału</returns>
         public override double[] ObliczWidmo(double[] probki, Okno okno, int iloscPrazkow, double dolnaCzestosc, double gornaCzestosc)
         {
+      
+
             AnalizaLog.Postep("Uruchamiam metodę 'ObliczWidmo'");
             PrzygotujDaneDoCZT(probki, okno);
 
@@ -301,6 +312,56 @@ namespace ABW_Project
             }
 
             AnalizaLog.Postep("Widmo obliczone - koniec metody");
+            return wynik;
+        }
+
+        /// <summary>
+        /// Metoda zwracająca Spektrogram nagrania
+        /// </summary>
+        /// <param name="plik">Obiekt klasy PlikWabe z nagraniem</param>
+        /// <param name="okno">Zastosowane okno</param>
+        /// <param name="skokCzestotliwosc">Co ile ma liczyć częstotliwość (FFT może zmniejszyć wartość)</param>
+        /// <param name="skokCzas">Co jaką wartość sekundy zmienia się indeks tablicy</param>
+        /// <returns>Spektrogram nagrania</returns>
+        public override Spektrogram ObliczSpektrogram(PlikWave plik, Okno okno, double skokCzestotliwosc, double skokCzas)
+        {
+            Spektrogram wynik = new Spektrogram(skokCzestotliwosc, skokCzas);
+
+            /* ======================================== DOPISAC GDY U FFT BĘDZIE DZIAŁAC !!!!!!!!!!!!!!!!!!!!!!!1
+            bool czyZmniejszycWynik = false;
+            double oIleZmniejszyc = 0;
+
+            if (skokCzestotliwosc > 1)
+            {
+                czyZmniejszycWynik = true;
+                oIleZmniejszyc = skokCzestotliwosc;
+                skokCzestotliwosc = 1;
+            }
+            
+            
+
+            plik.Przeladuj();
+
+            int iloscWartosciWCzasie = (int)(Math.Floor(plik.dlugoscWSekundach) / skokCzas);
+            int iloscPrazkow = PrzeliczDokladnosc(skokCzestotliwosc, plik.czestotliwoscProbkowania, 0, plik.czestotliwoscProbkowania / 2);
+
+            wynik.modulWidma = new double[iloscWartosciWCzasie][];
+
+            for (int sekunda = 0; sekunda < iloscWartosciWCzasie; sekunda++)
+            {
+                double[] widmo = ObliczWidmo(plik.PobierzProbki(), okno, iloscPrazkow, 0,plik.czestotliwoscProbkowania / 2);
+                if(czyZmniejszycWynik)
+                {
+                    wynik.modulWidma[sekunda] = new double[(int)(widmo.Length / oIleZmniejszyc)];
+                    for (int i = 0; i < ((double)widmo.Length)/ oIleZmniejszyc; i++)
+                    {
+                        wynik.modulWidma[sekunda][i] = widmo[(int)(i * oIleZmniejszyc)];
+                    }
+                }
+                else
+                    wynik.modulWidma[sekunda] = (double[])widmo.Clone();
+            }*/
+
             return wynik;
         }
     }

@@ -208,8 +208,7 @@ namespace ABW_Project
 
             //CZT czt = new CZT();
 
-            stan.Init(Console.CursorLeft, Console.CursorTop);
-            //stan.Rozpocznij();
+            
             index = 0;
 
             AnalizaLog.Dodaj("Rozpoczęcie analizy FFT");
@@ -275,12 +274,20 @@ namespace ABW_Project
 
                 throw ex;
             }
-            
-            wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, okno, "widmo.txt" ,dolnyZakres, gornyZakres, dokladnosc).czestotliwoscSygnalu;
+
+            stan.Init(Console.CursorLeft, Console.CursorTop);
+            stan.Rozpocznij();
+
+            Spektrogram spektrogram = fft.ObliczSpektrogram(wv, new OknoBlackmana(), 0.1, 0.1);
+
+            //wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, okno, "widmo.txt" ,dolnyZakres, gornyZakres, dokladnosc).czestotliwoscSygnalu;
             //wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, new OknoBlackmana(), "widmo2.txt", 45, 55, 0.001).czestotliwoscSygnalu;
             //wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52).czestotliwoscSygnalu;
 
-            int potegaDwojki = (int)Math.Log(fft.PrzeliczDokladnosc(0.01,wv.czestotliwoscProbkowania), 2) + 1;
+            int potegaDwojki = (int)Math.Log(fft.PrzeliczDokladnosc(dokladnosc,wv.czestotliwoscProbkowania), 2) + 1;
+
+            wynik = new double[5];
+
            // AnalizaLog.Dodaj("Zakończenie analizy");
            // stan.Zakoncz();
             Console.WriteLine("> Wynik FFT");

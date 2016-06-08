@@ -36,7 +36,7 @@ namespace ABW_Project
         /// <param name="tekst">Tekst, który ma zostać wpisany</param>
         /// <param name="Modul">Nazwa modułu, do którego należy plik Log (Log.MODUL_GUI, Log.MODUL_ANALIZY, Log.MODUL_BAZ_DANYCH,Log.MODUL_POROWNANIA) </param>
         /// <param name="czyWypisywacDate">Jeśli 'true' zapisuje też datę obok wpisu</param>
-        public static void Postep(string tekst, int Modul, bool czyWypisywacDate = true)
+        public static void Postep(string tekst, bool czyWypisywacDate = true)
         {
             Dodaj("[Postęp] " + tekst, czyWypisywacDate);
         }

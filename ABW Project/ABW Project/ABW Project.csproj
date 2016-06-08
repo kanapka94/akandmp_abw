@@ -53,6 +53,7 @@
     <Compile Include="Okna\OknoHamminga.cs" />
     <Compile Include="Okna\OknoHanninga.cs" />
     <Compile Include="Okna\OknoProstokatne.cs" />
+    <Compile Include="Spektrogram.cs" />
     <Compile Include="stare klasy\DFT.cs" />
     <Compile Include="Algorytm.cs" />
     <Compile Include="FFT.cs" />
