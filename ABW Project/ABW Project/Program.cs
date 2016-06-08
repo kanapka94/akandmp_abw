@@ -165,7 +165,7 @@ namespace ABW_Project
             
             Stan stan;
             //DFT dft;
-            FFT fft;
+            //FFT fft;
             int index = 0;
             double[] wynik;
 
@@ -204,16 +204,15 @@ namespace ABW_Project
 
             Console.WriteLine(" Analiza...\n");
             stan = new Stan();
-            fft = new FFT();
+            //fft = new FFT();
 
-            //CZT czt = new CZT();
+            CZT czt = new CZT();
 
             
             index = 0;
 
             AnalizaLog.Dodaj("Rozpoczęcie analizy FFT");
 
-            CZT czt = new CZT();
             //wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, new OknoBlackmana(), "widmo.txt", 49.8, 50.2, 0.01).czestotliwoscSygnalu;
 
             Console.WriteLine("Wybierz okno: ");
@@ -278,13 +277,14 @@ namespace ABW_Project
             stan.Init(Console.CursorLeft, Console.CursorTop);
             stan.Rozpocznij();
 
-            Spektrogram spektrogram = fft.ObliczSpektrogram(wv, new OknoBlackmana(), 0.1, 0.1);
+            //Spektrogram spektrogram = fft.ObliczSpektrogram(wv, new OknoBlackmana(), 0.1, 0.1);
 
             //wynik = fft.WydzielPrzydzwiek(wv, ref stan.stan, okno, "widmo.txt" ,dolnyZakres, gornyZakres, dokladnosc).czestotliwoscSygnalu;
             //wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, new OknoBlackmana(), "widmo2.txt", 45, 55, 0.001).czestotliwoscSygnalu;
+            wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, okno, "widmo2.txt", dolnyZakres, gornyZakres, dokladnosc).czestotliwoscSygnalu;
             //wynik = czt.WydzielPrzydzwiek(wv, ref stan.stan, 48, 52).czestotliwoscSygnalu;
 
-            int potegaDwojki = (int)Math.Log(fft.PrzeliczDokladnosc(dokladnosc,wv.czestotliwoscProbkowania), 2) + 1;
+            int potegaDwojki = (int)Math.Log(czt.PrzeliczDokladnosc(dokladnosc,wv.czestotliwoscProbkowania), 2) + 1;
 
             wynik = new double[5];
 

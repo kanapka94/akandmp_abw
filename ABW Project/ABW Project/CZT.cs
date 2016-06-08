@@ -200,19 +200,22 @@ namespace ABW_Project
 
             int N = probki.Length;
              int NM1 = N + iloscPrazkow - 1;
-             Complex A = Complex.Exp(Complex.ImaginaryOne * 2 * Math.PI * czestoscDolna / czestoscProbkowania);
-             Complex W = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * ((czestoscGorna - czestoscDolna) / ((iloscPrazkow - 1)) / czestoscProbkowania));
+             //Complex A = Complex.Exp(Complex.ImaginaryOne * 2 * Math.PI * czestoscDolna / czestoscProbkowania);
+             //Complex W = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * (czestoscGorna - czestoscDolna) / (iloscPrazkow * czestoscProbkowania));
 
-             Complex[] y1 = new Complex[NM1];
-             Complex[] y2 = new Complex[NM1];
+            Complex A = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * czestoscDolna / czestoscProbkowania);
+            Complex W = Complex.Exp(-Complex.ImaginaryOne * 2 * Math.PI * ((czestoscGorna - czestoscDolna) / (2 * (iloscPrazkow - 1)) / czestoscProbkowania));
+
+            Complex[] y1 = new Complex[NM1];
+            Complex[] y2 = new Complex[NM1];
 
              int k;
 
-            //for (k = 0; k < NM1; k++)
-            //{
-            //    if (k < N) y1[k] = Complex.Pow(A * Complex.Pow(W, k), k) * probki[k]; else y1[k] = 0;
-            //    if (k < iloscPrazkow) y2[k] = Complex.Pow(W, -Math.Pow(k, 2)); else y2[k] = Complex.Pow(W, -Math.Pow((NM1 - k), 2));
-            //}
+            for (k = 0; k < NM1; k++)
+            {
+                if (k < N) y1[k] = Complex.Pow(A * Complex.Pow(W, k), k) * probki[k]; else y1[k] = 0;
+                if (k < iloscPrazkow) y2[k] = Complex.Pow(W, -Math.Pow(k, 2)); else y2[k] = Complex.Pow(W, -Math.Pow((NM1 - k), 2));
+            }
 
             /* int N = probki.Length;
              int NM1 = N + iloscPrazkow - 1;
@@ -225,6 +228,7 @@ namespace ABW_Project
             int k;
             */
 
+            /*
             for (k = 0; k < N; k++)
             {
                 y1[k] = Complex.Pow(A * Complex.Pow(W, k), k) * probki[k];
@@ -238,7 +242,7 @@ namespace ABW_Project
             for (k = iloscPrazkow; k < NM1; k++)
             {
                 y2[k] = Complex.Pow(W, -Math.Pow((NM1 - k), 2));
-            }
+            }*/
 
 
 
@@ -254,9 +258,8 @@ namespace ABW_Project
 
             for (int i = 0; i < Y2.Length; i++)
             {
-                //Y[i] = Complex.Multiply(Y1[i], Y2[i]);
-                Y[i] = Y1[i] * Y2[i];
-                //Y[i] = 
+                Y[i] = Complex.Multiply(Y1[i], Y2[i]);
+                //Y[i] = Y1[i] * Y2[i];
             }
 
             Complex[] y = new Complex[Y.Length];

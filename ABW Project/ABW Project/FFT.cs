@@ -337,7 +337,7 @@ namespace ABW_Project
                 y[i] = Complex.Conjugate(x[i]);
             }
 
-            PrzestawienieProbek(x);
+            PrzestawienieProbek(y);
 
             y = fftFor(y);
 
